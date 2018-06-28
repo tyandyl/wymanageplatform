@@ -1,54 +1,121 @@
 package com.wy.manage.platform.core;
 
+import java.util.List;
+
 /**
- * Created by tianye on 2018/6/27.
+ * Created by tianye on 2018/6/28.
  */
-public interface Block {
+public class Block implements IBlock {
 
-    String PIXEL_UNIT="px";
+    private boolean isRoot;
+    private Flow flow;
+    private int width;
+    private int height;
+    private IBlock parent;
+    private String identifying;
+    private String className;
+    private String description;
 
-    /**
-     * 获取块的宽度
-     * @return
-     */
-    int getWidth();
+    private BlockType blockType;
+    private String code;
+    private String name;
 
-    /**
-     * 设置块的宽度
-     */
-    void setWidth(int width);
+    private List<IBlock> children;
 
-    /**
-     * 获取块的高度
-     * @return
-     */
-    int getHeight();
+    public boolean isRoot() {
+        return isRoot;
+    }
 
-    /**
-     * 设置块的高度
-     */
-    void setHeight(int height);
-
-    /**
-     * 获取流
-     */
-    int getFlow();
+    public void setRoot() {
+         isRoot=true;
+    }
 
 
-    /**
-     *设置流
-     */
-    void setFlow(Flow flow);
+    public Flow getFlow() {
+        return flow;
+    }
 
-    /**
-     * 获取父类
-     */
-    Block getParentBlock();
+    public void setFlow(Flow flow) {
+        this.flow = flow;
+    }
 
-    /**
-     * 设置父类
-     */
-    void setParentBlock(Block block);
+    public int getWidth() {
+        return width;
+    }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public IBlock getParent() {
+        return parent;
+    }
+
+    public void setParent(IBlock parent) {
+        this.parent = parent;
+    }
+
+    public String getIdentifying() {
+        return identifying;
+    }
+
+    public void setIdentifying(String identifying) {
+        this.identifying = identifying;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BlockType getBlockType() {
+        return blockType;
+    }
+
+    public void setBlockType(BlockType blockType) {
+        this.blockType = blockType;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<IBlock> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<IBlock> children) {
+        this.children = children;
+    }
 }

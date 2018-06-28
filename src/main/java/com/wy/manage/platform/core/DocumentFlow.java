@@ -5,4 +5,5 @@ package com.wy.manage.platform.core;
  * 文档流
  */
 public class DocumentFlow implements Flow{
+
 }
