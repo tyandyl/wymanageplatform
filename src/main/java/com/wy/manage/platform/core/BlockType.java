@@ -11,20 +11,19 @@ public enum BlockType {
     NORMAL_DIV(4,"normal_div"),//一般的块
     ;
 
-    private int value;
+    private int code;
     private String name;
 
-    BlockType(int value,String name){
-        this.value=value;
+    BlockType(int code,String name){
+        this.code=code;
         this.name=name;
     }
 
-    public int getValue() {
-        return value;
+    public int getCode() {
+        return code;
     }
 
     public String getName() {
         return name;
     }
-
 }

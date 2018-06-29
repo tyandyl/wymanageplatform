@@ -4,7 +4,7 @@ package com.wy.manage.platform.core;
  * Created by tianye on 2018/6/27.
  * 定位
  */
-public class PositionFlow implements Flow{
+public class PositionFlow implements IFlow {
 
     /**
      * 向下偏移
