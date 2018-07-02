@@ -14,6 +14,22 @@ public class Widget implements IWidget{
 
     private Map<PropertyType,List<Property>> properties;
 
+    private IFlow flow;
+
+    private List<Property> identifyingList;
+
+    private List<Property> classList;
+
+    private String description;
+
+    private BlockType blockType;
+
+    private String title;
+
+    private TagType tagType;
+
+    private List<IBlock> children;
+
 
     public int getWidth() throws Exception {
         String value = PropertyTools.getPropertyValue(properties, PropertyType.WIDTH);
@@ -46,74 +62,76 @@ public class Widget implements IWidget{
     }
 
     public IFlow getFlow() {
-        return null;
+        return flow;
     }
 
     public void setFlow(IFlow flow) {
-
+        this.flow=flow;
     }
 
     public List<Property> getIdentifying() {
-        return null;
+        return identifyingList;
     }
 
     public void addIdentifying(Property iProperty) {
-
+        identifyingList.add(iProperty);
     }
 
     public List<Property> getClassList() {
-        return null;
+        return classList;
     }
 
     public void addClass(Property iProperty) {
-
+        classList.add(iProperty);
     }
 
     public String getDescription() {
-        return null;
+        return description;
     }
 
     public void setDescription(String description) {
-
+        this.description=description;
     }
 
     public BlockType getBlockType() {
-        return null;
+        return blockType;
     }
 
     public void setBlockType(BlockType blockType) {
-
+        this.blockType=blockType;
     }
 
     public String getTitle() {
-        return null;
+        return title;
     }
 
     public void setTitle(String name) {
-
+        this.title=name;
     }
 
     public Map<PropertyType, List<Property>> getProperties() {
-        return null;
+        return properties;
     }
 
     public void setProperties(Map<PropertyType, List<Property>> properties) {
-
+        this.properties=properties;
     }
 
     public TagType getTagType() {
-        return null;
+        return tagType;
     }
 
     public void setTagType(TagType tagType) {
-
+        this.tagType=tagType;
     }
 
     public List<IBlock> getChildren() {
-        return null;
+        return children;
     }
 
     public void setChildren(List<IBlock> list) {
-
+        this.children=list;
     }
+
+
 }
