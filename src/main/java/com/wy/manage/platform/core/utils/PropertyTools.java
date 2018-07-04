@@ -36,7 +36,7 @@ public class PropertyTools {
      * @throws Exception
      */
     public static String getPropertyValue(Map<PropertyType,List<Property>> properties,PropertyType propertyType)throws Exception{
-        List<Property> WidthProperties = properties.get(PropertyType.WIDTH);
+        List<Property> WidthProperties = properties.get(propertyType);
         String value=null;
         if(WidthProperties!=null && WidthProperties.size()>0){
             Property property = WidthProperties.get(0);
