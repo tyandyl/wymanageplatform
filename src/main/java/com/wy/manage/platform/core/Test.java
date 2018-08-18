@@ -1,7 +1,10 @@
 package com.wy.manage.platform.core;
 
+import com.wy.manage.platform.core.attribute.AttributeNameType;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,10 +12,7 @@ import java.util.Map;
  */
 public class Test {
     public static void main(String[] agrs){
-        Map<PropertyType,String> properties=new HashMap<PropertyType,String>();
-
-        properties.put(PropertyType.WIDTH,"2");
-        System.out.println("sssssssss"+properties.get(PropertyType.WIDTH));
+        ApplicationContext context1 = new ClassPathXmlApplicationContext("win/window.html");
 
     }
 }
