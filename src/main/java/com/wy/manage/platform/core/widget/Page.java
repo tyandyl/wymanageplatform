@@ -19,11 +19,38 @@ public class Page implements IBlock, Serializable {
 
     private List<Link> links;
 
-    public void invoke(){
 
+    public String getPreposition() {
+        return preposition;
     }
 
+    public void setPreposition(String preposition) {
+        this.preposition = preposition;
+    }
 
+    public List<Meta> getMetas() {
+        return metas;
+    }
+
+    public void setMetas(List<Meta> metas) {
+        this.metas = metas;
+    }
+
+    public List<Script> getScripts() {
+        return scripts;
+    }
+
+    public void setScripts(List<Script> scripts) {
+        this.scripts = scripts;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 
     public Properties getProperties() {
         return null;
@@ -46,6 +73,10 @@ public class Page implements IBlock, Serializable {
     }
 
     public void setChildren(List<IBlock> list) {
+
+    }
+
+    public void invoke() throws Exception {
 
     }
 }

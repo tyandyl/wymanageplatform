@@ -79,12 +79,37 @@ public interface IWidget extends IBlock {
      */
     void setTitle(String var);
 
+    /**
+     * 获取id列表
+     * @return
+     */
     List<String> getIds();
 
+    /**
+     * 设置id列表
+     * @param list
+     */
     void setIds(List<String> list);
 
+
+    /**
+     * 增加一个选择器
+     * @param styleSheetType
+     * @param SelectorName
+     * @return
+     */
+    IWidget addSelector(StyleSheetType styleSheetType,String SelectorName);
+
+    /**
+     * 获取class列表
+     * @return
+     */
     List<String> getClasses();
 
+    /**
+     * 设置class列表
+     * @param list
+     */
     void setClasses(List<String> list);
 
 

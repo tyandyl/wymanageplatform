@@ -12,10 +12,19 @@ public class AttributeValue implements IAttributeValue, Serializable {
 
     private static final long serialVersionUID = 9041992567868286746L;
 
+    /**
+     * 样式表
+     */
     private StyleSheetType styleSheetType;
 
+    /**
+     *当属性值关联选择器类型
+     */
     private SelectorType selectorType;
 
+    /**
+     * 关联选择器的值
+     */
     private String selectorName;
 
     private String attributeValue;

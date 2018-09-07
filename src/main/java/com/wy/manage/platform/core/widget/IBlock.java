@@ -11,8 +11,16 @@ public interface IBlock {
 
     String PIXEL_UNIT="px";
 
+    /**
+     * 获取属性信息
+     * @return
+     */
     Properties getProperties();
 
+    /**
+     * 设置属性信息
+     * @param properties
+     */
     void setProperties(Properties properties);
 
     TagType getTagType();
@@ -23,8 +31,7 @@ public interface IBlock {
 
     void setChildren(List<IBlock> list);
 
-    void invoke();
-
+    void invoke()throws Exception;
 
 
 }

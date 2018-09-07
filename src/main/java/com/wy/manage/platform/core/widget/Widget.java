@@ -8,7 +8,9 @@ import com.wy.manage.platform.core.utils.GUIDTools;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tianye on 2018/6/29.
@@ -50,7 +52,12 @@ public class Widget implements IWidget, Serializable {
      * @throws Exception
      */
     public void setWidth(String var) throws Exception {
-        setPropertyValue(AttributeNameType.WIDTH,var,SelectorType.ID_SELECTOR,false,StyleSheetType.EXTERNAL,null);
+        setPropertyValue(AttributeNameType.WIDTH,
+                var,
+                SelectorType.ID_SELECTOR,
+                false,
+                StyleSheetType.EXTERNAL,
+                "id");
     }
 
 
@@ -148,6 +155,10 @@ public class Widget implements IWidget, Serializable {
 
     }
 
+    public IWidget addSelector(StyleSheetType styleSheetType, String SelectorName) {
+        return null;
+    }
+
     public List<String> getClasses() {
         return null;
     }
@@ -180,7 +191,14 @@ public class Widget implements IWidget, Serializable {
         this.children=var;
     }
 
-    public void invoke() {
-
+    public void invoke() throws Exception {
+        if(properties==null){
+            properties=new Properties();
+        }
+        Map<AttributeNameType, IAttributeValue> map = properties.getProperties();
+        if(map==null){
+            map=new HashMap<AttributeNameType, IAttributeValue>();
+        }
     }
+
 }
