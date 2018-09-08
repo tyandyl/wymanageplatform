@@ -10,6 +10,17 @@ public class EdgeLine {
     public EdgeInputType edgeInputType;
     //可以输入的字符集，也可以是单个字符，如果是ε，则为空
     public List<Character> edgeAllowInputGather;
+    //下一个节点
+    public NfaStateNode next;
+
+
+    public NfaStateNode getNext() {
+        return next;
+    }
+
+    public void setNext(NfaStateNode next) {
+        this.next = next;
+    }
 
     public EdgeInputType getEdgeInputType() {
         return edgeInputType;

@@ -5,7 +5,9 @@ package com.wy.manage.platform.core.parser;
  */
 public class NfaStateMachine {
     private final int NFA_MAX_NUM=256;
+    //一个整体，开始只能指向别人，别人不能指向他
     public NfaStateNode startNode;
+    //一个整体，结束只能被指向，他不能指向别人
     public NfaStateNode endNode;
 
     public NfaStateNode getStartNode() {

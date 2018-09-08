@@ -1,7 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
 /**
- * 正则表达式符号
+ * 正则表达式符号，无/，/需要另外考虑
  * Created by tianye on 2018/9/7.
  */
 public enum SymbolType {

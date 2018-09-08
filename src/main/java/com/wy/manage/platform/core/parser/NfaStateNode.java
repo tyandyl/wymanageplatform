@@ -9,22 +9,12 @@ import java.util.Set;
  */
 public class NfaStateNode {
 
-    public NfaStateNode[] next=new NfaStateNode[2];
-
     //状态编号
-    public int stateNum;
+    private int stateNum;
 
-    public NfaState state;
+    private NfaState state;
 
-    public EdgeLine[] edgeLines=new EdgeLine[2];
-
-    public NfaStateNode[] getNext() {
-        return next;
-    }
-
-    public void setNext(NfaStateNode[] next) {
-        this.next = next;
-    }
+    private EdgeLine[] edgeLines=new EdgeLine[2];
 
     public int getStateNum() {
         return stateNum;
