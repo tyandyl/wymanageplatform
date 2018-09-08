@@ -10,7 +10,6 @@ public class RegularExpressionParser {
 
     public static NfaStateMachine parser(String str) throws Exception {
         char[] arry=str.toCharArray();
-        NfaStateMachine nfaStateMachine=null;
         Stack<XContentItem> stack=new Stack<XContentItem>();
         for(int i=0;i<arry.length;i++){
             SymbolType symbolType = SymbolType.findSymbolType(arry[i]);
@@ -18,9 +17,28 @@ public class RegularExpressionParser {
                 case CCL_END:
                     analyze(stack,new NfaStateMachineBuilder(){
                         public List<Character> getCharacterRepertoire(Stack<Integer> stack) throws Exception {
+                            Integer peek = stack.peek();
+                            boolean isNegation=false;
+                            if(peek==SymbolType.AT_BOL.getState()){
+                                isNegation=true;
+                                stack.pop();
+                            }
+                            NfaStateMachine nfaStateMachine=null;
                             while (!stack.empty()){
                                 Integer pop = stack.pop();
+                                NfaStateMachine singleCharacterNfaStateMachine = NfaManager.createSingleCharacterNfaStateMachine(pop);
+                                if(nfaStateMachine==null){
+                                    nfaStateMachine=singleCharacterNfaStateMachine;
+                                }else {
+                                    NfaStateNode startNode = nfaStateMachine.getStartNode();
+                                    EdgeLine edgeLines = startNode.getEdgeLines()[0];
+                                    edgeLines.setEdgeInputType(EdgeInputType.CHARACTER_REPERTOIRE);
+                                    List<Character> edgeAllowInputGather = edgeLines.getEdgeAllowInputGather();
+                                    edgeAllowInputGather.add()
+
+                                }
                             }
+
                             return null;
                         }
 
