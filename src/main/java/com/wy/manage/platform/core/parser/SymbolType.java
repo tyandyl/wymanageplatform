@@ -16,7 +16,14 @@ public enum SymbolType {
     DASH(45," -"),
     OPTIONAL(63,"?"),
     OR(124,"|"),
-    BACKSLASH(92,"反斜杠\\");
+    BACKSLASH(92,"反斜杠\\"),
+    OPEN_PAREN(40,"("),
+    CLOSE_PAREN(41,")"),
+    LP(10,"换行"),
+    CR(13,"回车"),
+    SP(32,"空格"),
+    L(999,"普通字符");
+
 
     public int state;
     public String name;
@@ -33,7 +40,7 @@ public enum SymbolType {
                 return each;
             }
         }
-        return null;
+        return L;
     }
 
     public int getState() {

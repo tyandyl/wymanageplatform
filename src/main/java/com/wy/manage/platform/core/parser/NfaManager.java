@@ -60,6 +60,17 @@ public class NfaManager {
     }
 
     /**
+     * 创建任何字符状态机
+     * @return
+     */
+    public static NfaStateMachine createAnyCharacterRepertoireNfaStateMachine()throws Exception{
+        NfaStateMachine simplestNfaStateMachine = createSimplestNfaStateMachine(true);
+        EdgeLine edgeLine =simplestNfaStateMachine.getStartNode().getEdgeLines()[0];
+        edgeLine.setEdgeInputType(EdgeInputType.ANY);
+        return simplestNfaStateMachine;
+    }
+
+    /**
      * 创建连接&
      * @param var1
      * @param var2
