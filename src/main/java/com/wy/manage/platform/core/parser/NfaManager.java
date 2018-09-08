@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +83,51 @@ public class NfaManager {
 
         NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var1,  var2);
         return nfaStateMachine;
+    }
+
+    /**
+     *创建或者OR
+     * @param var1
+     * @param var2
+     * @return
+     * @throws Exception
+     */
+    public static NfaStateMachine createOrNfaStateMachine(NfaStateMachine var1,NfaStateMachine var2)throws Exception{
+        NfaStateMachine simplestNfaStateMachine = createSimplestNfaStateMachine(false);
+        NfaStateNode startNode = simplestNfaStateMachine.getStartNode();
+        NfaStateNode endNode = simplestNfaStateMachine.getEndNode();
+        EdgeLine edgeLine=new EdgeLine();
+        edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine.setNext(var1.getStartNode());
+
+        EdgeLine[] edgeLines = startNode.getEdgeLines();
+
+        assignArray(edgeLines, edgeLine);
+        var1.getStartNode().setState(NfaState.PROCEED);
+
+        EdgeLine edgeLine1=new EdgeLine();
+        edgeLine1.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine1.setNext(var2.getStartNode());
+
+        assignArray(edgeLines, edgeLine1);
+        var2.getStartNode().setState(NfaState.PROCEED);
+
+        EdgeLine edgeLine2=new EdgeLine();
+        edgeLine2.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine2.setNext(endNode);
+
+        EdgeLine[] edgeLines1 = var1.getEndNode().getEdgeLines();
+        assignArray(edgeLines1, edgeLine2);
+        var1.getEndNode().setState(NfaState.PROCEED);
+
+        EdgeLine edgeLine3=new EdgeLine();
+        edgeLine3.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine3.setNext(endNode);
+
+        EdgeLine[] edgeLines2 = var2.getEndNode().getEdgeLines();
+        assignArray(edgeLines2, edgeLine3);
+        var2.getEndNode().setState(NfaState.PROCEED);
+        return simplestNfaStateMachine;
     }
 
     /**

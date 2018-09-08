@@ -1,7 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
 /**
- * 正则表达式符号，无/，/需要另外考虑
+ * 正则表达式符号
  * Created by tianye on 2018/9/7.
  */
 public enum SymbolType {
@@ -11,14 +11,12 @@ public enum SymbolType {
     CCL_END(93,"字符集类结尾括号]"),
     CCL_START(91,"字符集类开始括号["),
     CLOSE_CURLY(125,"}"),
-    CLOSE_PAREN(41,")"),
+    OPEN_CURLY(123,"{"),
     CLOSURE(42,"*"),
     DASH(45," -"),
-    L(999,"字符常量"),
-    OPEN_CURLY(123,"{"),
-    OPEN_PAREN(40,"("),
     OPTIONAL(63,"?"),
-    OR(124,"|");
+    OR(124,"|"),
+    BACKSLASH(92,"反斜杠\\");
 
     public int state;
     public String name;
@@ -27,6 +25,17 @@ public enum SymbolType {
         this.state=state;
         this.name=name;
     }
+
+    public static SymbolType findSymbolType(int code) {
+        SymbolType[] values = SymbolType.values();
+        for (SymbolType each : values) {
+            if (each.getState() == code) {
+                return each;
+            }
+        }
+        return null;
+    }
+
     public int getState() {
         return state;
     }
