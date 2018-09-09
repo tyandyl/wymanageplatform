@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -8,80 +9,27 @@ import java.util.Stack;
  */
 public class RegularExpressionParser {
 
-    public static NfaStateMachine parser(String str) throws Exception {
-        char[] arry=str.toCharArray();
+    public static NfaStateMachine parserCss(String str) throws Exception {
+        char[] array=str.toCharArray();
         Stack<XContentItem> stack=new Stack<XContentItem>();
-        for(int i=0;i<arry.length;i++){
-            SymbolType symbolType = SymbolType.findSymbolType(arry[i]);
+        for(int i=0;i<array.length;i++){
+            SymbolType symbolType = SymbolType.findSymbolType(array[i]);
             switch (symbolType){
                 case CCL_END:
-                    analyze(stack,new NfaStateMachineBuilder(){
-                        public List<Character> getCharacterRepertoire(Stack<Integer> stack) throws Exception {
-                            Integer peek = stack.peek();
-                            boolean isNegation=false;
-                            if(peek==SymbolType.AT_BOL.getState()){
-                                isNegation=true;
-                                stack.pop();
-                            }
-                            NfaStateMachine nfaStateMachine=null;
-                            while (!stack.empty()){
-                                Integer pop = stack.pop();
-                                NfaStateMachine singleCharacterNfaStateMachine = NfaManager.createSingleCharacterNfaStateMachine(pop);
-                                if(nfaStateMachine==null){
-                                    nfaStateMachine=singleCharacterNfaStateMachine;
-                                }else {
-                                    NfaStateNode startNode = nfaStateMachine.getStartNode();
-                                    EdgeLine edgeLines = startNode.getEdgeLines()[0];
-                                    edgeLines.setEdgeInputType(EdgeInputType.CHARACTER_REPERTOIRE);
-                                    List<Character> edgeAllowInputGather = edgeLines.getEdgeAllowInputGather();
-                                    edgeAllowInputGather.add()
-
-                                }
-                            }
-
-                            return null;
-                        }
-
-                        public NfaStateMachine createNfaStateMachine(List<Character> list) throws Exception {
-                            return null;
-                        }
-                    });
+                    NfaStateMachineBuilder cclNfaStateMachineBuilder = NfaStateMachineFactory.getCCLNfaStateMachineBuilder();
+                    NfaStateMachine builder = cclNfaStateMachineBuilder.builder(stack, "[", "]");
+                    XContentItem xContentItem1 = new XContentItem(builder);
+                    stack.add(xContentItem1);
                     break;
-                    default:
-                        break;
+                default:
+                    XContentItem xContentItem=new XContentItem(array[i],i);
+                    stack.add(xContentItem);
+                    break;
             }
+
         }
-        return null;
+        return stack.peek().getNfaStateMachine();
     }
 
-    public static void analyze(Stack<XContentItem> stack,NfaStateMachineBuilder nfaStateMachineBuilder)throws Exception{
-        boolean isEmpty = stack.empty();
-        if(isEmpty){
-            throw new Exception("]必须和[成对");
-        }
-        Stack<Integer> stack1=new Stack<Integer>();
-        boolean isMatching=false;
-        while (!stack.empty()){
-            XContentItem pop1 = stack.pop();
-            int legend = pop1.getLegend();
-            SymbolType symbolType1 = SymbolType.findSymbolType(legend);
-            if(symbolType1==SymbolType.CCL_START){
-                isMatching=true;
-                break;
-            }else {
-                stack1.push(legend);
-            }
-        }
-        if(!isMatching){
-            throw new Exception("]必须和[成对");
-        }
-        boolean empty = stack1.empty();
-        if(empty){
-            throw new Exception("]和[之间必须有字符");
-        }
-        nfaStateMachineBuilder.builder(stack1);
-
-
-    }
 
 }

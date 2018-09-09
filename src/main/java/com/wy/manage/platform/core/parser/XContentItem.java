@@ -16,6 +16,10 @@ public class XContentItem {
         this.index=index;
     }
 
+    public XContentItem(NfaStateMachine nfaStateMachine){
+        this.nfaStateMachine=nfaStateMachine;
+    }
+
     public int getLegend() {
         return legend;
     }
