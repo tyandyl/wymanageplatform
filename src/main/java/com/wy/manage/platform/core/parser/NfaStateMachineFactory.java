@@ -9,4 +9,9 @@ public class NfaStateMachineFactory {
         CCLNfaStateMachineBuilder cclNfaStateMachineBuilder=new CCLNfaStateMachineBuilder();
         return cclNfaStateMachineBuilder;
     }
+
+    public static NfaStateMachineBuilder getCURLYNfaStateMachineBuilder(){
+        CURLYNfaStateMachineBuilder curlyNfaStateMachineBuilder=new CURLYNfaStateMachineBuilder();
+        return curlyNfaStateMachineBuilder;
+    }
 }

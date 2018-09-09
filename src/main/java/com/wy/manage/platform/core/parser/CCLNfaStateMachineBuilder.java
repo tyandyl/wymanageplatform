@@ -9,7 +9,7 @@ import java.util.Stack;
  */
 public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
     @Override
-    public List<Character> getCharacterRepertoire(Stack<Integer> stack) throws Exception {
+    public List<Character> getCharacterRepertoire(Stack<Integer> stack,Stack<XContentItem> stackXContentItem) throws Exception {
         Integer peek = stack.peek();
         boolean isNegation = false;
         if (peek == SymbolType.AT_BOL.getState()) {
@@ -26,7 +26,7 @@ public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
             if (pop == SymbolType.AT_BOL.getState()) {
                 throw new Exception("[]只能有一个^");
             }
-            if (peek1 != null && peek1 == SymbolType.DASH.getState() && Character.isLetter(pop)) {
+            if (peek1 != null && peek1 == SymbolType.DASH.getState() && Character.isLetterOrDigit(pop)) {
                 int pre = pop;
                 stack.pop();
                 if (stack.empty()) {
@@ -54,7 +54,7 @@ public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
                 characterList.add((char) (pop.intValue()));
             }
         }
-        //暂不考虑取反
+        //考虑取反
         if (isNegation) {
 
         }
@@ -62,7 +62,7 @@ public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
     }
 
     @Override
-    public NfaStateMachine createNfaStateMachine(List<Character> list) throws Exception {
+    public NfaStateMachine createNfaStateMachine(List<Character> list,int least,int max) throws Exception {
         return NfaManager.createCharacterRepertoireNfaStateMachine(list);
     }
 }

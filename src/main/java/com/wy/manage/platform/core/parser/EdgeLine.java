@@ -12,6 +12,10 @@ public class EdgeLine {
     public List<Character> edgeAllowInputGather;
     //下一个节点
     public NfaStateNode next;
+    //对输入值的要求,大于等于几
+    public int least=0;
+    //对输入值的要求,小于等于几
+    public int max=0;
 
 
     public NfaStateNode getNext() {
@@ -36,5 +40,21 @@ public class EdgeLine {
 
     public void setEdgeAllowInputGather(List<Character> edgeAllowInputGather) {
         this.edgeAllowInputGather = edgeAllowInputGather;
+    }
+
+    public int getLeast() {
+        return least;
+    }
+
+    public void setLeast(int least) {
+        this.least = least;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
     }
 }

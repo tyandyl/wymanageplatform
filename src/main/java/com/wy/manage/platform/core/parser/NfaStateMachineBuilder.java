@@ -7,20 +7,32 @@ import java.util.Stack;
  * Created by tianye on 2018/9/9.
  */
 public abstract class NfaStateMachineBuilder {
-    public abstract List<Character> getCharacterRepertoire(Stack<Integer> stack)throws Exception;
+    public abstract List<Character> getCharacterRepertoire(Stack<Integer> stack,Stack<XContentItem> stackXContentItem)throws Exception;
 
-    public abstract NfaStateMachine createNfaStateMachine(List<Character> list)throws Exception;
+    public abstract NfaStateMachine createNfaStateMachine(List<Character> list,int least,int max)throws Exception;
 
-    public NfaStateMachine builder(Stack<XContentItem> stack,String pre,String later)throws Exception{
-        Stack<Integer> analyzeResult = analyze(stack,pre,later);
-        List<Character> characterRepertoire = getCharacterRepertoire(analyzeResult);
-        return createNfaStateMachine(characterRepertoire);
+    public NfaStateMachine builder(Stack<XContentItem> stack,SymbolType pre,SymbolType later,int i)throws Exception{
+        Stack<Integer> analyzeResult = analyze(stack,pre,later,i);
+        if(analyzeResult==null){
+            return null;
+        }
+        List<Character> characterRepertoire = getCharacterRepertoire(analyzeResult,stack);
+        return createNfaStateMachine(characterRepertoire,0,0);
     }
 
-    public Stack<Integer> analyze(Stack<XContentItem> stack,String pre,String later)throws Exception{
+    public Stack<Integer> analyze(Stack<XContentItem> stack,SymbolType pre,SymbolType later,int i)throws Exception{
         boolean isEmpty = stack.empty();
         if(isEmpty){
-            throw new Exception(pre+"必须和"+later+"成对");
+            throw new Exception(pre.getName()+"必须和"+later.getName()+"成对");
+        }
+        XContentItem peek = stack.peek();
+        int legend1 = peek.getLegend();
+        //说明上一个字符是\
+        if(legend1==SymbolType.BACKSLASH.getState()){
+            stack.pop();
+            XContentItem xContentItem=new XContentItem(pre.getState(),i);
+            stack.push(xContentItem);
+            return null;
         }
         Stack<Integer> stack1=new Stack<Integer>();
         boolean isMatching=false;
@@ -36,11 +48,11 @@ public abstract class NfaStateMachineBuilder {
             }
         }
         if(!isMatching){
-            throw new Exception(pre+"必须和"+later+"成对");
+            throw new Exception(pre.getName()+"必须和"+later.getName()+"成对");
         }
         boolean empty = stack1.empty();
         if(empty){
-            throw new Exception(pre+"和"+later+"之间必须有字符");
+            throw new Exception(pre.getName()+"和"+later.getName()+"之间必须有字符");
         }
         return stack1;
     }
