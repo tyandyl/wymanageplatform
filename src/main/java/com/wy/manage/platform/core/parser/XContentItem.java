@@ -9,11 +9,26 @@ import java.util.List;
 public class XContentItem {
     private int legend;
     private int index;
+    private MeanType meanType;
     private NfaStateMachine nfaStateMachine=null;
 
     public XContentItem(int legend,int index){
         this.legend=legend;
         this.index=index;
+    }
+
+    public XContentItem(int legend,int index,MeanType meanType){
+        this.legend=legend;
+        this.index=index;
+        this.meanType=meanType;
+    }
+
+    public MeanType getMeanType() {
+        return meanType;
+    }
+
+    public void setMeanType(MeanType meanType) {
+        this.meanType = meanType;
     }
 
     public XContentItem(NfaStateMachine nfaStateMachine){

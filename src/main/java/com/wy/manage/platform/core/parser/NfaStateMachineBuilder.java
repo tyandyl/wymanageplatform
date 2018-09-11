@@ -7,45 +7,38 @@ import java.util.Stack;
  * Created by tianye on 2018/9/9.
  */
 public abstract class NfaStateMachineBuilder {
-    public abstract List<Character> getCharacterRepertoire(Stack<Integer> stack,Stack<XContentItem> stackXContentItem)throws Exception;
+    public abstract List<Character> getCharacterRepertoire(Stack<XContentItem> analyzeResult)throws Exception;
 
     public abstract NfaStateMachine createNfaStateMachine(List<Character> list,int least,int max)throws Exception;
 
     public NfaStateMachine builder(Stack<XContentItem> stack,SymbolType pre,SymbolType later,int i)throws Exception{
-        Stack<Integer> analyzeResult = analyze(stack,pre,later,i);
-        if(analyzeResult==null){
-            return null;
-        }
-        List<Character> characterRepertoire = getCharacterRepertoire(analyzeResult,stack);
+        Stack<XContentItem> analyzeResult = analyze(stack,pre,later);
+        List<Character> characterRepertoire = getCharacterRepertoire(analyzeResult);
         return createNfaStateMachine(characterRepertoire,0,0);
     }
 
-    public Stack<Integer> analyze(Stack<XContentItem> stack,SymbolType pre,SymbolType later,int i)throws Exception{
-        boolean isEmpty = stack.empty();
-        if(isEmpty){
-            throw new Exception(pre.getName()+"必须和"+later.getName()+"成对");
-        }
-        XContentItem peek = stack.peek();
-        int legend1 = peek.getLegend();
-        //说明上一个字符是\
-        if(legend1==SymbolType.BACKSLASH.getState()){
-            stack.pop();
-            XContentItem xContentItem=new XContentItem(pre.getState(),i);
-            stack.push(xContentItem);
-            return null;
-        }
-        Stack<Integer> stack1=new Stack<Integer>();
+    public Stack<XContentItem> analyze(Stack<XContentItem> stack,SymbolType pre,SymbolType later)throws Exception{
+        Stack<XContentItem> stack1=new Stack<XContentItem>();
         boolean isMatching=false;
         while (!stack.empty()){
-            XContentItem pop1 = stack.pop();
-            int legend = pop1.getLegend();
-            SymbolType symbolType1 = SymbolType.findSymbolType(legend);
-            if(symbolType1==SymbolType.CCL_START){
-                isMatching=true;
-                break;
+            XContentItem pop = stack.pop();
+            //表明没有状态机
+            if(pop.getNfaStateMachine()==null){
+                int legend = pop.getLegend();
+                SymbolType symbolType1 = SymbolType.findSymbolType(legend);
+                if((symbolType1==SymbolType.CCL_START
+                        || symbolType1==SymbolType.OPEN_CURLY
+                        || symbolType1==SymbolType.OPEN_PAREN)
+                        && pop.getMeanType()==MeanType.CHANGE_MEANING){
+                    isMatching=true;
+                    break;
+                }else {
+                    stack1.push(pop);
+                }
             }else {
-                stack1.push(legend);
+                stack1.push(pop);
             }
+
         }
         if(!isMatching){
             throw new Exception(pre.getName()+"必须和"+later.getName()+"成对");
