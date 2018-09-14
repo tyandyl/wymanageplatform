@@ -13,9 +13,13 @@ public class EdgeLine {
     //下一个节点
     public NfaStateNode next;
     //对输入值的要求,大于等于几
-    public int least=0;
+    public int least=-1;
     //对输入值的要求,小于等于几
-    public int max=0;
+    public int max=-1;
+
+    public int useNum=0;
+
+    public boolean isLeadToEnd=false;
 
 
     public NfaStateNode getNext() {
@@ -56,5 +60,21 @@ public class EdgeLine {
 
     public void setMax(int max) {
         this.max = max;
+    }
+
+    public int getUseNum() {
+        return useNum;
+    }
+
+    public void setUseNum(int useNum) {
+        this.useNum = useNum;
+    }
+
+    public boolean isLeadToEnd() {
+        return isLeadToEnd;
+    }
+
+    public void setLeadToEnd(boolean leadToEnd) {
+        isLeadToEnd = leadToEnd;
     }
 }

@@ -22,7 +22,8 @@ public enum SymbolType {
     LP(10,"换行"),
     CR(13,"回车"),
     SP(32,"空格"),
-    L(999,"普通字符");
+    L(999,"普通字符"),
+    COMMA(44,"逗号");
 
 
     public int state;

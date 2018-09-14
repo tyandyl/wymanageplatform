@@ -11,6 +11,7 @@ public class XContentItem {
     private int index;
     private MeanType meanType;
     private NfaStateMachine nfaStateMachine=null;
+    private boolean isOr=false;
 
     public XContentItem(int legend,int index){
         this.legend=legend;
@@ -57,5 +58,13 @@ public class XContentItem {
 
     public void setNfaStateMachine(NfaStateMachine nfaStateMachine) {
         this.nfaStateMachine = nfaStateMachine;
+    }
+
+    public boolean isOr() {
+        return isOr;
+    }
+
+    public void setOr(boolean or) {
+        isOr = or;
     }
 }

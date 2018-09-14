@@ -39,7 +39,7 @@ public class NfaManager {
     public static NfaStateMachine createSingleCharacterNfaStateMachine(int i)throws Exception{
         NfaStateMachine simplestNfaStateMachine = createSimplestNfaStateMachine(true);
         EdgeLine edgeLine = simplestNfaStateMachine.getStartNode().getEdgeLines()[0];
-        edgeLine.setEdgeInputType(EdgeInputType.CHARACTER_ALONE);
+        edgeLine.setEdgeInputType(EdgeInputType.CHARACTER_REPERTOIRE);
         List<Character> list=new ArrayList<Character>();
         list.add((char)i);
         edgeLine.setEdgeAllowInputGather(list);
@@ -50,6 +50,7 @@ public class NfaManager {
      * 创建字符集状态机
      * @param str
      * @return
+     * @throws Exception
      */
     public static NfaStateMachine createCharacterRepertoireNfaStateMachine(List<Character> str)throws Exception{
         NfaStateMachine simplestNfaStateMachine = createSimplestNfaStateMachine(true);
@@ -178,6 +179,30 @@ public class NfaManager {
     }
 
     /**
+     * 创建{n,m}，至少重复n次，最多重复m次
+     * @param var
+     * @param n
+     * @param m
+     * @return
+     * @throws Exception
+     */
+    public static NfaStateMachine createRepetitionAddNumNfaStateMachine(NfaStateMachine var,int n,int m)throws Exception{
+        EdgeLine edgeLine=new EdgeLine();
+        NfaStateNode startNode = var.getStartNode();
+        edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine.setNext(startNode);
+        edgeLine.setLeast(n);
+        edgeLine.setMax(m);
+
+        NfaStateNode endNode = var.getEndNode();
+        EdgeLine[] edgeLines = endNode.getEdgeLines();
+        assignArray(edgeLines, edgeLine);
+        NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var,  null);
+        return nfaStateMachine;
+    }
+
+
+    /**
      * 创建?，最多重复1次
      * @param var
      * @return
@@ -219,7 +244,7 @@ public class NfaManager {
         edgeLine2.setNext(endNode);
         endNode1.setState(NfaState.PROCEED);
         EdgeLine[] edgeLines1 = endNode1.getEdgeLines();
-        assignArray(edgeLines1, edgeLine);
+        assignArray(edgeLines1, edgeLine2);
 
         return simplestNfaStateMachine;
     }

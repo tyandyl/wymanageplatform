@@ -8,7 +8,6 @@ import java.util.Stack;
  * Created by tianye13 on 2018/9/9.
  */
 public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
-
     /**
      * 我们要解决[0-9],[a-z],[a-zA-Z],[A-Za-z0-9]
      * [\w./-+]是匹配\w [0-9a-zA-Z_] 或 . 或 / 或 - 或 + 字符；
@@ -17,11 +16,11 @@ public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
      * 在[]内特殊字符，表示匹配特殊字符本身，不需要加反斜杠
      * 在[]外特殊字符，表示匹配特殊字符本身，必须要加反斜杠
      * @param analyzeResult
-     * @return
+     * @param stack
      * @throws Exception
      */
     @Override
-    public List<Character> getCharacterRepertoire(Stack<XContentItem> analyzeResult) throws Exception {
+    public void build(Stack<XContentItem> analyzeResult, Stack<XContentItem> stack,char[] array,int i) throws Exception {
         XContentItem itemFirst = analyzeResult.peek();
         Integer peek = itemFirst.getLegend();
         boolean isNegation = false;
@@ -32,7 +31,8 @@ public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
         }
         List<Character> characterList = new ArrayList<Character>();
         while (!analyzeResult.empty()) {
-            Integer pop = analyzeResult.pop().getLegend();
+            XContentItem pop = analyzeResult.pop();
+            Integer popInt =pop.getLegend();
             Integer peek1 = null;
             if (!analyzeResult.empty()) {
                 peek1 = analyzeResult.peek().getLegend();
@@ -41,8 +41,8 @@ public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
             if (peek1 != null
                     && peek1 == SymbolType.DASH.getState()
                     &&  analyzeResult.peek().getMeanType()==MeanType.CHANGE_MEANING
-                    && Character.isLetterOrDigit(pop)) {
-                int pre = pop;
+                    && Character.isLetterOrDigit(popInt)) {
+                int pre = popInt;
                 analyzeResult.pop();
                 if (analyzeResult.empty()) {
                     throw new Exception("-后边必须跟着字符");
@@ -58,19 +58,25 @@ public class CCLNfaStateMachineBuilder extends NfaStateMachineBuilder{
                     pre++;
                 }
             }
-            if (!characterList.contains((char) (pop.intValue()))) {
-                characterList.add((char) (pop.intValue()));
+            NfaStateMachine nfaStateMachine = pop.getNfaStateMachine();
+            if(nfaStateMachine!=null){
+                throw new Exception("[]目前内不支持生成自动机");
+            }
+            MeanType meanType = pop.getMeanType();
+            if(meanType==MeanType.CHANGE_MEANING){
+                throw new Exception("[]目前内不允许有转义");
+            }
+            if (!characterList.contains((char) (popInt.intValue()))) {
+                characterList.add((char) (popInt.intValue()));
             }
         }
         //考虑取反
         if (isNegation) {
 
         }
-        return characterList;
-    }
 
-    @Override
-    public NfaStateMachine createNfaStateMachine(List<Character> list,int least,int max) throws Exception {
-        return NfaManager.createCharacterRepertoireNfaStateMachine(list);
+        NfaStateMachine characterRepertoireNfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(characterList);
+        XContentItem item=new XContentItem(characterRepertoireNfaStateMachine);
+        stack.push(item);
     }
 }

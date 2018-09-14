@@ -7,17 +7,18 @@ import java.util.Stack;
  * Created by tianye on 2018/9/9.
  */
 public abstract class NfaStateMachineBuilder {
-    public abstract List<Character> getCharacterRepertoire(Stack<XContentItem> analyzeResult)throws Exception;
+    public abstract void build(Stack<XContentItem> analyzeResult,Stack<XContentItem> stack,char[] array,int i)throws Exception;
 
-    public abstract NfaStateMachine createNfaStateMachine(List<Character> list,int least,int max)throws Exception;
-
-    public NfaStateMachine builder(Stack<XContentItem> stack,SymbolType pre,SymbolType later,int i)throws Exception{
-        Stack<XContentItem> analyzeResult = analyze(stack,pre,later);
-        List<Character> characterRepertoire = getCharacterRepertoire(analyzeResult);
-        return createNfaStateMachine(characterRepertoire,0,0);
+    public void builder(Stack<XContentItem> stack,char[] array,int i,SymbolType pre,SymbolType later)throws Exception{
+        Stack<XContentItem> analyzeResult = analyze(stack,array,i,pre,later);
+        if(analyzeResult==null){
+            return;
+        }
+        build(analyzeResult,stack,array,i);
+        return;
     }
 
-    public Stack<XContentItem> analyze(Stack<XContentItem> stack,SymbolType pre,SymbolType later)throws Exception{
+    public Stack<XContentItem> analyze(Stack<XContentItem> stack,char[] array,int i,SymbolType pre,SymbolType later)throws Exception{
         Stack<XContentItem> stack1=new Stack<XContentItem>();
         boolean isMatching=false;
         while (!stack.empty()){
