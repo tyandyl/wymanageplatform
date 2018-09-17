@@ -60,6 +60,14 @@ public class NfaManager {
         return simplestNfaStateMachine;
     }
 
+    public static NfaStateMachine createCharacterRepertoireNfaStateMachine(NfaStateMachine var1,int i)throws Exception{
+        NfaStateNode startNode = var1.getStartNode();
+        EdgeLine[] edgeLines = startNode.getEdgeLines();
+        List<Character> edgeAllowInputGather = edgeLines[0].getEdgeAllowInputGather();
+        edgeAllowInputGather.add((char)i);
+        return var1;
+    }
+
     /**
      * 创建任何字符状态机
      * @return

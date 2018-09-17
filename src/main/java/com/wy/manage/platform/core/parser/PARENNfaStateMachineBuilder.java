@@ -10,11 +10,10 @@ import java.util.Stack;
 public class PARENNfaStateMachineBuilder extends NfaStateMachineBuilder{
     @Override
     public void build(Stack<XContentItem> analyzeResult, Stack<XContentItem> stack,char[] array,int i) throws Exception {
-        XContentItem itemFirst = analyzeResult.peek();
-        Integer peek = itemFirst.getLegend();
 
         List<Character> characterList = new ArrayList<Character>();
         NfaStateMachine nfaStateMachine=null;
+        NfaStateMachine nfaStateMachineOr=null;
         while (!analyzeResult.empty()) {
             XContentItem pop = analyzeResult.pop();
             NfaStateMachine nfaStateMachineItem=null;
@@ -22,12 +21,20 @@ public class PARENNfaStateMachineBuilder extends NfaStateMachineBuilder{
                 nfaStateMachineItem = NfaManager.createSingleCharacterNfaStateMachine(pop.getLegend());
             }else {
                 nfaStateMachineItem=pop.getNfaStateMachine();
+                if(pop.isOr()){
+                    nfaStateMachineOr=nfaStateMachineItem;
+                }
             }
-            if(nfaStateMachine==null){
-                nfaStateMachine=nfaStateMachineItem;
+            if(nfaStateMachineOr==null){
+                if(nfaStateMachine==null){
+                    nfaStateMachine=nfaStateMachineItem;
+                }else {
+                    nfaStateMachine = NfaManager.createLinkNfaStateMachine();
+                }
             }else {
-                nfaStateMachine = NfaManager.createLinkNfaStateMachine(nfaStateMachine, nfaStateMachineItem);
+
             }
+
         }
         XContentItem item=new XContentItem(nfaStateMachine);
         stack.push(item);

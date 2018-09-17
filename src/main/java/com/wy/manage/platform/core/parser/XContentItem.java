@@ -1,27 +1,34 @@
 package com.wy.manage.platform.core.parser;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by tianye on 2018/9/8.
  */
 public class XContentItem {
     private int legend;
-    private int index;
+    //index融合，数目较大
+    private Set<Integer> index =new HashSet<Integer>();
     private MeanType meanType;
     private NfaStateMachine nfaStateMachine=null;
-    private boolean isOr=false;
+    private boolean isDash=false;
 
     public XContentItem(int legend,int index){
         this.legend=legend;
-        this.index=index;
+        this.index.add(index);
     }
 
     public XContentItem(int legend,int index,MeanType meanType){
         this.legend=legend;
-        this.index=index;
+        this.index.add(index);
         this.meanType=meanType;
+    }
+
+    public void addIndex(Set<Integer>  index){
+        this.index.addAll(index);
     }
 
     public MeanType getMeanType() {
@@ -44,14 +51,6 @@ public class XContentItem {
         this.legend = legend;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     public NfaStateMachine getNfaStateMachine() {
         return nfaStateMachine;
     }
@@ -60,11 +59,19 @@ public class XContentItem {
         this.nfaStateMachine = nfaStateMachine;
     }
 
-    public boolean isOr() {
-        return isOr;
+    public Set<Integer> getIndex() {
+        return index;
     }
 
-    public void setOr(boolean or) {
-        isOr = or;
+    public void setIndex(Set<Integer> index) {
+        this.index = index;
+    }
+
+    public boolean isDash() {
+        return isDash;
+    }
+
+    public void setDash(boolean dash) {
+        isDash = dash;
     }
 }
