@@ -49,7 +49,10 @@ public class RegularExpressionParser {
                     break;
                 case DASH:
                     CharacterCarveCapacity dashCharacterCarveCapacity = NfaStateMachineFactory.getDashCharacterCarveCapacity();
-                    dashCharacterCarveCapacity.carve(context,array,i);
+                    int carve1 = dashCharacterCarveCapacity.carve(context, array, i);
+                    if(carve1==1){
+                        i++;
+                    }
                     break;
                 case OPTIONAL:
                     CharacterCarveCapacity optionalCharacterCarveCapacity = NfaStateMachineFactory.getOptionalCharacterCarveCapacity();

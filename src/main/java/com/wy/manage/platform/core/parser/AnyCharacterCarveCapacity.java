@@ -11,6 +11,10 @@ import java.util.Stack;
 public class AnyCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            throw new Exception(".不应该在{}内");
+        }
         //.不知道是连接还是或，在外边是连接在[.]是或的意思，
         //比如[\w./-+]
         Stack<XContentItem> stack = context.getStack();
@@ -37,18 +41,22 @@ public class AnyCharacterCarveCapacity implements CharacterCarveCapacity{
                     stack.push(xContentItemAny);
                 }
             }else {
-                xContentItemAny.setMeanType(MeanType.CHANGE_MEANING);
                 XContentItem pop = stack.pop();
-                NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createAnyCharacterRepertoireNfaStateMachine());
+                NfaStateMachine linkNfaStateMachine=null;
+                if(pop.getNfaStateMachine()!=null){
+                    xContentItemAny.setMeanType(MeanType.CHANGE_MEANING);
+                    linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createAnyCharacterRepertoireNfaStateMachine());
+                    xContentItemAny.addIndex(pop.getIndex());
+                }else {
+                    stack.push(pop);
+                    //除了（[{第一个字母之外，都有状态机,这里排除了[和{，只剩下（了
+                    linkNfaStateMachine = NfaManager.createAnyCharacterRepertoireNfaStateMachine();
+                }
                 xContentItemAny.setNfaStateMachine( linkNfaStateMachine);
-                xContentItemAny.addIndex(pop.getIndex());
                 stack.push(xContentItemAny);
+
             }
 
-        }
-        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
-        if(specialCurlyStart.size()>0){
-            throw new Exception(".不应该在{}内");
         }
 
         return 0;

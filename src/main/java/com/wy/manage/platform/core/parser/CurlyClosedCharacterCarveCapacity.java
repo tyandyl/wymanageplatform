@@ -26,6 +26,12 @@ public class CurlyClosedCharacterCarveCapacity implements CharacterCarveCapacity
             XContentItem pop1 = stack.pop();
             pop.addIndex(i);
             pop.addIndex(pop1.getIndex());
+            EdgeLine edgeLine = pop.getNfaStateMachine().getStartNode().getEdgeLines()[0];
+            int least = edgeLine.getLeast();
+            if(least<0){
+                throw new Exception("{}第一个字母没有赋值么？");
+            }
+            edgeLine.setMax(array[i]-'0');
             stack.push(pop);
             specialCurlyStart.remove(specialCurlyStart.size()-1);
         }else {

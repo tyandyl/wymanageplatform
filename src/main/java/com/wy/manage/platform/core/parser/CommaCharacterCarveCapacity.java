@@ -35,16 +35,15 @@ public class CommaCharacterCarveCapacity implements CharacterCarveCapacity{
             }else {
                 List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
                 if(specialCurlyStart.size()>0){
+                    //是{的第一个字符
                     XContentItem pop = stack.pop();
-                    xContentItemComma.addIndex(i-1);
+                    xContentItemComma.addIndex(pop.getIndex());
                     if(!Character.isDigit(pop.getLegend())){
                         throw new Exception("{}内的第一个字符不是数字么");
                     }
                     XContentItem peek = stack.peek();
                     if(peek.getMeanType()==MeanType.CHANGE_MEANING
                             && peek.getLegend()==SymbolType.OPEN_CURLY.getState()){
-                        xContentItemComma.addIndex(pop.getIndex());
-                        xContentItemComma.addIndex(peek.getIndex());
                         char c = array[i + 1];
                         int c1 = (int)array[i + 2];
                         xContentItemComma.addIndex(i+1);
@@ -55,11 +54,13 @@ public class CommaCharacterCarveCapacity implements CharacterCarveCapacity{
                         if(c1!=SymbolType.CLOSE_CURLY.getState()){
                             throw new Exception("{},的下下一个字符不是}");
                         }
-                        stack.pop();//{字符
-                        xContentItemComma.addIndex(i-2);
+                        //{
                         XContentItem pop1 = stack.pop();
-                        xContentItemComma.addIndex(i-3);
-                        NfaStateMachine nfaStateMachine = pop1.getNfaStateMachine();
+                        xContentItemComma.addIndex(pop1.getIndex());
+                        //{之前的字符
+                        XContentItem pop2 = stack.pop();
+                        xContentItemComma.addIndex(pop2.getIndex());
+                        NfaStateMachine nfaStateMachine = pop2.getNfaStateMachine();
                         NfaStateMachine repetitionAddNumNfaStateMachine = NfaManager.createRepetitionAddNumNfaStateMachine(nfaStateMachine, pop.getLegend() - '0', c - '0');
                         xContentItemComma.setNfaStateMachine(repetitionAddNumNfaStateMachine);
                         stack.push(xContentItemComma);

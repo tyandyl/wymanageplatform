@@ -18,14 +18,18 @@ public class DashCharacterCarveCapacity implements CharacterCarveCapacity{
             stack.push(xContentItemDash);
         }else {
             if(specialCclStart.size()>0){
-                XContentItem peek = stack.peek();
-                if(peek.getMeanType()==MeanType.NO_CHANGE_MEANING
-                        && Character.isLetterOrDigit(peek.getLegend())){
-                    peek.setDash(true);
-                    peek.addIndex(i);
-                }else {
-                    throw new Exception("[-前边必须是字母或者数字");
+                //-前边的字符
+                XContentItem pop = stack.pop();
+                xContentItemDash.addIndex(pop.getIndex());
+                if(pop.getLegend()>=(int)array[i+1]){
+                    throw new Exception("不允许-后比-前小");
                 }
+                NfaStateMachine nfaStateMachine=null;
+                for (int y=pop.getLegend();y<=(int)array[i+1];y++){
+                    nfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(pop.getNfaStateMachine(), y);
+                }
+                xContentItemDash.setNfaStateMachine(nfaStateMachine);
+                return 1;
             }else {
                 xContentItemDash.setMeanType(MeanType.CHANGE_MEANING);
                 XContentItem pop = stack.pop();

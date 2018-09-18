@@ -14,7 +14,6 @@ public class XContentItem {
     private Set<Integer> index =new HashSet<Integer>();
     private MeanType meanType;
     private NfaStateMachine nfaStateMachine=null;
-    private boolean isDash=false;
     private boolean isOr=false;
 
     public XContentItem(int legend,int index){
@@ -70,14 +69,6 @@ public class XContentItem {
 
     public void setIndex(Set<Integer> index) {
         this.index = index;
-    }
-
-    public boolean isDash() {
-        return isDash;
-    }
-
-    public void setDash(boolean dash) {
-        isDash = dash;
     }
 
     public boolean isOr() {
