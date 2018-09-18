@@ -28,28 +28,20 @@ public class RegularExpressionParser {
                     atEolCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case CCL_END:
-                    CharacterCarveCapacity cclCharacterCarveCapacity = NfaStateMachineFactory.getCclCharacterCarveCapacity();
+                    CharacterCarveCapacity cclCharacterCarveCapacity = NfaStateMachineFactory.getCclClosedCharacterCarveCapacity();
                     cclCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case CCL_START:
-                    List<Integer> specialCclStart = context.getSpecialCclStart();
-                    Stack<XContentItem> stack = context.getStack();
-                    XContentItem xContentItemCclStart=new XContentItem(array[i],i);
-                    xContentItemCclStart.setMeanType(MeanType.CHANGE_MEANING);
-                    stack.add(xContentItemCclStart);
-                    specialCclStart.add(i);
+                    CharacterCarveCapacity cclStartedCharacterCarveCapacity = NfaStateMachineFactory.getCclStartedCharacterCarveCapacity();
+                    cclStartedCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case CLOSE_CURLY:
-                    CharacterCarveCapacity curlyCharacterCarveCapacity = NfaStateMachineFactory.getCURLYCharacterCarveCapacity();
+                    CharacterCarveCapacity curlyCharacterCarveCapacity = NfaStateMachineFactory.getCURLYClosedCharacterCarveCapacity();
                     curlyCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case OPEN_CURLY:
-                    List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
-                    specialCurlyStart.add(i);
-                    XContentItem xContentItemOpenCurly=new XContentItem(array[i],i);
-                    xContentItemOpenCurly.setMeanType(MeanType.CHANGE_MEANING);
-                    Stack<XContentItem> stackCurly = context.getStack();
-                    stackCurly.add(xContentItemOpenCurly);
+                    CharacterCarveCapacity curlyOpenedCharacterCarveCapacity = NfaStateMachineFactory.getCurlyOpenedCharacterCarveCapacity();
+                    curlyOpenedCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case CLOSURE:
                     CharacterCarveCapacity closureNfaStateMachineBuilder = NfaStateMachineFactory.getCLOSURECharacterCarveCapacity();
@@ -60,85 +52,43 @@ public class RegularExpressionParser {
                     dashCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case OPTIONAL:
-                    XContentItem xContentItemOptional=new XContentItem(array[i],i);
-                    if(isCCL_START){
-                        xContentItemOptional.setMeanType(MeanType.NO_CHANGE_MEANING);
-                        stack.add(xContentItemOptional);
-                    }else {
-                        NfaStateMachineBuilder optionalNfaStateMachineBuilder = NfaStateMachineFactory.getOPTIONALNfaStateMachineBuilder();
-                        optionalNfaStateMachineBuilder.builder(stack,array,i,null,null);
-                    }
+                    CharacterCarveCapacity optionalCharacterCarveCapacity = NfaStateMachineFactory.getOptionalCharacterCarveCapacity();
+                    optionalCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case OR:
-                    if(isCCL_START){
-                        XContentItem xContentItemOr=new XContentItem(array[i],i);
-                        xContentItemOr.setMeanType(MeanType.NO_CHANGE_MEANING);
-                        stack.add(xContentItemOr);
-                    }else {
-                        NfaStateMachineBuilder orNfaStateMachineBuilder = NfaStateMachineFactory.getORNfaStateMachineBuilder();
-                        orNfaStateMachineBuilder.builder(stack,array,i,null,null);
-                    }
+                    CharacterCarveCapacity orCharacterCarveCapacity = NfaStateMachineFactory.getOrCharacterCarveCapacity();
+                    orCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case BACKSLASH:
-                    XContentItem xContentItemL=new XContentItem(array[i+1],i+1,MeanType.NO_CHANGE_MEANING);
-                    stack.add(xContentItemL);
-                    i++;
+                    CharacterCarveCapacity backSlashCharacterCarveCapacity = NfaStateMachineFactory.getBackSlashCharacterCarveCapacity();
+                    int carve = backSlashCharacterCarveCapacity.carve(context, array, i);
+                    if(carve==1){
+                        i++;
+                    }
                     break;
                 case OPEN_PAREN:
-                    XContentItem xContentItemOpenParen=new XContentItem(array[i],i);
-                    if(isCCL_START){
-                        xContentItemOpenParen.setMeanType(MeanType.NO_CHANGE_MEANING);
-                    }else {
-                        xContentItemOpenParen.setMeanType(MeanType.CHANGE_MEANING);
-                    }
-                    stack.add(xContentItemOpenParen);
+                    CharacterCarveCapacity parenStartedCharacterCarveCapacity = NfaStateMachineFactory.getPARENStartedCharacterCarveCapacity();
+                    parenStartedCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case CLOSE_PAREN:
-                    if(isCCL_START){
-                        XContentItem xContentItemCloseParen=new XContentItem(array[i],i);
-                        xContentItemCloseParen.setMeanType(MeanType.NO_CHANGE_MEANING);
-                        stack.add(xContentItemCloseParen);
-                    }else {
-                        NfaStateMachineBuilder parenNfaStateMachineBuilder = NfaStateMachineFactory.getPARENNfaStateMachineBuilder();
-                        parenNfaStateMachineBuilder.builder(stack,array,i,SymbolType.OPEN_PAREN,SymbolType.CLOSE_PAREN);
-                    }
+                    CharacterCarveCapacity parenClosedCharacterCarveCapacity = NfaStateMachineFactory.getPARENClosedCharacterCarveCapacity();
+                    parenClosedCharacterCarveCapacity.carve(context,array,i);
                     break;
+                case COMMA:
+                    CharacterCarveCapacity commaCharacterCarveCapacity = NfaStateMachineFactory.getCommaCharacterCarveCapacity();
+                    int carveComma=commaCharacterCarveCapacity.carve(context,array,i);
+                    if(carveComma==2){
+                        i++;
+                        i++;
+                    }
                 default:
                     //普通字符
-                    XContentItem xContentItem=new XContentItem(array[i],i);
-                    xContentItem.setMeanType(MeanType.NO_CHANGE_MEANING);
-                    stack.add(xContentItem);
                     break;
             }
 
         }
-        Stack<XContentItem> stackForward=new Stack<XContentItem>();
-        while (!stack.empty()){
-            XContentItem pop = stack.pop();
-            stackForward.push(pop);
-        }
 
-        NfaStateMachine nfaStateMachine=null;
-        while (!stackForward.empty()){
-            XContentItem pop = stackForward.pop();
-            NfaStateMachine nfaStateMachineItem=null;
-            if(pop.getNfaStateMachine()==null){
-                if(pop.getLegend()==SymbolType.ANY.getState()){
-                    nfaStateMachineItem=NfaManager.createAnyCharacterRepertoireNfaStateMachine();
-                }else {
-                    nfaStateMachineItem = NfaManager.createSingleCharacterNfaStateMachine(pop.getLegend());
-                }
-
-            }else {
-                nfaStateMachineItem=pop.getNfaStateMachine();
-            }
-            if(nfaStateMachine==null){
-                nfaStateMachine=nfaStateMachineItem;
-            }else {
-                nfaStateMachine = NfaManager.createLinkNfaStateMachine();
-            }
-        }
-        return nfaStateMachine;
+        return null;
     }
 
 

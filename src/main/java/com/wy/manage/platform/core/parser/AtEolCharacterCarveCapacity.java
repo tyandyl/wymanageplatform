@@ -9,7 +9,7 @@ import java.util.Stack;
  */
 public class AtEolCharacterCarveCapacity implements CharacterCarveCapacity{
 
-    public void carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+    public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
         XContentItem xContentItemAtEol=new XContentItem(array[i],i);
@@ -39,5 +39,10 @@ public class AtEolCharacterCarveCapacity implements CharacterCarveCapacity{
             }
 
         }
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            throw new Exception("$不应该在{}内");
+        }
+        return 0;
     }
 }

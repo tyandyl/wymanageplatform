@@ -7,6 +7,6 @@ import java.util.Stack;
  */
 public interface CharacterCarveCapacity {
 
-    public void carve(CharacterCarveContext context, char[] array, int i)throws Exception;
+    public int carve(CharacterCarveContext context, char[] array, int i)throws Exception;
 
 }

@@ -8,7 +8,7 @@ import java.util.Stack;
  */
 public class DashCharacterCarveCapacity implements CharacterCarveCapacity{
 
-    public void carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+    public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
         XContentItem xContentItemDash=new XContentItem(array[i],i);
@@ -22,8 +22,9 @@ public class DashCharacterCarveCapacity implements CharacterCarveCapacity{
                 if(peek.getMeanType()==MeanType.NO_CHANGE_MEANING
                         && Character.isLetterOrDigit(peek.getLegend())){
                     peek.setDash(true);
+                    peek.addIndex(i);
                 }else {
-                    throw new Exception("{-前边必须是字母或者数字");
+                    throw new Exception("[-前边必须是字母或者数字");
                 }
             }else {
                 xContentItemDash.setMeanType(MeanType.CHANGE_MEANING);
@@ -35,5 +36,6 @@ public class DashCharacterCarveCapacity implements CharacterCarveCapacity{
             }
 
         }
+        return 0;
     }
 }

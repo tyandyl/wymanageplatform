@@ -10,7 +10,7 @@ import java.util.Stack;
  */
 public class AnyCharacterCarveCapacity implements CharacterCarveCapacity{
 
-    public void carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+    public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         //.不知道是连接还是或，在外边是连接在[.]是或的意思，
         //比如[\w./-+]
         Stack<XContentItem> stack = context.getStack();
@@ -46,6 +46,12 @@ public class AnyCharacterCarveCapacity implements CharacterCarveCapacity{
             }
 
         }
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            throw new Exception(".不应该在{}内");
+        }
+
+        return 0;
 
 
     }

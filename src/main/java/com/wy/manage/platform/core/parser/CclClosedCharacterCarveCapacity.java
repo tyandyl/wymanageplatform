@@ -7,7 +7,7 @@ import java.util.Stack;
 /**
  * Created by tianye13 on 2018/9/9.
  */
-public class CclCharacterCarveCapacity implements CharacterCarveCapacity{
+public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
 
     /**
      * 我们要解决[0-9],[a-z],[a-zA-Z],[A-Za-z0-9]
@@ -21,7 +21,7 @@ public class CclCharacterCarveCapacity implements CharacterCarveCapacity{
      * @param i
      * @throws Exception
      */
-    public void carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+    public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         List<Integer> specialCclStart = context.getSpecialCclStart();
         if(specialCclStart.size()==0){
             throw new Exception("[]没有匹配");
@@ -36,10 +36,13 @@ public class CclCharacterCarveCapacity implements CharacterCarveCapacity{
                 && stack.peek().getLegend()==SymbolType.CCL_START.getState()){
             XContentItem pop1 = stack.pop();
             pop.addIndex(pop1.getIndex());
+            pop.addIndex(i);
             stack.push(pop);
             specialCclStart.remove(specialCclStart.size()-1);
         }else {
             throw new Exception("[]解析错误");
         }
+
+        return 0;
     }
 }

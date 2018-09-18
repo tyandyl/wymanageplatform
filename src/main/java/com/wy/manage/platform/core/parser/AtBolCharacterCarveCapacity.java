@@ -8,7 +8,7 @@ import java.util.Stack;
  */
 public class AtBolCharacterCarveCapacity implements CharacterCarveCapacity{
 
-    public void carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+    public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
         List<Integer> specialAtBol1 = context.getSpecialAtBol();
@@ -18,7 +18,7 @@ public class AtBolCharacterCarveCapacity implements CharacterCarveCapacity{
         xContentItemAtBol.setMeanType(MeanType.CHANGE_MEANING);
 
         if(stack.empty()){
-            specialAtBol1.add(i);
+            //正则表达式的首位，默认不处理
         }else {
             XContentItem peek = stack.peek();
 
@@ -39,7 +39,11 @@ public class AtBolCharacterCarveCapacity implements CharacterCarveCapacity{
                 }
             }
         }
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            throw new Exception("^不能再{}中");
+        }
 
-
+        return 0;
     }
 }

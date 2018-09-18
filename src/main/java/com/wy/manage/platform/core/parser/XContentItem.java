@@ -15,6 +15,7 @@ public class XContentItem {
     private MeanType meanType;
     private NfaStateMachine nfaStateMachine=null;
     private boolean isDash=false;
+    private boolean isOr=false;
 
     public XContentItem(int legend,int index){
         this.legend=legend;
@@ -29,6 +30,10 @@ public class XContentItem {
 
     public void addIndex(Set<Integer>  index){
         this.index.addAll(index);
+    }
+
+    public void addIndex(Integer  index){
+        this.index.add(index);
     }
 
     public MeanType getMeanType() {
@@ -74,4 +79,13 @@ public class XContentItem {
     public void setDash(boolean dash) {
         isDash = dash;
     }
+
+    public boolean isOr() {
+        return isOr;
+    }
+
+    public void setOr(boolean or) {
+        isOr = or;
+    }
+
 }

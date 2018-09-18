@@ -15,13 +15,22 @@ public class NfaStateMachineFactory {
         return new AtEolCharacterCarveCapacity();
     }
 
-    public static CharacterCarveCapacity getCclCharacterCarveCapacity(){
-        CharacterCarveCapacity cclCharacterCarveCapacity=new CclCharacterCarveCapacity();
+    public static CharacterCarveCapacity getCclClosedCharacterCarveCapacity(){
+        CharacterCarveCapacity cclCharacterCarveCapacity=new CclClosedCharacterCarveCapacity();
+        return cclCharacterCarveCapacity;
+    }
+    public static CharacterCarveCapacity getCclStartedCharacterCarveCapacity(){
+        CharacterCarveCapacity cclCharacterCarveCapacity=new CclStartedCharacterCarveCapacity();
         return cclCharacterCarveCapacity;
     }
 
-    public static CharacterCarveCapacity getCURLYCharacterCarveCapacity(){
-        CharacterCarveCapacity curlyCharacterCarveCapacity=new CurlyCharacterCarveCapacity();
+    public static CharacterCarveCapacity getCURLYClosedCharacterCarveCapacity(){
+        CharacterCarveCapacity curlyCharacterCarveCapacity=new CurlyClosedCharacterCarveCapacity();
+        return curlyCharacterCarveCapacity;
+    }
+
+    public static CharacterCarveCapacity getCurlyOpenedCharacterCarveCapacity(){
+        CharacterCarveCapacity curlyCharacterCarveCapacity=new CurlyOpenedCharacterCarveCapacity();
         return curlyCharacterCarveCapacity;
     }
 
@@ -34,20 +43,33 @@ public class NfaStateMachineFactory {
         DashCharacterCarveCapacity dashCharacterCarveCapacity=new DashCharacterCarveCapacity();
         return dashCharacterCarveCapacity;
     }
-    public static NfaStateMachineBuilder getORNfaStateMachineBuilder(){
-        ORNfaStateMachineBuilder orNfaStateMachineBuilder=new ORNfaStateMachineBuilder();
+    public static CharacterCarveCapacity getOrCharacterCarveCapacity(){
+        OrCharacterCarveCapacity orNfaStateMachineBuilder=new OrCharacterCarveCapacity();
         return orNfaStateMachineBuilder;
     }
 
-    public static NfaStateMachineBuilder getOPTIONALNfaStateMachineBuilder(){
+    public static CharacterCarveCapacity getOptionalCharacterCarveCapacity(){
         OptionalCharacterCarveCapacity optionalNfaStateMachineBuilder=new OptionalCharacterCarveCapacity();
         return optionalNfaStateMachineBuilder;
     }
 
 
 
-    public static NfaStateMachineBuilder getPARENNfaStateMachineBuilder(){
-        PARENNfaStateMachineBuilder parenNfaStateMachineBuilder=new PARENNfaStateMachineBuilder();
+    public static CharacterCarveCapacity getPARENClosedCharacterCarveCapacity(){
+        ParenClosedCharacterCarveCapacity parenNfaStateMachineBuilder=new ParenClosedCharacterCarveCapacity();
         return parenNfaStateMachineBuilder;
+    }
+
+    public static CharacterCarveCapacity getPARENStartedCharacterCarveCapacity(){
+        ParenOpenedCharacterCarveCapacity parenNfaStateMachineBuilder=new ParenOpenedCharacterCarveCapacity();
+        return parenNfaStateMachineBuilder;
+    }
+
+    public static CharacterCarveCapacity getBackSlashCharacterCarveCapacity(){
+        return new BackSlashCharacterCarveCapacity();
+    }
+
+    public static CharacterCarveCapacity getCommaCharacterCarveCapacity(){
+        return new CommaCharacterCarveCapacity();
     }
 }
