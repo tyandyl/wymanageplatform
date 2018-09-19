@@ -17,6 +17,8 @@ public class NfaStateNode implements Serializable{
 
     private EdgeLine[] edgeLines=new EdgeLine[2];
 
+    private RelevanceHandle handle;
+
     public int getStateNum() {
         return stateNum;
     }
@@ -41,4 +43,11 @@ public class NfaStateNode implements Serializable{
         this.edgeLines = edgeLines;
     }
 
+    public RelevanceHandle getHandle() {
+        return handle;
+    }
+
+    public void setHandle(RelevanceHandle handle) {
+        this.handle = handle;
+    }
 }

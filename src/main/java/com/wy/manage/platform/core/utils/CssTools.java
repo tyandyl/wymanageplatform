@@ -1,5 +1,9 @@
 package com.wy.manage.platform.core.utils;
 
+import com.wy.manage.platform.core.parser.EdgeLine;
+import com.wy.manage.platform.core.parser.NfaManager;
+import com.wy.manage.platform.core.parser.NfaStateMachine;
+import com.wy.manage.platform.core.parser.NfaStateNode;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -9,7 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by tianye on 2018/9/6.
+ * Created by tianye
  */
 public class CssTools {
 
@@ -43,31 +47,13 @@ public class CssTools {
 
     private static Map<String,Map<String,String>> load(File cssFile) throws IOException {
         FileReader fileReader=new FileReader(cssFile);
-        int ch=0;
-        //左大括号是否已经标记
-        boolean leftBigBracketsIsMarked=false;
-        StringBuffer line=new StringBuffer();
-        while ((ch=fileReader.read())!=-1){
-            switch (ch){
-                case 13:
-                    line.append("回车");
-                    break;
-                case 30:
-                    line.append("空格");
-                    break;
-                case 47:
-                    line.append("斜杠");
-                    break;
-                default:
-                    line.append((char)ch);
-                    break;
-            }
-            leftBigBracketsIsMarked=true;
-
-        }
-        System.out.println(line);
+        fileReader
         return null;
 
+    }
+
+    public NfaStateMachine parser()throws Exception{
+        return null;
     }
 
     private static String getConfigUrl() {

@@ -10,17 +10,9 @@ import java.util.Stack;
  */
 public class AnalyzeExecuteModel {
 
-    public static void execute(String str) throws Exception {
-        String m="abc|fng";
-        Stack<XContentItem> stack = RegularExpressionParser.parserCss(m.toCharArray());
-        System.out.println("栈的长度是:"+stack.size());
-        System.out.println("栈末级项的内容是:"+stack.peek().getIndex());
-        if(stack.size()!=1){
-            System.out.println("解析失败,请查找原因");
-            ExceptionTools.ThrowException("解析失败,请查找原因");
-        }
+    public static void execute(String str,NfaStateMachine nfaStateMachine) throws Exception {
         char[] chars = str.toCharArray();
-        NfaStateNode startNode = stack.peek().getNfaStateMachine().getStartNode();
+        NfaStateNode startNode = nfaStateMachine.getStartNode();
         Stack<NfaStateNodeRecord> stackNodes=new Stack<NfaStateNodeRecord>();
         NfaStateNode analyze=null;
         for(int i=0;i<chars.length;i++){
