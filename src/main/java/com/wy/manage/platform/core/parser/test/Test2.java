@@ -64,9 +64,6 @@ public class Test2 {
                         System.out.println("成功识别--------开始找头");
                         return analyze(next,sy,9);
                     }
-                }else if(edgeInputType==EdgeInputType.ANY){
-                    System.out.println("当前连接线是任意");
-                    return edgeLines[i].getNext();
                 }
             }else {
                 System.out.println("edgeLines["+i+"]为空");

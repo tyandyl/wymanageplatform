@@ -1,5 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import javax.print.DocFlavor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -79,7 +81,11 @@ public class NfaManager {
     public static NfaStateMachine createAnyCharacterRepertoireNfaStateMachine()throws Exception{
         NfaStateMachine simplestNfaStateMachine = createSimplestNfaStateMachine(true);
         EdgeLine edgeLine =simplestNfaStateMachine.getStartNode().getEdgeLines()[0];
-        edgeLine.setEdgeInputType(EdgeInputType.ANY);
+        List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
+        for(int i=0;i<128;i++){
+            edgeAllowInputGather.add((char)i);
+        }
+        edgeLine.setEdgeInputType(EdgeInputType.CHARACTER_REPERTOIRE);
         return simplestNfaStateMachine;
     }
 
@@ -178,8 +184,10 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionAddNfaStateMachine(NfaStateMachine var)throws Exception{
+        NfaStateMachine nfaStateMachine = deepClone(var);
         NfaStateMachine repetitionStarNfaStateMachine = createRepetitionStarNfaStateMachine(var);
-        return var;
+        NfaStateMachine linkNfaStateMachine = createLinkNfaStateMachine(nfaStateMachine, repetitionStarNfaStateMachine);
+        return linkNfaStateMachine;
     }
 
     /**
@@ -262,10 +270,13 @@ public class NfaManager {
     public static void assignArray(EdgeLine[] edgeLines1,EdgeLine edgeLine)throws Exception{
         if(edgeLines1[0]==null){
             edgeLines1[0]=edgeLine;
+            edgeLines1[0].setEdgeType(EdgeType.MAYBE);
         }else if(edgeLines1[1]==null){
             edgeLines1[1]=edgeLine;
+            edgeLines1[0].setEdgeType(EdgeType.NO_PASSED);
+            edgeLines1[1].setEdgeType(EdgeType.NO_PASSED);
         }else {
-            throw new Exception();
+            ExceptionTools.ThrowException("路径赋值失败");
         }
     }
 
