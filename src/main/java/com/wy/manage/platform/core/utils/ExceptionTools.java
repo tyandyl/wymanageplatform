@@ -8,9 +8,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ExceptionTools {
 
-    public static void argumentCanNotBeNull(String argument, String var) throws Exception{
-        if(StringUtils.isBlank(argument)) {
-            throw new Exception(var + " can not be null");
-        }
+    public static void ThrowException(String str) throws Exception{
+        throw new Exception(str);
     }
 }
