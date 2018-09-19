@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/8.
+ * Created by tianye
  */
 public class RegularExpressionParser {
 
-    public static NfaStateMachine parserCss(String str) throws Exception {
-        char[] array=str.toCharArray();
+    public static Stack<XContentItem> parserCss(char[] array) throws Exception {
         CharacterCarveContext context=new CharacterCarveContext();
         for(int i=0;i<array.length;i++){
             SymbolType symbolType = SymbolType.findSymbolType(array[i]);
@@ -80,18 +79,23 @@ public class RegularExpressionParser {
                 case COMMA:
                     CharacterCarveCapacity commaCharacterCarveCapacity = NfaStateMachineFactory.getCommaCharacterCarveCapacity();
                     int carveComma=commaCharacterCarveCapacity.carve(context,array,i);
-                    if(carveComma==2){
-                        i++;
+                    if(carveComma==1){
                         i++;
                     }
+                    break;
                 default:
+                    CharacterCarveCapacity lCharacterCarveCapacity = NfaStateMachineFactory.getLCharacterCarveCapacity();
+                    lCharacterCarveCapacity.carve(context,array,i);
                     //普通字符
                     break;
             }
+            if(symbolType==SymbolType.OR){
+                break;
+            }
 
         }
-
-        return null;
+        Stack<XContentItem> stack = context.getStack();
+        return stack;
     }
 
 

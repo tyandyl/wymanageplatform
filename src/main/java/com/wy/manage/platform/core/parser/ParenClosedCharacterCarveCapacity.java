@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/9.
+ * Created by tianye
  */
 public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity{
 

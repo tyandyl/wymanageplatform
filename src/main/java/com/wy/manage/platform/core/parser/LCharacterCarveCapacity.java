@@ -1,15 +1,18 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/18.
+ * Created by tianye
  */
 public class LCharacterCarveCapacity implements CharacterCarveCapacity{
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
         XContentItem xContentItemL=new XContentItem(array[i],i);
         if(stack.empty()){
             xContentItemL.setNfaStateMachine( NfaManager.createSingleCharacterNfaStateMachine(array[i]));
@@ -31,25 +34,32 @@ public class LCharacterCarveCapacity implements CharacterCarveCapacity{
                     xContentItemL.addIndex(pop.getIndex());
                     stack.push(xContentItemL);
                 }
+            }else if(specialCurlyStart.size()>0){
+                XContentItem peek = stack.peek();
+                if(peek.getMeanType()==MeanType.CHANGE_MEANING
+                        && stack.peek().getLegend()==SymbolType.OPEN_CURLY.getState()){
+                    List<Integer> charCurly = context.getCharCurly();
+                    charCurly.add(array[i]-'0');
+                    peek.addIndex(i);
+                }else {
+                    ExceptionTools.ThrowException("应该是{");
+                }
             }else {
                 xContentItemL.setMeanType(MeanType.NO_CHANGE_MEANING);
                 XContentItem pop = stack.pop();
                 NfaStateMachine linkNfaStateMachine=null;
-                //除了（[{第一个字母之外，都有状态机
+                //这里只剩下(了，
                 if(pop.getNfaStateMachine()==null){
+                    stack.push(pop);
                     linkNfaStateMachine=NfaManager.createSingleCharacterNfaStateMachine(array[i]);
                 }else {
-                    linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createAnyCharacterRepertoireNfaStateMachine());
+                    linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createSingleCharacterNfaStateMachine(array[i]));
                 }
                 xContentItemL.setNfaStateMachine( linkNfaStateMachine);
                 xContentItemL.addIndex(pop.getIndex());
                 stack.push(xContentItemL);
             }
 
-        }
-        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
-        if(specialCurlyStart.size()>0){
-            throw new Exception(".不应该在{}内");
         }
         return 0;
     }

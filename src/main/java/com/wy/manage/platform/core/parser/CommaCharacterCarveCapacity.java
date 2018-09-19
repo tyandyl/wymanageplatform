@@ -1,16 +1,19 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/18.
+ * Created by tianye
  */
 public class CommaCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
         XContentItem xContentItemComma=new XContentItem(array[i],i);
         if(stack.empty()){
             xContentItemComma.setNfaStateMachine( NfaManager.createSingleCharacterNfaStateMachine(array[i]));
@@ -32,51 +35,29 @@ public class CommaCharacterCarveCapacity implements CharacterCarveCapacity{
                     xContentItemComma.addIndex(pop.getIndex());
                     stack.push(xContentItemComma);
                 }
-            }else {
-                List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
-                if(specialCurlyStart.size()>0){
-                    //是{的第一个字符
-                    XContentItem pop = stack.pop();
-                    xContentItemComma.addIndex(pop.getIndex());
-                    if(!Character.isDigit(pop.getLegend())){
-                        throw new Exception("{}内的第一个字符不是数字么");
-                    }
-                    XContentItem peek = stack.peek();
-                    if(peek.getMeanType()==MeanType.CHANGE_MEANING
-                            && peek.getLegend()==SymbolType.OPEN_CURLY.getState()){
-                        char c = array[i + 1];
-                        int c1 = (int)array[i + 2];
-                        xContentItemComma.addIndex(i+1);
-                        xContentItemComma.addIndex(i+2);
-                        if(!Character.isDigit(c)){
-                            throw new Exception("{},的下一个字符不是数字");
-                        }
-                        if(c1!=SymbolType.CLOSE_CURLY.getState()){
-                            throw new Exception("{},的下下一个字符不是}");
-                        }
-                        //{
-                        XContentItem pop1 = stack.pop();
-                        xContentItemComma.addIndex(pop1.getIndex());
-                        //{之前的字符
-                        XContentItem pop2 = stack.pop();
-                        xContentItemComma.addIndex(pop2.getIndex());
-                        NfaStateMachine nfaStateMachine = pop2.getNfaStateMachine();
-                        NfaStateMachine repetitionAddNumNfaStateMachine = NfaManager.createRepetitionAddNumNfaStateMachine(nfaStateMachine, pop.getLegend() - '0', c - '0');
-                        xContentItemComma.setNfaStateMachine(repetitionAddNumNfaStateMachine);
-                        stack.push(xContentItemComma);
-                        return 2;
-                    }else {
-                        throw new Exception("{}解析中发现边不是{");
-                    }
-
+            }else if(specialCurlyStart.size()>0){
+                XContentItem peek = stack.peek();
+                if(peek.getMeanType()==MeanType.CHANGE_MEANING
+                        && stack.peek().getLegend()==SymbolType.OPEN_CURLY.getState()){
+                    peek.addIndex(i);
                 }else {
-                    xContentItemComma.setMeanType(MeanType.CHANGE_MEANING);
-                    XContentItem pop = stack.pop();
-                    xContentItemComma.addIndex(pop.getIndex());
-                    NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createSingleCharacterNfaStateMachine(array[i]));
-                    xContentItemComma.setNfaStateMachine( linkNfaStateMachine);
-                    stack.push(xContentItemComma);
+                    ExceptionTools.ThrowException("应该是{");
                 }
+            }else {
+                xContentItemComma.setMeanType(MeanType.CHANGE_MEANING);
+                XContentItem pop = stack.pop();
+                NfaStateMachine linkNfaStateMachine=null;
+                //只剩下（了
+                if(pop.getNfaStateMachine()==null){
+                    stack.push(pop);
+                    linkNfaStateMachine=NfaManager.createSingleCharacterNfaStateMachine(array[i]);
+                }else {
+                    linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createSingleCharacterNfaStateMachine(array[i]));
+                }
+                xContentItemComma.addIndex(pop.getIndex());
+
+                xContentItemComma.setNfaStateMachine( linkNfaStateMachine);
+                stack.push(xContentItemComma);
 
             }
 

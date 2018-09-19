@@ -1,14 +1,20 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/18.
+ * Created by tianye
  */
 public class CclStartedCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            ExceptionTools.ThrowException("[不应该在{}内");
+        }
         List<Integer> specialCclStart = context.getSpecialCclStart();
         Stack<XContentItem> stack = context.getStack();
 

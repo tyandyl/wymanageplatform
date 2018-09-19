@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/17.
+ * Created by tianye
  */
 public class CharacterCarveContext {
     private List<Integer> specialCclStart=new ArrayList<Integer>();
@@ -14,6 +14,8 @@ public class CharacterCarveContext {
     private List<Integer> specialAtBol=new ArrayList<Integer>();
     //放进栈中的item都有自动机
     private Stack<XContentItem> stack=new Stack<XContentItem>();
+
+    private List<Integer> charCurly=new ArrayList<Integer>();
 
     public List<Integer> getSpecialCclStart() {
         return specialCclStart;
@@ -53,5 +55,13 @@ public class CharacterCarveContext {
 
     public void setStack(Stack<XContentItem> stack) {
         this.stack = stack;
+    }
+
+    public List<Integer> getCharCurly() {
+        return charCurly;
+    }
+
+    public void setCharCurly(List<Integer> charCurly) {
+        this.charCurly = charCurly;
     }
 }

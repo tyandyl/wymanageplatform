@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/14.
+ * Created by tianye
  */
 public class OptionalCharacterCarveCapacity implements CharacterCarveCapacity{
 

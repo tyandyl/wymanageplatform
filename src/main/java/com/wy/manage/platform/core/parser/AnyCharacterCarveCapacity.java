@@ -1,19 +1,19 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.ArrayList;
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/17.
+ * Created by tianye
  */
 public class AnyCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
         if(specialCurlyStart.size()>0){
-            throw new Exception(".不应该在{}内");
+            ExceptionTools.ThrowException(".不应该在{}内");
         }
         //.不知道是连接还是或，在外边是连接在[.]是或的意思，
         //比如[\w./-+]
@@ -49,7 +49,7 @@ public class AnyCharacterCarveCapacity implements CharacterCarveCapacity{
                     xContentItemAny.addIndex(pop.getIndex());
                 }else {
                     stack.push(pop);
-                    //除了（[{第一个字母之外，都有状态机,这里排除了[和{，只剩下（了
+                    //除了（[{之外，别的都有状态机,这里排除了[和{，只剩下（了
                     linkNfaStateMachine = NfaManager.createAnyCharacterRepertoireNfaStateMachine();
                 }
                 xContentItemAny.setNfaStateMachine( linkNfaStateMachine);

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by tianye on 2018/9/8.
+ * Created by tianye
  */
 public class XContentItem {
     private int legend;
@@ -14,7 +14,6 @@ public class XContentItem {
     private Set<Integer> index =new HashSet<Integer>();
     private MeanType meanType;
     private NfaStateMachine nfaStateMachine=null;
-    private boolean isOr=false;
 
     public XContentItem(int legend,int index){
         this.legend=legend;
@@ -69,14 +68,6 @@ public class XContentItem {
 
     public void setIndex(Set<Integer> index) {
         this.index = index;
-    }
-
-    public boolean isOr() {
-        return isOr;
-    }
-
-    public void setOr(boolean or) {
-        isOr = or;
     }
 
 }

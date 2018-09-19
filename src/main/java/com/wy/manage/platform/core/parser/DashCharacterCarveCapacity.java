@@ -1,14 +1,20 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/17.
+ * Created by tianye
  */
 public class DashCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            ExceptionTools.ThrowException("-不应该在{}内");
+        }
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
         XContentItem xContentItemDash=new XContentItem(array[i],i);
@@ -22,18 +28,26 @@ public class DashCharacterCarveCapacity implements CharacterCarveCapacity{
                 XContentItem pop = stack.pop();
                 xContentItemDash.addIndex(pop.getIndex());
                 if(pop.getLegend()>=(int)array[i+1]){
-                    throw new Exception("不允许-后比-前小");
+                    ExceptionTools.ThrowException("不允许-后比-前小");
                 }
+                xContentItemDash.addIndex(i+1);
                 NfaStateMachine nfaStateMachine=null;
-                for (int y=pop.getLegend();y<=(int)array[i+1];y++){
+                for (int y=pop.getLegend()+1;y<=(int)array[i+1];y++){
                     nfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(pop.getNfaStateMachine(), y);
                 }
                 xContentItemDash.setNfaStateMachine(nfaStateMachine);
+                stack.push(xContentItemDash);
                 return 1;
             }else {
                 xContentItemDash.setMeanType(MeanType.CHANGE_MEANING);
                 XContentItem pop = stack.pop();
-                NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createSingleCharacterNfaStateMachine(array[i]));
+                NfaStateMachine linkNfaStateMachine=null;
+                if(pop.getNfaStateMachine()==null){
+                    stack.push(pop);
+                    linkNfaStateMachine=NfaManager.createSingleCharacterNfaStateMachine(array[i]);
+                }else{
+                    linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createSingleCharacterNfaStateMachine(array[i]));
+                }
                 xContentItemDash.setNfaStateMachine( linkNfaStateMachine);
                 xContentItemDash.addIndex(pop.getIndex());
                 stack.push(xContentItemDash);

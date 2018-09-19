@@ -1,11 +1,12 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.ArrayList;
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye13 on 2018/9/9.
+ * Created by tianye
  */
 public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
 
@@ -22,13 +23,17 @@ public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
      * @throws Exception
      */
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            ExceptionTools.ThrowException("]不应该在{}内");
+        }
         List<Integer> specialCclStart = context.getSpecialCclStart();
         if(specialCclStart.size()==0){
-            throw new Exception("[]没有匹配");
+            ExceptionTools.ThrowException("[]没有匹配");
         }
         Stack<XContentItem> stack = context.getStack();
         if(stack.empty()){
-            throw new Exception("[]没有匹配");
+            ExceptionTools.ThrowException("[]没有匹配");
         }
         XContentItem pop = stack.pop();
         XContentItem peek = stack.peek();
@@ -40,7 +45,7 @@ public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
             stack.push(pop);
             specialCclStart.remove(specialCclStart.size()-1);
         }else {
-            throw new Exception("[]解析错误");
+            ExceptionTools.ThrowException("[]解析错误");
         }
 
         return 0;

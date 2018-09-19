@@ -1,11 +1,15 @@
 package com.wy.manage.platform.core.parser;
 
 import javax.print.DocFlavor;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by tianye on 2018/9/7.
+ * Created by tianye
  */
 public class NfaManager {
 
@@ -101,8 +105,8 @@ public class NfaManager {
         //设置var2开始节点的状态，由start变成proceed
         var2.getStartNode().setState(NfaState.PROCEED);
 
-        NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var1,  var2);
-        return nfaStateMachine;
+        var1.setEndNode(var2.getEndNode());
+        return var1;
     }
 
     /**
@@ -156,17 +160,16 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionStarNfaStateMachine(NfaStateMachine var)throws Exception{
-        NfaStateMachine repetitionAddNfaStateMachine = createRepetitionAddNfaStateMachine( var);
-        NfaStateNode startNode = repetitionAddNfaStateMachine.getStartNode();
-        NfaStateNode endNode = repetitionAddNfaStateMachine.getEndNode();
-
         EdgeLine edgeLine=new EdgeLine();
         edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
-        edgeLine.setNext(endNode);
+        edgeLine.setEdgeType(EdgeType.MAYBE);
+        edgeLine.setNext(var.getStartNode());
 
-        EdgeLine[] edgeLines = startNode.getEdgeLines();
-        edgeLines[1]=edgeLine;
-        return repetitionAddNfaStateMachine;
+        NfaStateNode endNode = var.getEndNode();
+        EdgeLine[] edgeLines = endNode.getEdgeLines();
+        assignArray(edgeLines, edgeLine);
+
+        return var;
     }
 
     /**
@@ -175,15 +178,8 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionAddNfaStateMachine(NfaStateMachine var)throws Exception{
-        EdgeLine edgeLine=new EdgeLine();
-        edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
-        edgeLine.setNext(var.getStartNode());
-
-        NfaStateNode endNode = var.getEndNode();
-        EdgeLine[] edgeLines = endNode.getEdgeLines();
-        assignArray(edgeLines, edgeLine);
-        NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var,  null);
-        return nfaStateMachine;
+        NfaStateMachine repetitionStarNfaStateMachine = createRepetitionStarNfaStateMachine(var);
+        return var;
     }
 
     /**
@@ -284,5 +280,31 @@ public class NfaManager {
         NfaStateNode nfaStateNode=new NfaStateNode();
         nfaStateNode.setState(NfaState.END);
         return nfaStateNode;
+    }
+
+    public static NfaStateMachine deepClone(NfaStateMachine var){
+        ObjectOutputStream os = null;
+        ObjectInputStream ois = null;
+        try{
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            os = new ObjectOutputStream(bos);
+            os.writeObject(var);
+
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            ois = new ObjectInputStream(bis);
+            NfaStateMachine target = (NfaStateMachine)ois.readObject();
+            return target;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                ois.close();
+                os.close();
+            } catch (Exception e) {
+                os = null;
+                ois=null;
+            }
+        }
+        return null;
     }
 }

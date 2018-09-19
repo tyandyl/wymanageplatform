@@ -1,14 +1,20 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/17.
+ * Created by tianye
  */
 public class AtBolCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            ExceptionTools.ThrowException("^不能再{}中");
+        }
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
         List<Integer> specialAtBol1 = context.getSpecialAtBol();
@@ -28,20 +34,16 @@ public class AtBolCharacterCarveCapacity implements CharacterCarveCapacity{
                         && peek.getLegend()==SymbolType.CCL_START.getState()){
                     specialAtBol1.add(i);
                 }else {
-                    throw new Exception("^必须在[]中排首位");
+                    ExceptionTools.ThrowException("^必须在[]中排首位");
                 }
             }else {
                 int size = specialParenStart.size();
                 if(size==stack.size()){
                     //正则表达式的首位，默认不处理
                 }else {
-                    throw new Exception("^必须在正则表达式中排首位");
+                    ExceptionTools.ThrowException("^必须在正则表达式中排首位");
                 }
             }
-        }
-        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
-        if(specialCurlyStart.size()>0){
-            throw new Exception("^不能再{}中");
         }
 
         return 0;

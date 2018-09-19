@@ -1,11 +1,13 @@
 package com.wy.manage.platform.core.parser;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by tianye on 2018/9/7.
+ * Created by tianye
  */
-public class EdgeLine {
+public class EdgeLine implements Serializable {
+    private static final long serialVersionUID = 123277793237844725L;
     //输入类型
     public EdgeInputType edgeInputType;
     //可以输入的字符集，也可以是单个字符，如果是ε，则为空
@@ -19,7 +21,7 @@ public class EdgeLine {
 
     public int useNum=0;
 
-    public boolean isLeadToEnd=false;
+    public EdgeType edgeType=EdgeType.NO_PASSED;
 
 
     public NfaStateNode getNext() {
@@ -70,11 +72,11 @@ public class EdgeLine {
         this.useNum = useNum;
     }
 
-    public boolean isLeadToEnd() {
-        return isLeadToEnd;
+    public EdgeType getEdgeType() {
+        return edgeType;
     }
 
-    public void setLeadToEnd(boolean leadToEnd) {
-        isLeadToEnd = leadToEnd;
+    public void setEdgeType(EdgeType edgeType) {
+        this.edgeType = edgeType;
     }
 }

@@ -1,11 +1,12 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * Created by tianye on 2018/9/7.
+ * Created by tianye
  */
-public class NfaStateMachine {
+public class NfaStateMachine implements Serializable {
+    private static final long serialVersionUID = -6332597576355411552L;
     private final int NFA_MAX_NUM=256;
     //一个整体，开始只能指向别人，别人不能指向他
     public NfaStateNode startNode;

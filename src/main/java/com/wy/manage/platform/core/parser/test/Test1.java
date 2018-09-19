@@ -8,12 +8,12 @@ import java.util.List;
 
 /**
  * 测试[0-9]
- * Created by tianye13 on 2018/9/12.
+ * Created by tianye
  */
 public class Test1 {
     public static void main(String[] agrs) throws Exception {
         String m="[0-9a-z]";
-        NfaStateMachine nfaStateMachine = RegularExpressionParser.parserCss(m);
+        NfaStateMachine nfaStateMachine = RegularExpressionParser.parserCss(m.toCharArray()).peek().getNfaStateMachine();
         EdgeLine edgeLines = nfaStateMachine.getStartNode().getEdgeLines()[0];
         List<Character> edgeAllowInputGather = edgeLines.getEdgeAllowInputGather();
         if(edgeAllowInputGather.contains('b')){

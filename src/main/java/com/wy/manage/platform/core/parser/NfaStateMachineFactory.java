@@ -1,7 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
 /**
- * Created by tianye on 2018/9/9.
+ * Created by tianye
  */
 public class NfaStateMachineFactory {
 
@@ -71,5 +71,8 @@ public class NfaStateMachineFactory {
 
     public static CharacterCarveCapacity getCommaCharacterCarveCapacity(){
         return new CommaCharacterCarveCapacity();
+    }
+    public static CharacterCarveCapacity getLCharacterCarveCapacity(){
+        return new LCharacterCarveCapacity();
     }
 }

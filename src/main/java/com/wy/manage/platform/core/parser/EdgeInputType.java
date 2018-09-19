@@ -1,9 +1,11 @@
 package com.wy.manage.platform.core.parser;
 
+import java.io.Serializable;
+
 /**
- * Created by tianye13 on 2018/9/7.
+ * Created by tianye
  */
-public enum EdgeInputType {
+public enum EdgeInputType{
     NULL_GATHER(1,"空集输入"),
     //CHARACTER_ALONE(2,"单个字符输入"),
     CHARACTER_REPERTOIRE(3,"有限字符集输入"),

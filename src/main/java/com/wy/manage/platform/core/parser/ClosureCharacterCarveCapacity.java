@@ -1,20 +1,26 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/14.
+ * Created by tianye
  */
 public class ClosureCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            ExceptionTools.ThrowException("*不应该在{}内");
+        }
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
         XContentItem xContentItemClosure=new XContentItem(array[i],i);
         if(stack.empty()){
-            throw new Exception("*不能放在首位");
+            ExceptionTools.ThrowException("*不能放在首位");
         }else {
             if(specialCclStart.size()>0){
                 XContentItem peek = stack.peek();
@@ -34,7 +40,12 @@ public class ClosureCharacterCarveCapacity implements CharacterCarveCapacity{
             }else {
                 xContentItemClosure.setMeanType(MeanType.CHANGE_MEANING);
                 XContentItem pop = stack.pop();
-                NfaStateMachine linkNfaStateMachine = NfaManager.createRepetitionStarNfaStateMachine(pop.getNfaStateMachine());
+                NfaStateMachine linkNfaStateMachine=null;
+                if(pop.getNfaStateMachine()==null){
+                    ExceptionTools.ThrowException("*不能放在(第一位");
+                }else {
+                    linkNfaStateMachine = NfaManager.createRepetitionStarNfaStateMachine(pop.getNfaStateMachine());
+                }
                 xContentItemClosure.setNfaStateMachine( linkNfaStateMachine);
                 xContentItemClosure.addIndex(pop.getIndex());
                 stack.push(xContentItemClosure);

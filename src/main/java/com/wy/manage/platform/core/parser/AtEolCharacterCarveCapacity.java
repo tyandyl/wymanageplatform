@@ -1,21 +1,26 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.ArrayList;
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/17.
+ * Created by tianye
  */
 public class AtEolCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            ExceptionTools.ThrowException("$不应该在{}内");
+        }
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
         XContentItem xContentItemAtEol=new XContentItem(array[i],i);
 
         if(stack.empty()){
-            throw new Exception("$不能放在首位");
+            ExceptionTools.ThrowException("$不能放在首位");
         }else {
             if(specialCclStart.size()>0){
                 XContentItem peek = stack.peek();
@@ -34,15 +39,12 @@ public class AtEolCharacterCarveCapacity implements CharacterCarveCapacity{
                 }
             }else {
                 if(!(i==array.length-1)){
-                    throw new Exception("$没有在末位");
+                    ExceptionTools.ThrowException("$没有在末位");
                 }
             }
 
         }
-        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
-        if(specialCurlyStart.size()>0){
-            throw new Exception("$不应该在{}内");
-        }
+
         return 0;
     }
 }

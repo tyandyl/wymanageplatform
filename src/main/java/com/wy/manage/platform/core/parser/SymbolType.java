@@ -2,7 +2,7 @@ package com.wy.manage.platform.core.parser;
 
 /**
  * 正则表达式符号
- * Created by tianye on 2018/9/7.
+ * Created by tianye
  */
 public enum SymbolType {
     ANY(46,".通配符"),
