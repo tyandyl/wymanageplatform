@@ -2,27 +2,29 @@ package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.utils.ExceptionTools;
 
+import java.util.List;
 import java.util.Stack;
 
 /**
  * Created by tianye
  */
-public class AbstractInvoker implements Invoker {
+public class InvokerImpl implements Invoker {
     private String regularStr;
     private long sTid = 0L;
     private boolean isPrint = false;
     private RelevanceHandle handle;
 
-    public AbstractInvoker(String regularStr) {
+    public InvokerImpl(String regularStr) {
         this.regularStr = regularStr;
     }
 
-    public AbstractInvoker relevance(RelevanceHandle handle){
+
+    public InvokerImpl relevance(RelevanceHandle handle){
         this.handle=handle;
         return this;
     }
 
-    public AbstractInvoker setIsPrint(boolean isPrint){
+    public InvokerImpl setIsPrint(boolean isPrint){
         this.isPrint=isPrint;
         return this;
     }
@@ -46,13 +48,16 @@ public class AbstractInvoker implements Invoker {
     }
 
     private NfaStateMachine preInvoke() throws Exception {
-        if (this.isPrint) {
-            System.out.println("开始解析正则表达式:" + regularStr);
-        }
         Stack<XContentItem> stack = RegularExpressionParser.parserCss(regularStr.toCharArray());
         if (stack.size() == 1) {
             XContentItem peek = stack.peek();
-            return peek.getNfaStateMachine();
+            NfaStateMachine nfaStateMachine = peek.getNfaStateMachine();
+            if (this.isPrint) {
+                System.out.println("开始解析正则表达式:" + regularStr);
+                NfaStateNode startNode = nfaStateMachine.getStartNode();
+
+            }
+            return nfaStateMachine;
         } else {
             System.out.println("栈的长度是:" + stack.size());
             System.out.println("栈末级项的内容是:" + stack.peek().getIndex());

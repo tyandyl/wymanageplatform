@@ -12,65 +12,68 @@ public class AnalyzeExecuteModel {
 
     public static void execute(String str,NfaStateMachine nfaStateMachine) throws Exception {
         char[] chars = str.toCharArray();
-        NfaStateNode startNode = nfaStateMachine.getStartNode();
-        Stack<NfaStateNodeRecord> stackNodes=new Stack<NfaStateNodeRecord>();
-        NfaStateNode analyze=null;
-        for(int i=0;i<chars.length;i++){
-            analyze = analyze(stackNodes,startNode, chars[i]);
-            if(analyze==null){
-                System.out.println("没有相对于的节点匹配");
+        ModelParam modelParam=new ModelParam(nfaStateMachine.getStartNode(),chars);
+        while (modelParam.getCurInt()<chars.length){
+            if(modelParam.getNum()>=10000){
+                System.out.println("执行失败");
                 break;
-            }else {
-                startNode=analyze;
             }
+            analyzeEx( modelParam);
         }
-        if(analyze!=null){
-            System.out.println("搞定");
-        }
-
-
     }
 
-    public static NfaStateNode analyze(Stack<NfaStateNodeRecord> stackNodes,NfaStateNode nfaStateNode, char sy)throws Exception {
-        EdgeLine[] edgeLines = nfaStateNode.getEdgeLines();
-        for(int i=0;i<edgeLines.length;i++){
+    public static void analyzeEx(ModelParam modelParam)throws Exception{
+        EdgeLine[] edgeLines = modelParam.getStartNode().getEdgeLines();
+        for(int i=0;i<2;i++){
             if(edgeLines[i]!=null && edgeLines[i].getEdgeType()!=EdgeType.PASSED){
                 EdgeInputType edgeInputType = edgeLines[i].getEdgeInputType();
                 if(edgeInputType==EdgeInputType.NULL_GATHER ){
                     if(edgeLines[i].getEdgeType()!=EdgeType.MAYBE){
                         edgeLines[i].setEdgeType(EdgeType.PASSED);
                     }
-                    NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(nfaStateNode,sy);
-                    stackNodes.push(nfaStateNodeRecord);
+                    //记录当前节点和经过的字符
+                    NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(modelParam.getStartNode(),-1);
+                    modelParam.getStackNodes().push(nfaStateNodeRecord);
 
                     NfaStateNode next = edgeLines[i].getNext();
+
                     if(next!=null){
-                        return analyze(stackNodes,next, sy);
+                        //System.out.println("条线为空,已找到下一个节点");
+                        modelParam.setStartNode(next);
+                        return;
                     }else {
                         ExceptionTools.ThrowException("没有与之对应的节点匹配");
                     }
                 }else if(edgeInputType==EdgeInputType.CHARACTER_REPERTOIRE){
                     List<Character> edgeAllowInputGather = edgeLines[i].getEdgeAllowInputGather();
-                    if(edgeAllowInputGather.contains(sy)){
+                    char[] chars = modelParam.getChars();
+                    int curInt = modelParam.getCurInt();
+                    if(edgeAllowInputGather.contains(chars[curInt])){
                         NfaStateNode next = edgeLines[i].getNext();
                         EdgeType edgeType = edgeLines[i].getEdgeType();
                         if(edgeType!=EdgeType.MAYBE){
                             edgeLines[i].setEdgeType(EdgeType.PASSED);
                         }
-                        NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(nfaStateNode,sy);
-                        stackNodes.push(nfaStateNodeRecord);
-                        System.out.println("成功识别"+sy);
-                        return next;
+                        NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(modelParam.getStartNode(),chars[curInt]);
+
+                        modelParam.getStackNodes().push(nfaStateNodeRecord);
+                        modelParam.setStartNode(next);
+                        modelParam.setCurInt(curInt+1);
+                        System.out.println("已匹配,当前的字符是:"+chars[curInt]);
+                        return;
                     }else {
-                        NfaStateNodeRecord pop = stackNodes.pop();
-                        return analyze(stackNodes,pop.getNfaStateNode(), (char)pop.getcRecord());
+//                        EdgeType edgeType = edgeLines[i].getEdgeType();
+//                        if(edgeType!=EdgeType.MAYBE){
+//                            edgeLines[i].setEdgeType(EdgeType.PASSED);
+//                        }
+//                        System.out.println("不匹配,跳出");
+//                        return;
                     }
                 }
             }
         }
-        //null为报错不匹配，匹配总会返回一个状态机
-        return null;
 
+        modelParam.analyzeIsBack();
+        return;
     }
-
 }

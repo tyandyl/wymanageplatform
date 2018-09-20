@@ -270,11 +270,8 @@ public class NfaManager {
     public static void assignArray(EdgeLine[] edgeLines1,EdgeLine edgeLine)throws Exception{
         if(edgeLines1[0]==null){
             edgeLines1[0]=edgeLine;
-            edgeLines1[0].setEdgeType(EdgeType.MAYBE);
         }else if(edgeLines1[1]==null){
             edgeLines1[1]=edgeLine;
-            edgeLines1[0].setEdgeType(EdgeType.NO_PASSED);
-            edgeLines1[1].setEdgeType(EdgeType.NO_PASSED);
         }else {
             ExceptionTools.ThrowException("路径赋值失败");
         }

@@ -1,9 +1,10 @@
 package com.wy.manage.platform.core.utils;
 
-import com.wy.manage.platform.core.parser.EdgeLine;
-import com.wy.manage.platform.core.parser.NfaManager;
-import com.wy.manage.platform.core.parser.NfaStateMachine;
-import com.wy.manage.platform.core.parser.NfaStateNode;
+import com.wy.manage.platform.core.parser.*;
+import com.wy.manage.platform.core.widget.AbsoluteFlow;
+import com.wy.manage.platform.core.widget.IFlow;
+import com.wy.manage.platform.core.widget.NormalFlow;
+import com.wy.manage.platform.core.widget.RelativeFlow;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -47,13 +48,39 @@ public class CssTools {
 
     private static Map<String,Map<String,String>> load(File cssFile) throws IOException {
         FileReader fileReader=new FileReader(cssFile);
-        fileReader
+
         return null;
 
     }
 
-    public NfaStateMachine parser()throws Exception{
-        return null;
+    public static NfaStateMachine parser()throws Exception{
+        //定义css解析的正则表达式position:static
+        NfaStateMachine invokeStatic = new InvokerImpl("a").relevance(new RelevanceHandle<IFlow>() {
+            public IFlow handle() {
+                return new NormalFlow();
+            }
+        }).setIsPrint(true).invoke();
+
+        //position:relative
+        NfaStateMachine invokeRelative = new InvokerImpl("b").relevance(new RelevanceHandle<IFlow>() {
+            public IFlow handle() {
+                return new RelativeFlow();
+            }
+        }).setIsPrint(true).invoke();
+
+        NfaStateMachine invokeAbsolute = new InvokerImpl("c").relevance(new RelevanceHandle<IFlow>() {
+            public IFlow handle() {
+                return new AbsoluteFlow();
+            }
+        }).setIsPrint(true).invoke();
+
+        NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(invokeStatic, invokeRelative);
+
+        NfaStateMachine orNfaStateMachine1 = NfaManager.createOrNfaStateMachine(orNfaStateMachine, invokeAbsolute);
+
+
+        //String str="#|.[^#.]+\\{";
+        return orNfaStateMachine1;
     }
 
     private static String getConfigUrl() {

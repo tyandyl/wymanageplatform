@@ -3,12 +3,10 @@ package com.wy.manage.platform.core.widget;
 import java.io.Serializable;
 
 /**
- * Created by tianye on 2018/6/27.
- * 定位
+ * Created by tianye13 on 2018/9/20.
  */
-public class PositionFlow implements IFlow, Serializable {
-
-    private static final long serialVersionUID = -6649698358560365626L;
+public class RelativeFlow implements IFlow, Serializable {
+    private static final long serialVersionUID = -4621715633334121527L;
     /**
      * 向下偏移
      */
