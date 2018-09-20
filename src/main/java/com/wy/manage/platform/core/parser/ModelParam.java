@@ -26,6 +26,7 @@ public class ModelParam {
             --curInt;
             System.out.println("字符不匹配,退位"+chars[curInt]);
         }
+        this.setStartNode(pop.getNfaStateNode());
         return this;
     }
 
