@@ -10,29 +10,34 @@ import java.util.Stack;
  */
 public class AnalyzeExecuteModel {
 
-    public static void execute(String str,NfaStateMachine nfaStateMachine) throws Exception {
+    public static void execute(String str,CssBag cssBag,NfaStateMachine nfaStateMachine) throws Exception {
+
         char[] chars = str.toCharArray();
-        ModelParam<CssBag> modelParam=new ModelParam<CssBag>(nfaStateMachine.getStartNode(),chars,new CssBag());
+        ModelParam modelParam=new ModelParam(nfaStateMachine.getStartNode(),chars);
         while (modelParam.getCurInt()<chars.length){
-            if(modelParam.getNum()>=10000){
+            if(modelParam.getNum()>=1000){
                 System.out.println("执行失败");
                 break;
             }
-            analyzeEx( modelParam);
+            analyzeEx( modelParam,cssBag);
         }
-        System.out.println(modelParam.getT());
+        if(modelParam.getNum()<1000){
+            nfaStateMachine.getEndNode().getHandle().handle(modelParam,cssBag);
+        }
+
     }
 
-    public static void analyzeEx(ModelParam modelParam)throws Exception{
+    public static void analyzeEx(ModelParam modelParam,CssBag cssBag)throws Exception{
         EdgeLine[] edgeLines = modelParam.getStartNode().getEdgeLines();
-        for(int i=0;i<2;i++){
+        int i=modelParam.getI();
+        for(;i<2;i++){
             if(edgeLines[i]!=null && edgeLines[i].getEdgeType()!=EdgeType.PASSED){
                 EdgeInputType edgeInputType = edgeLines[i].getEdgeInputType();
                 if(edgeInputType==EdgeInputType.NULL_GATHER ){
                     if(edgeLines[i].getEdgeType()!=EdgeType.MAYBE){
                         edgeLines[i].setEdgeType(EdgeType.PASSED);
                     }else {
-                        System.out.println("当前路径是maybe");
+                       // System.out.println("当前路径是maybe");
                     }
                     //记录当前节点和经过的字符
                     NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(modelParam.getStartNode(),-1);
@@ -42,8 +47,10 @@ public class AnalyzeExecuteModel {
 
                     if(next!=null){
                         modelParam.setStartNode(next);
+                        //优先后，恢复默认
+                        modelParam.setI(0);
                         if(next.getHandle()!=null){
-                            next.getHandle().handle(modelParam,modelParam.getT());
+                            next.getHandle().handle(modelParam,cssBag);
                             modelParam.getCurModelValue().clear();
                         }
                         return;
@@ -66,10 +73,15 @@ public class AnalyzeExecuteModel {
                         modelParam.setStartNode(next);
                         modelParam.setCurInt(curInt+1);
                         modelParam.getCurModelValue().add(chars[curInt]);
+                        modelParam.setI(0);
                         System.out.println("已匹配,当前的字符是:"+chars[curInt]);
-                        if(next.getHandle()!=null){
-                            next.getHandle().handle(modelParam,modelParam.getT());
-                            modelParam.getCurModelValue().clear();
+                        if((curInt+1)==modelParam.getChars().length){
+                            System.out.println("识别完毕，退出");
+                        }else {
+                            if(next.getHandle()!=null){
+                                next.getHandle().handle(modelParam,cssBag);
+                                modelParam.getCurModelValue().clear();
+                            }
                         }
                         return;
                     }else {

@@ -20,7 +20,9 @@ import java.util.regex.Pattern;
 public class Test {
     public static void main(String[] agrs) throws Exception {
         NfaStateMachine parser = CssParser.parser();
-        AnalyzeExecuteModel.execute("#ab.cgh{",parser);
-
+        CssBag cssBag=new CssBag();
+        AnalyzeExecuteModel.execute("#abcghssssshjkl{",cssBag,parser);
+        System.out.println(cssBag.getSelectorType());
+        System.out.println(cssBag.getName());
     }
 }

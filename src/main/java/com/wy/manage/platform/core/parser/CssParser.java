@@ -31,12 +31,15 @@ public class CssParser {
         NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(invokePound, invokeSpot);
 
         //解析(.)+\{
-        NfaStateMachine invokeFirstFollowUp = new InvokerImpl("(.)+\\{").relevance(new RelevanceHandle<CssBag>() {
+        NfaStateMachine invokeFirstFollowUp = new InvokerImpl("[a-z1-9A-Z]+\\{").relevance(new RelevanceHandle<CssBag>() {
             public void handle(ModelParam modelParam,CssBag cssBag) {
-                List curModelValue = modelParam.getCurModelValue();
-                List value = (List)curModelValue.remove(curModelValue.size() - 1);
-                Character[] objects = (Character[])value.toArray();
-                cssBag.setName(String.valueOf(objects));
+                List<Character> curModelValue = modelParam.getCurModelValue();
+                curModelValue.remove(curModelValue.size() - 1);
+                StringBuilder str = new StringBuilder();
+                for (Character character : curModelValue) {// 对ArrayList进行遍历，将字符放入StringBuilder中
+                    str.append(character);
+                }
+                cssBag.setName(String.valueOf(str));
             }
         }).setIsPrint(true).invoke();
 

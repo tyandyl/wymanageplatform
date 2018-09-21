@@ -7,7 +7,7 @@ import java.util.Stack;
 /**
  * Created by tianye
  */
-public class ModelParam<T> {
+public class ModelParam {
     private NfaStateNode startNode =null;
     private NfaStateNode startNodeBackup =null;
     private int curInt=0;
@@ -15,7 +15,9 @@ public class ModelParam<T> {
     private char[] chars=null;
     private int num=0;//次数
     private List<Character> curModelValue=new ArrayList<Character>();
-    private T t;
+    //遇到[a-z1-9]+\{
+    //有转移符号,回退后，该节点有两条边，第一条边是转移+，每次都走这条，所以转移优先2
+    private int i=0;//优先路径
 
     public ModelParam analyzeIsBack(){
         if(stackNodes.empty()){
@@ -30,15 +32,15 @@ public class ModelParam<T> {
             System.out.println("字符不匹配,退位"+chars[curInt]);
         }
         this.setStartNode(pop.getNfaStateNode());
+        i=1;
         return this;
     }
 
-    public ModelParam(NfaStateNode startNode,char[] chars,T t){
+    public ModelParam(NfaStateNode startNode,char[] chars){
         this.startNode=startNode;
         this.startNodeBackup=startNode;
         this.curInt=0;
         this.chars=chars;
-        this.t=t;
     }
 
     public NfaStateNode getStartNode() {
@@ -90,11 +92,11 @@ public class ModelParam<T> {
         this.curModelValue = curModelValue;
     }
 
-    public T getT() {
-        return t;
+    public int getI() {
+        return i;
     }
 
-    public void setT(T t) {
-        this.t = t;
+    public void setI(int i) {
+        this.i = i;
     }
 }

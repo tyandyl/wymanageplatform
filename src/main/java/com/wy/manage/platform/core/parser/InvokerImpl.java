@@ -44,7 +44,28 @@ public class InvokerImpl implements Invoker {
     private NfaStateMachine onInvoke(NfaStateMachine nfaStateMachine,RelevanceHandle handle) throws Exception{
         NfaStateNode endNode = nfaStateMachine.getEndNode();
         endNode.setHandle(handle);
+        //traverse(nfaStateMachine.startNode, endNode,0);
         return nfaStateMachine;
+    }
+
+    public static void traverse(NfaStateNode startNode,NfaStateNode endNode,int i){
+        if(startNode!=null){
+            i++;
+            if(startNode.getEdgeLines()[0]!=null){
+                List<Character> edgeAllowInputGather = startNode.getEdgeLines()[0].getEdgeAllowInputGather();
+                System.out.println("第"+i+"个节点的第1条边的输入是:"+(edgeAllowInputGather.size()==0?"空集":String.valueOf((Character[])edgeAllowInputGather.toArray())));
+                if(startNode.getEdgeLines()[0].getNext()!=endNode){
+                    traverse(startNode.getEdgeLines()[0].getNext(),endNode,i);
+                }
+            }
+            if(startNode.getEdgeLines()[1]!=null){
+                List<Character> edgeAllowInputGather = startNode.getEdgeLines()[1].getEdgeAllowInputGather();
+                System.out.println("第"+i+"个节点的第2条边的输入是:"+(edgeAllowInputGather.size()==0?"空集":String.valueOf((Character[])edgeAllowInputGather.toArray())));
+                if(startNode.getEdgeLines()[1].getNext()!=endNode){
+                    traverse(startNode.getEdgeLines()[1].getNext(),endNode,i);
+                }
+            }
+        }
     }
 
     private NfaStateMachine preInvoke() throws Exception {
