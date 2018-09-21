@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by tianye
@@ -82,7 +83,7 @@ public class NfaManager {
         NfaStateMachine simplestNfaStateMachine = createSimplestNfaStateMachine(true);
         EdgeLine edgeLine =simplestNfaStateMachine.getStartNode().getEdgeLines()[0];
         List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
-        for(int i=0;i<128;i++){
+        for(int i=0;i<127;i++){
             edgeAllowInputGather.add((char)i);
         }
         edgeLine.setEdgeInputType(EdgeInputType.CHARACTER_REPERTOIRE);
@@ -174,8 +175,25 @@ public class NfaManager {
         NfaStateNode endNode = var.getEndNode();
         EdgeLine[] edgeLines = endNode.getEdgeLines();
         assignArray(edgeLines, edgeLine);
-
+        traverse( var.getStartNode(),var.getEndNode());
         return var;
+    }
+
+    public static void traverse(NfaStateNode startNode,NfaStateNode endNode){
+        if(startNode!=null){
+            if(startNode.getEdgeLines()[0]!=null){
+                if(startNode.getEdgeLines()[0].getNext()!=endNode){
+                    traverse(startNode.getEdgeLines()[0].getNext(),endNode);
+                }
+                startNode.getEdgeLines()[0].setEdgeType(EdgeType.MAYBE);
+            }
+            if(startNode.getEdgeLines()[1]!=null){
+                if(startNode.getEdgeLines()[1].getNext()!=endNode){
+                    traverse(startNode.getEdgeLines()[1].getNext(),endNode);
+                }
+                startNode.getEdgeLines()[1].setEdgeType(EdgeType.MAYBE);
+            }
+        }
     }
 
     /**

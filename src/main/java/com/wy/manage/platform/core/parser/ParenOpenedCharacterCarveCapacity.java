@@ -1,5 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
 import java.util.List;
 import java.util.Stack;
 
@@ -9,6 +11,10 @@ import java.util.Stack;
 public class ParenOpenedCharacterCarveCapacity implements CharacterCarveCapacity{
 
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
+        List<Integer> specialCurlyStart = context.getSpecialCurlyStart();
+        if(specialCurlyStart.size()>0){
+            ExceptionTools.ThrowException("(不应该在{}内");
+        }
         List<Integer> specialCclStart = context.getSpecialCclStart();
         List<Integer> specialParenStart = context.getSpecialParenStart();
         Stack<XContentItem> stack = context.getStack();

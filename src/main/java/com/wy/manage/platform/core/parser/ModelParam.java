@@ -1,5 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -12,7 +14,7 @@ public class ModelParam {
     private Stack<NfaStateNodeRecord> stackNodes=new Stack<NfaStateNodeRecord>();
     private char[] chars=null;
     private int num=0;//次数
-
+    private List<Character> curModelValue=new ArrayList<Character>();
 
     public ModelParam analyzeIsBack(){
         if(stackNodes.empty()){
@@ -72,5 +74,17 @@ public class ModelParam {
 
     public int getNum() {
         return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    public List<Character> getCurModelValue() {
+        return curModelValue;
+    }
+
+    public void setCurModelValue(List<Character> curModelValue) {
+        this.curModelValue = curModelValue;
     }
 }

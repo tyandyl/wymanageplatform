@@ -19,6 +19,7 @@ public enum SymbolType {
     BACKSLASH(92,"反斜杠\\"),
     OPEN_PAREN(40,"("),
     CLOSE_PAREN(41,")"),
+    PLUS(43,"+"),
     LP(10,"换行"),
     CR(13,"回车"),
     SP(32,"空格"),

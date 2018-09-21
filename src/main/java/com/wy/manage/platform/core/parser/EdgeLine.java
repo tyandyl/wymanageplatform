@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ public class EdgeLine implements Serializable {
     //输入类型
     public EdgeInputType edgeInputType;
     //可以输入的字符集，也可以是单个字符，如果是ε，则为空
-    public List<Character> edgeAllowInputGather;
+    public List<Character> edgeAllowInputGather=new ArrayList<Character>();
     //下一个节点
     public NfaStateNode next;
     //对输入值的要求,大于等于几

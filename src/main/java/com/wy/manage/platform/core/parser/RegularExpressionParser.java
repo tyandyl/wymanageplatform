@@ -83,6 +83,10 @@ public class RegularExpressionParser {
                         i++;
                     }
                     break;
+                case PLUS:
+                    CharacterCarveCapacity plusCharacterCarveCapacity = NfaStateMachineFactory.getPlusCharacterCarveCapacity();
+                    plusCharacterCarveCapacity.carve(context,array,i);
+                    break;
                 default:
                     CharacterCarveCapacity lCharacterCarveCapacity = NfaStateMachineFactory.getLCharacterCarveCapacity();
                     lCharacterCarveCapacity.carve(context,array,i);

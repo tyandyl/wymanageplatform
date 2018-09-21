@@ -30,6 +30,8 @@ public class AnalyzeExecuteModel {
                 if(edgeInputType==EdgeInputType.NULL_GATHER ){
                     if(edgeLines[i].getEdgeType()!=EdgeType.MAYBE){
                         edgeLines[i].setEdgeType(EdgeType.PASSED);
+                    }else {
+                        System.out.println("当前路径是maybe");
                     }
                     //记录当前节点和经过的字符
                     NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(modelParam.getStartNode(),-1);
@@ -38,8 +40,11 @@ public class AnalyzeExecuteModel {
                     NfaStateNode next = edgeLines[i].getNext();
 
                     if(next!=null){
-                        //System.out.println("条线为空,已找到下一个节点");
                         modelParam.setStartNode(next);
+                        if(next.getHandle()!=null){
+                            next.getHandle().handle(modelParam);
+                            modelParam.getCurModelValue().clear();
+                        }
                         return;
                     }else {
                         ExceptionTools.ThrowException("没有与之对应的节点匹配");
@@ -59,15 +64,14 @@ public class AnalyzeExecuteModel {
                         modelParam.getStackNodes().push(nfaStateNodeRecord);
                         modelParam.setStartNode(next);
                         modelParam.setCurInt(curInt+1);
+                        modelParam.getCurModelValue().add(chars[curInt]);
                         System.out.println("已匹配,当前的字符是:"+chars[curInt]);
+                        if(next.getHandle()!=null){
+                            next.getHandle().handle(modelParam);
+                            modelParam.getCurModelValue().clear();
+                        }
                         return;
                     }else {
-//                        EdgeType edgeType = edgeLines[i].getEdgeType();
-//                        if(edgeType!=EdgeType.MAYBE){
-//                            edgeLines[i].setEdgeType(EdgeType.PASSED);
-//                        }
-//                        System.out.println("不匹配,跳出");
-//                        return;
                     }
                 }
             }

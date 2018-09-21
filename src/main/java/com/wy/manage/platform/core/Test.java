@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
  */
 public class Test {
     public static void main(String[] agrs) throws Exception {
-        NfaStateMachine parser = CssTools.parser();
-        AnalyzeExecuteModel.execute("position:relative",parser);
+        NfaStateMachine parser = CssParser.parser();
+        AnalyzeExecuteModel.execute("#ab.cgh{",parser);
 
     }
 }

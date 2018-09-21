@@ -42,6 +42,7 @@ public class BackSlashCharacterCarveCapacity implements CharacterCarveCapacity{
                 }
             }else {
                 xContentItemBackSlash=new XContentItem(array[i+1],i+1,MeanType.NO_CHANGE_MEANING);
+                xContentItemBackSlash.addIndex(i);
                 XContentItem pop = stack.pop();
                 NfaStateMachine linkNfaStateMachine=null;
                 if(pop.getNfaStateMachine()==null){

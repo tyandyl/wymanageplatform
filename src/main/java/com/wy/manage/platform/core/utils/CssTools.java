@@ -56,26 +56,26 @@ public class CssTools {
     public static NfaStateMachine parser()throws Exception{
         //定义css解析的正则表达式position:static
         NfaStateMachine invokeStatic = new InvokerImpl("static").relevance(new RelevanceHandle<IFlow>() {
-            public IFlow handle() {
+            public IFlow handle(ModelParam modelParam) {
                 return new NormalFlow();
             }
         }).setIsPrint(true).invoke();
 
         //position:relative
         NfaStateMachine invokeRelative = new InvokerImpl("relative").relevance(new RelevanceHandle<IFlow>() {
-            public IFlow handle() {
+            public IFlow handle(ModelParam modelParam) {
                 return new RelativeFlow();
             }
         }).setIsPrint(true).invoke();
 
         NfaStateMachine invokeAbsolute = new InvokerImpl("absolute").relevance(new RelevanceHandle<IFlow>() {
-            public IFlow handle() {
+            public IFlow handle(ModelParam modelParam) {
                 return new AbsoluteFlow();
             }
         }).setIsPrint(true).invoke();
 
         NfaStateMachine invokePosition = new InvokerImpl("position:").relevance(new RelevanceHandle<IFlow>() {
-            public IFlow handle() {
+            public IFlow handle(ModelParam modelParam) {
                 return new AbsoluteFlow();
             }
         }).setIsPrint(true).invoke();
