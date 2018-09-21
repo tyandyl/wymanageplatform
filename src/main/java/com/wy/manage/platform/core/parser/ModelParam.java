@@ -7,7 +7,7 @@ import java.util.Stack;
 /**
  * Created by tianye
  */
-public class ModelParam {
+public class ModelParam<T> {
     private NfaStateNode startNode =null;
     private NfaStateNode startNodeBackup =null;
     private int curInt=0;
@@ -15,6 +15,7 @@ public class ModelParam {
     private char[] chars=null;
     private int num=0;//次数
     private List<Character> curModelValue=new ArrayList<Character>();
+    private T t;
 
     public ModelParam analyzeIsBack(){
         if(stackNodes.empty()){
@@ -32,11 +33,12 @@ public class ModelParam {
         return this;
     }
 
-    public ModelParam(NfaStateNode startNode,char[] chars){
+    public ModelParam(NfaStateNode startNode,char[] chars,T t){
         this.startNode=startNode;
         this.startNodeBackup=startNode;
         this.curInt=0;
         this.chars=chars;
+        this.t=t;
     }
 
     public NfaStateNode getStartNode() {
@@ -86,5 +88,13 @@ public class ModelParam {
 
     public void setCurModelValue(List<Character> curModelValue) {
         this.curModelValue = curModelValue;
+    }
+
+    public T getT() {
+        return t;
+    }
+
+    public void setT(T t) {
+        this.t = t;
     }
 }

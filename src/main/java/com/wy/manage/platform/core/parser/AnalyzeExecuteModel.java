@@ -12,7 +12,7 @@ public class AnalyzeExecuteModel {
 
     public static void execute(String str,NfaStateMachine nfaStateMachine) throws Exception {
         char[] chars = str.toCharArray();
-        ModelParam modelParam=new ModelParam(nfaStateMachine.getStartNode(),chars);
+        ModelParam<CssBag> modelParam=new ModelParam<CssBag>(nfaStateMachine.getStartNode(),chars,new CssBag());
         while (modelParam.getCurInt()<chars.length){
             if(modelParam.getNum()>=10000){
                 System.out.println("执行失败");
@@ -20,6 +20,7 @@ public class AnalyzeExecuteModel {
             }
             analyzeEx( modelParam);
         }
+        System.out.println(modelParam.getT());
     }
 
     public static void analyzeEx(ModelParam modelParam)throws Exception{
@@ -42,7 +43,7 @@ public class AnalyzeExecuteModel {
                     if(next!=null){
                         modelParam.setStartNode(next);
                         if(next.getHandle()!=null){
-                            next.getHandle().handle(modelParam);
+                            next.getHandle().handle(modelParam,modelParam.getT());
                             modelParam.getCurModelValue().clear();
                         }
                         return;
@@ -67,7 +68,7 @@ public class AnalyzeExecuteModel {
                         modelParam.getCurModelValue().add(chars[curInt]);
                         System.out.println("已匹配,当前的字符是:"+chars[curInt]);
                         if(next.getHandle()!=null){
-                            next.getHandle().handle(modelParam);
+                            next.getHandle().handle(modelParam,modelParam.getT());
                             modelParam.getCurModelValue().clear();
                         }
                         return;
