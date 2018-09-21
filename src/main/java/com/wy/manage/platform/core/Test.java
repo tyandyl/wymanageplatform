@@ -21,7 +21,7 @@ public class Test {
     public static void main(String[] agrs) throws Exception {
         NfaStateMachine parser = CssParser.parser();
         CssBag cssBag=new CssBag();
-        AnalyzeExecuteModel.execute("#abcghssssshjkl{",cssBag,parser);
+        AnalyzeExecuteModel.execute("#abcghs_-sssshjkl{position:static",cssBag,parser);
         System.out.println(cssBag.getSelectorType());
         System.out.println(cssBag.getName());
     }

@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.utils.ExceptionTools;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -44,6 +45,19 @@ public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
             pop.addIndex(i);
             stack.push(pop);
             specialCclStart.remove(specialCclStart.size()-1);
+            List<Integer> specialAtBol = context.getSpecialAtBol();
+            if(specialAtBol.size()>0){
+                EdgeLine edgeLines = pop.getNfaStateMachine().getStartNode().getEdgeLines()[0];
+                List<Character> edgeAllowInputGather = edgeLines.getEdgeAllowInputGather();
+                List<Character> list=new ArrayList<Character>();
+                for(int y=0;y<128;y++){
+                    if(!edgeAllowInputGather.contains(y)){
+                        list.add((char)y);
+                    }
+                }
+                edgeLines.setEdgeAllowInputGather(list);
+
+            }
         }else {
             ExceptionTools.ThrowException("[]解析错误");
         }

@@ -31,7 +31,7 @@ public class CssParser {
         NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(invokePound, invokeSpot);
 
         //解析(.)+\{
-        NfaStateMachine invokeFirstFollowUp = new InvokerImpl("[a-z1-9A-Z]+\\{").relevance(new RelevanceHandle<CssBag>() {
+        NfaStateMachine invokeFirstFollowUp = new InvokerImpl("[^{]+\\{").relevance(new RelevanceHandle<CssBag>() {
             public void handle(ModelParam modelParam,CssBag cssBag) {
                 List<Character> curModelValue = modelParam.getCurModelValue();
                 curModelValue.remove(curModelValue.size() - 1);
@@ -45,7 +45,25 @@ public class CssParser {
 
         NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(orNfaStateMachine, invokeFirstFollowUp);
 
+        //定义css解析的正则表达式position:static
+        NfaStateMachine invokeStatic = new InvokerImpl("position:static").relevance(new RelevanceHandle<CssBag>() {
+            public void handle(ModelParam modelParam,CssBag cssBag) {
+                Map<String, String> map = cssBag.getMap();
+                map.put("position","static");
+            }
+        }).setIsPrint(true).invoke();
 
-        return linkNfaStateMachine;
+        NfaStateMachine invokeRelative = new InvokerImpl("position:relative").relevance(new RelevanceHandle<CssBag>() {
+            public void handle(ModelParam modelParam,CssBag cssBag) {
+                Map<String, String> map = cssBag.getMap();
+                map.put("position","relative");
+            }
+        }).setIsPrint(true).invoke();
+
+        NfaStateMachine orNfaStateMachine1 = NfaManager.createOrNfaStateMachine(invokeStatic, invokeRelative);
+
+        NfaStateMachine linkNfaStateMachine1 = NfaManager.createLinkNfaStateMachine(linkNfaStateMachine, orNfaStateMachine1);
+
+        return linkNfaStateMachine1;
     }
 }
