@@ -22,10 +22,12 @@ public class AnalyzeExecuteModel {
             analyzeEx( modelParam,cssBag);
         }
         if(modelParam.getNum()<1000){
-            nfaStateMachine.getEndNode().getHandle().handle(modelParam,cssBag);
+            System.out.println("执行成功");
         }
 
     }
+
+
 
     public static void analyzeEx(ModelParam modelParam,CssBag cssBag)throws Exception{
         EdgeLine[] edgeLines = modelParam.getStartNode().getEdgeLines();
@@ -75,13 +77,12 @@ public class AnalyzeExecuteModel {
                         modelParam.getCurModelValue().add(chars[curInt]);
                         modelParam.setI(0);
                         System.out.println("已匹配,当前的字符是:"+chars[curInt]);
+                        if(next.getHandle()!=null){
+                            next.getHandle().handle(modelParam,cssBag);
+                            modelParam.getCurModelValue().clear();
+                        }
                         if((curInt+1)==modelParam.getChars().length){
                             System.out.println("识别完毕，退出");
-                        }else {
-                            if(next.getHandle()!=null){
-                                next.getHandle().handle(modelParam,cssBag);
-                                modelParam.getCurModelValue().clear();
-                            }
                         }
                         return;
                     }else {

@@ -51,7 +51,10 @@ public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
                 List<Character> edgeAllowInputGather = edgeLines.getEdgeAllowInputGather();
                 List<Character> list=new ArrayList<Character>();
                 for(int y=0;y<128;y++){
-                    if(!edgeAllowInputGather.contains(y)){
+                    if(y==123){
+                        System.out.print("ss");
+                    }
+                    if(!edgeAllowInputGather.contains((char)y)){
                         list.add((char)y);
                     }
                 }

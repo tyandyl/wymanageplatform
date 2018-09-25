@@ -18,12 +18,14 @@ public class CssParser {
         NfaStateMachine invokePound = new InvokerImpl("#").relevance(new RelevanceHandle<CssBag>() {
             public void handle(ModelParam modelParam,CssBag cssBag) {
                 cssBag.setSelectorType(SelectorType.ID_SELECTOR);
+                System.out.println("打印:"+SelectorType.ID_SELECTOR.name());
             }
         }).setIsPrint(true).invoke();
 
         NfaStateMachine invokeSpot = new InvokerImpl("\\.").relevance(new RelevanceHandle<CssBag>() {
             public void handle(ModelParam modelParam,CssBag cssBag) {
                 cssBag.setSelectorType(SelectorType.CLASS_SELECTOR);
+                System.out.println("打印:"+SelectorType.CLASS_SELECTOR.name());
             }
         }).setIsPrint(true).invoke();
 
@@ -31,7 +33,7 @@ public class CssParser {
         NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(invokePound, invokeSpot);
 
         //解析(.)+\{
-        NfaStateMachine invokeFirstFollowUp = new InvokerImpl("[^{]+\\{").relevance(new RelevanceHandle<CssBag>() {
+        NfaStateMachine invokeFirstFollowUp = new InvokerImpl("[^{ ]+\\{").relevance(new RelevanceHandle<CssBag>() {
             public void handle(ModelParam modelParam,CssBag cssBag) {
                 List<Character> curModelValue = modelParam.getCurModelValue();
                 curModelValue.remove(curModelValue.size() - 1);
@@ -40,6 +42,7 @@ public class CssParser {
                     str.append(character);
                 }
                 cssBag.setName(String.valueOf(str));
+                System.out.println("打印:"+cssBag.getName());
             }
         }).setIsPrint(true).invoke();
 
@@ -50,6 +53,7 @@ public class CssParser {
             public void handle(ModelParam modelParam,CssBag cssBag) {
                 Map<String, String> map = cssBag.getMap();
                 map.put("position","static");
+                System.out.println("打印:position:static");
             }
         }).setIsPrint(true).invoke();
 
@@ -57,6 +61,7 @@ public class CssParser {
             public void handle(ModelParam modelParam,CssBag cssBag) {
                 Map<String, String> map = cssBag.getMap();
                 map.put("position","relative");
+                System.out.println("打印:position:relative");
             }
         }).setIsPrint(true).invoke();
 

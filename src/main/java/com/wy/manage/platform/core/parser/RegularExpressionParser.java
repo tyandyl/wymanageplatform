@@ -87,6 +87,18 @@ public class RegularExpressionParser {
                     CharacterCarveCapacity plusCharacterCarveCapacity = NfaStateMachineFactory.getPlusCharacterCarveCapacity();
                     plusCharacterCarveCapacity.carve(context,array,i);
                     break;
+                case LP:
+                    //和空格使用一个
+                    CharacterCarveCapacity lpCharacterCarveCapacity = NfaStateMachineFactory.getSpCharacterCarveCapacity();
+                    lpCharacterCarveCapacity.carve(context,array,i);
+                    break;
+                case CR:
+                    break;
+                case SP:
+                    //正则表达式空格的话，也应该当做一个输入处理
+                    CharacterCarveCapacity spCharacterCarveCapacity = NfaStateMachineFactory.getSpCharacterCarveCapacity();
+                    spCharacterCarveCapacity.carve(context,array,i);
+                    break;
                 default:
                     CharacterCarveCapacity lCharacterCarveCapacity = NfaStateMachineFactory.getLCharacterCarveCapacity();
                     lCharacterCarveCapacity.carve(context,array,i);

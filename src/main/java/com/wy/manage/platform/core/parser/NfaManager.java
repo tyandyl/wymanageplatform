@@ -167,15 +167,19 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionStarNfaStateMachine(NfaStateMachine var)throws Exception{
+        NfaStateNode startNode = var.getStartNode();
+        NfaStateNode endNode = var.getEndNode();
+        if(startNode.getEdgeLines()[1]!=null){
+            ExceptionTools.ThrowException("开始有两个边，稍后处理");
+        }
+
         EdgeLine edgeLine=new EdgeLine();
         edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
         edgeLine.setEdgeType(EdgeType.MAYBE);
-        edgeLine.setNext(var.getStartNode());
+        edgeLine.setNext(endNode);
 
-        NfaStateNode endNode = var.getEndNode();
-        EdgeLine[] edgeLines = endNode.getEdgeLines();
+        EdgeLine[] edgeLines = startNode.getEdgeLines();
         assignArray(edgeLines, edgeLine);
-        traverse( var.getStartNode(),var.getEndNode());
         return var;
     }
 
@@ -202,10 +206,19 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionAddNfaStateMachine(NfaStateMachine var)throws Exception{
-        NfaStateMachine nfaStateMachine = deepClone(var);
-        NfaStateMachine repetitionStarNfaStateMachine = createRepetitionStarNfaStateMachine(var);
-        NfaStateMachine linkNfaStateMachine = createLinkNfaStateMachine(nfaStateMachine, repetitionStarNfaStateMachine);
-        return linkNfaStateMachine;
+//        NfaStateMachine nfaStateMachine = deepClone(var);
+//        NfaStateMachine repetitionStarNfaStateMachine = createRepetitionStarNfaStateMachine(var);
+//        NfaStateMachine linkNfaStateMachine = createLinkNfaStateMachine(nfaStateMachine, repetitionStarNfaStateMachine);
+        EdgeLine edgeLine=new EdgeLine();
+        edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine.setEdgeType(EdgeType.MAYBE);
+        edgeLine.setNext(var.getStartNode());
+
+        NfaStateNode endNode = var.getEndNode();
+        EdgeLine[] edgeLines = endNode.getEdgeLines();
+        assignArray(edgeLines, edgeLine);
+        traverse( var.getStartNode(),var.getEndNode());
+        return var;
     }
 
     /**

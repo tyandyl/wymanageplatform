@@ -43,6 +43,8 @@ public class ModelParam {
         this.chars=chars;
     }
 
+
+
     public NfaStateNode getStartNode() {
         return startNode;
     }
