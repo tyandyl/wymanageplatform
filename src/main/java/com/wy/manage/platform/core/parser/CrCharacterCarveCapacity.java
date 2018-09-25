@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye on 2018/9/24.
+ * Created by tianye
  */
-public class SpCharacterCarveCapacity implements CharacterCarveCapacity{
+public class CrCharacterCarveCapacity implements CharacterCarveCapacity{
     public int carve(CharacterCarveContext context, char[] array, int i) throws Exception {
         Stack<XContentItem> stack = context.getStack();
         List<Integer> specialCclStart = context.getSpecialCclStart();
@@ -29,14 +29,13 @@ public class SpCharacterCarveCapacity implements CharacterCarveCapacity{
                 }else {
                     XContentItem pop = stack.pop();
                     NfaStateMachine nfaStateMachine = pop.getNfaStateMachine();
-                    NfaStateMachine characterRepertoireNfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(nfaStateMachine,SymbolType.SP.getState());
+                    NfaStateMachine characterRepertoireNfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(nfaStateMachine,SymbolType.CR.getState());
                     xContentItemL.setNfaStateMachine(characterRepertoireNfaStateMachine);
                     xContentItemL.addIndex(pop.getIndex());
                     stack.push(xContentItemL);
                 }
             }else if(specialCurlyStart.size()>0){
-                XContentItem peek = stack.peek();
-                peek.addIndex(i);
+                ExceptionTools.ThrowException("{不应该回车");
             }else {
                 xContentItemL.setMeanType(MeanType.NO_CHANGE_MEANING);
                 XContentItem pop = stack.pop();
@@ -44,9 +43,9 @@ public class SpCharacterCarveCapacity implements CharacterCarveCapacity{
                 //这里只剩下(了，
                 if(pop.getNfaStateMachine()==null){
                     stack.push(pop);
-                    linkNfaStateMachine=NfaManager.createSingleCharacterNfaStateMachine(SymbolType.SP.getState());
+                    linkNfaStateMachine=NfaManager.createSingleCharacterNfaStateMachine(SymbolType.CR.getState());
                 }else {
-                    linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createSingleCharacterNfaStateMachine(SymbolType.SP.getState()));
+                    linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop.getNfaStateMachine(), NfaManager.createSingleCharacterNfaStateMachine(SymbolType.CR.getState()));
                 }
                 xContentItemL.setNfaStateMachine( linkNfaStateMachine);
                 xContentItemL.addIndex(pop.getIndex());

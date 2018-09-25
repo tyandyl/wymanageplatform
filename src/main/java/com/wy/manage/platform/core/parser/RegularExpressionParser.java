@@ -89,10 +89,12 @@ public class RegularExpressionParser {
                     break;
                 case LP:
                     //和空格使用一个
-                    CharacterCarveCapacity lpCharacterCarveCapacity = NfaStateMachineFactory.getSpCharacterCarveCapacity();
+                    CharacterCarveCapacity lpCharacterCarveCapacity = NfaStateMachineFactory.getLpCharacterCarveCapacity();
                     lpCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case CR:
+                    CharacterCarveCapacity crCharacterCarveCapacity = NfaStateMachineFactory.getCrCharacterCarveCapacity();
+                    crCharacterCarveCapacity.carve(context,array,i);
                     break;
                 case SP:
                     //正则表达式空格的话，也应该当做一个输入处理

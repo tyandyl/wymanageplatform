@@ -19,8 +19,13 @@ import java.util.regex.Pattern;
  */
 public class Test {
     public static void main(String[] agrs) throws Exception {
-        NfaStateMachine parser = CssParser.parser();
-        CssBag cssBag=new CssBag();
-        AnalyzeExecuteModel.execute("#bcghs_-sssshjkl{position:static",cssBag,parser);
+//        NfaStateMachine parser = CssParser.parser();
+//        CssBag cssBag=new CssBag();
+//        AnalyzeExecuteModel.execute("#bcghs_-sssshjkl{position:static",cssBag,parser);
+        String s = "#|\\.[^\r\n\\s{]+[\r\n\\s]+{";
+        char[] chars = s.toCharArray();
+        for(int i=0;i<chars.length;i++) {
+            System.out.println(chars[i]);
+        }
     }
 }
