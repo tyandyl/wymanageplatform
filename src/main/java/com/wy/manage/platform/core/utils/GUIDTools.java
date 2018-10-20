@@ -7,7 +7,7 @@ import java.util.UUID;
  */
 public class GUIDTools {
 
-    public static String  randomUUID() throws Exception{
+    public static String  randomUUID(){
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

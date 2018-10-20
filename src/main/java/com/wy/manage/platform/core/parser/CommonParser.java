@@ -17,7 +17,7 @@ public class CommonParser {
         list.add((char)32);
         NfaStateMachine characterRepertoireNfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(list);
         NfaStateMachine repetitionStarNfaStateMachine = NfaManager.createRepetitionStarNfaStateMachine(characterRepertoireNfaStateMachine);
-        NfaStateMachine nfaStateMachine = NfaManager.packNewStartAndEndNode(repetitionStarNfaStateMachine, null);
+        NfaStateMachine nfaStateMachine = NfaManager.packNewStartAndEndNode(repetitionStarNfaStateMachine);
         return nfaStateMachine;
     }
 }

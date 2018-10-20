@@ -27,6 +27,7 @@ public class CurlyClosedCharacterCarveCapacity implements CharacterCarveCapacity
                 && pop.getLegend()==SymbolType.OPEN_CURLY.getState()){
             List<Integer> charCurly = context.getCharCurly();
             if(charCurly.size()==1){
+                ExceptionTools.ThrowException("{}解析错误,目前不支持无限");
                 NfaStateMachine nfaStateMachine = peek.getNfaStateMachine();
                 NfaStateMachine repetitionAddNumNfaStateMachine = NfaManager.createRepetitionAddNumNfaStateMachine(nfaStateMachine, charCurly.get(0), 999);
                 peek.setNfaStateMachine(repetitionAddNumNfaStateMachine);

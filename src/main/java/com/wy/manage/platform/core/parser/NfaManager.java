@@ -1,15 +1,14 @@
 package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.utils.ExceptionTools;
+import com.wy.manage.platform.core.utils.GUIDTools;
 
-import javax.print.DocFlavor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Created by tianye
@@ -67,6 +66,13 @@ public class NfaManager {
         return simplestNfaStateMachine;
     }
 
+    /**
+     * 在字符集中增一个字符
+     * @param var1
+     * @param i
+     * @return
+     * @throws Exception
+     */
     public static NfaStateMachine createCharacterRepertoireNfaStateMachine(NfaStateMachine var1,int i)throws Exception{
         NfaStateNode startNode = var1.getStartNode();
         EdgeLine[] edgeLines = startNode.getEdgeLines();
@@ -113,7 +119,9 @@ public class NfaManager {
         var2.getStartNode().setState(NfaState.PROCEED);
 
         var1.setEndNode(var2.getEndNode());
-        return var1;
+
+        NfaStateMachine nfaStateMachine = packNewStartAndEndNode(var1);
+        return nfaStateMachine;
     }
 
     /**
@@ -167,38 +175,31 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionStarNfaStateMachine(NfaStateMachine var)throws Exception{
-        NfaStateNode startNode = var.getStartNode();
-        NfaStateNode endNode = var.getEndNode();
-        if(startNode.getEdgeLines()[1]!=null){
-            ExceptionTools.ThrowException("开始有两个边，稍后处理");
-        }
+        //防止连接溢出
+        NfaStateMachine nfaStateMachine = packNewStartAndEndNode(var);
+
+        NfaStateNode startNode = nfaStateMachine.getStartNode();
+        NfaStateNode endNode = nfaStateMachine.getEndNode();
 
         EdgeLine edgeLine=new EdgeLine();
         edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
-        edgeLine.setEdgeType(EdgeType.MAYBE);
         edgeLine.setNext(endNode);
-
+        //开始节点指向结束节点
         EdgeLine[] edgeLines = startNode.getEdgeLines();
         assignArray(edgeLines, edgeLine);
-        return var;
+
+        EdgeLine edgeLine1=new EdgeLine();
+        edgeLine1.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine1.setNext(startNode);
+        //结束节点指向开始节点
+        EdgeLine[] edgeLines1 = endNode.getEdgeLines();
+        assignArray(edgeLines1, edgeLine1);
+        //防止连接溢出
+        NfaStateMachine nfaStateMachine2 = packNewStartAndEndNode(nfaStateMachine);
+        return nfaStateMachine2;
     }
 
-    public static void traverse(NfaStateNode startNode,NfaStateNode endNode){
-        if(startNode!=null){
-            if(startNode.getEdgeLines()[0]!=null){
-                if(startNode.getEdgeLines()[0].getNext()!=endNode){
-                    traverse(startNode.getEdgeLines()[0].getNext(),endNode);
-                }
-                startNode.getEdgeLines()[0].setEdgeType(EdgeType.MAYBE);
-            }
-            if(startNode.getEdgeLines()[1]!=null){
-                if(startNode.getEdgeLines()[1].getNext()!=endNode){
-                    traverse(startNode.getEdgeLines()[1].getNext(),endNode);
-                }
-                startNode.getEdgeLines()[1].setEdgeType(EdgeType.MAYBE);
-            }
-        }
-    }
+
 
     /**
      * 创建+，至少重复1次
@@ -206,20 +207,19 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionAddNfaStateMachine(NfaStateMachine var)throws Exception{
-//        NfaStateMachine nfaStateMachine = deepClone(var);
-//        NfaStateMachine repetitionStarNfaStateMachine = createRepetitionStarNfaStateMachine(var);
-//        NfaStateMachine linkNfaStateMachine = createLinkNfaStateMachine(nfaStateMachine, repetitionStarNfaStateMachine);
         EdgeLine edgeLine=new EdgeLine();
         edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
-        edgeLine.setEdgeType(EdgeType.MAYBE);
         edgeLine.setNext(var.getStartNode());
 
         NfaStateNode endNode = var.getEndNode();
         EdgeLine[] edgeLines = endNode.getEdgeLines();
         assignArray(edgeLines, edgeLine);
-        traverse( var.getStartNode(),var.getEndNode());
-        return var;
+        NfaStateMachine nfaStateMachine = packNewStartAndEndNode(var);
+        return nfaStateMachine;
     }
+
+
+
 
     /**
      * 创建{n,m}，至少重复n次，最多重复m次
@@ -230,17 +230,46 @@ public class NfaManager {
      * @throws Exception
      */
     public static NfaStateMachine createRepetitionAddNumNfaStateMachine(NfaStateMachine var,int n,int m)throws Exception{
-        EdgeLine edgeLine=new EdgeLine();
-        NfaStateNode startNode = var.getStartNode();
-        edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
-        edgeLine.setNext(startNode);
-        edgeLine.setLeast(n);
-        edgeLine.setMax(m);
+        if(n>m){
+            ExceptionTools.ThrowException("{}解析错误,n不能大于m");
+        }
+        int i=0;
+        //创建N的连接节点
+        NfaStateMachine linkNfaStateMachine=var;
+        while (i<n){
+            NfaStateMachine nfaStateMachineVar = deepClone(var);
+            linkNfaStateMachine = createLinkNfaStateMachine(linkNfaStateMachine, nfaStateMachineVar);
+            i++;
+        }
+        int y=m-n;
 
-        NfaStateNode endNode = var.getEndNode();
-        EdgeLine[] edgeLines = endNode.getEdgeLines();
-        assignArray(edgeLines, edgeLine);
-        NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var,  null);
+        //记录跳转节点，N之后的M-N个节点，每个节点都可以跳转到最后的输出节点，直接跳转到最后的阶段
+        List<NfaStateNode> list=new ArrayList<NfaStateNode>();
+
+        i=0;
+        while (i<y){
+            NfaStateNode endNode1 = linkNfaStateMachine.getEndNode();
+            list.add(endNode1);
+            NfaStateMachine nfaStateMachineVar = deepClone(var);
+            linkNfaStateMachine = createLinkNfaStateMachine(linkNfaStateMachine, nfaStateMachineVar);
+            i++;
+        }
+
+        if(list.size()>0){
+            NfaStateNode endNode = linkNfaStateMachine.getEndNode();
+            for(NfaStateNode node:list){
+                //end节点也进去了，所以得排除
+                if(node!=endNode){
+                    EdgeLine edgeLine=new EdgeLine();
+                    edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
+                    edgeLine.setNext(endNode);
+                    EdgeLine[] edgeLines = node.getEdgeLines();
+                    assignArray(edgeLines, edgeLine);
+                }
+            }
+        }
+
+        NfaStateMachine nfaStateMachine = packNewStartAndEndNode( linkNfaStateMachine);
         return nfaStateMachine;
     }
 
@@ -252,7 +281,7 @@ public class NfaManager {
      * @throws Exception
      */
     public static NfaStateMachine createRepetitionQuestionMarkNfaStateMachine(NfaStateMachine var)throws Exception{
-        NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var,  null);
+        NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var);
         return nfaStateMachine;
     }
 
@@ -260,10 +289,9 @@ public class NfaManager {
     /**
      * 包装新的开始结束节点
      * @param var1
-     * @param var2
      * @return
      */
-    public static NfaStateMachine packNewStartAndEndNode(NfaStateMachine var1,NfaStateMachine var2)throws Exception{
+    public static NfaStateMachine packNewStartAndEndNode(NfaStateMachine var1)throws Exception{
         NfaStateMachine simplestNfaStateMachine = createSimplestNfaStateMachine(false);
         NfaStateNode startNode = simplestNfaStateMachine.getStartNode();
         NfaStateNode endNode = simplestNfaStateMachine.getEndNode();
@@ -277,11 +305,7 @@ public class NfaManager {
         startNode1.setState(NfaState.PROCEED);
 
         NfaStateNode endNode1=null;
-        if(var2!=null){
-            endNode1 = var2.getEndNode();
-        }else {
-            endNode1 = var1.getEndNode();
-        }
+        endNode1 = var1.getEndNode();
         EdgeLine edgeLine2=new EdgeLine();
         edgeLine2.setEdgeInputType(EdgeInputType.NULL_GATHER);
         edgeLine2.setNext(endNode);
@@ -312,15 +336,22 @@ public class NfaManager {
     public static NfaStateNode createStartNode(){
         NfaStateNode nfaStateNode=new NfaStateNode();
         nfaStateNode.setState(NfaState.START);
+        nfaStateNode.setStateNum(GUIDTools.randomUUID());
         return nfaStateNode;
     }
 
     public static NfaStateNode createEndNode(){
         NfaStateNode nfaStateNode=new NfaStateNode();
         nfaStateNode.setState(NfaState.END);
+        nfaStateNode.setStateNum(GUIDTools.randomUUID());
         return nfaStateNode;
     }
 
+    /**
+     * 深度复制
+     * @param var
+     * @return
+     */
     public static NfaStateMachine deepClone(NfaStateMachine var){
         ObjectOutputStream os = null;
         ObjectInputStream ois = null;
@@ -332,6 +363,13 @@ public class NfaManager {
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
             ois = new ObjectInputStream(bis);
             NfaStateMachine target = (NfaStateMachine)ois.readObject();
+            traverse(target.getStartNode(), target.getEndNode(), new NodeHandle<NfaStateNode>() {
+                public void handle(NfaStateNode o, int i) {
+                    o.getEdgeLines()[i].getNext().setStateNum(GUIDTools.randomUUID());
+                    o.setStateNum(GUIDTools.randomUUID());
+                }
+            });
+
             return target;
         } catch (Exception e) {
             e.printStackTrace();
@@ -345,5 +383,25 @@ public class NfaManager {
             }
         }
         return null;
+    }
+
+    public static void traverse(NfaStateNode startNode,NfaStateNode endNode,NodeHandle nodeHandle)throws Exception{
+        if(startNode!=null){
+            if(startNode.getEdgeLines()[0]!=null){
+                if(startNode.getEdgeLines()[0].getNext()!=endNode){
+                    traverse(startNode.getEdgeLines()[0].getNext(),endNode,nodeHandle);
+                }
+                //处理操作
+                nodeHandle.handle(startNode,0);
+
+            }
+            if(startNode.getEdgeLines()[1]!=null){
+                if(startNode.getEdgeLines()[1].getNext()!=endNode){
+                    traverse(startNode.getEdgeLines()[1].getNext(),endNode,nodeHandle);
+                }
+                //处理操作
+                nodeHandle.handle(startNode,1);
+            }
+        }
     }
 }

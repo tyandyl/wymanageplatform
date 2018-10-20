@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by tianye
+ * nfa节点的连接线
  */
 public class EdgeLine implements Serializable {
     private static final long serialVersionUID = 123277793237844725L;
@@ -15,14 +16,6 @@ public class EdgeLine implements Serializable {
     public List<Character> edgeAllowInputGather=new ArrayList<Character>();
     //下一个节点
     public NfaStateNode next;
-    //对输入值的要求,大于等于几
-    public int least=-1;
-    //对输入值的要求,小于等于几
-    public int max=-1;
-
-    public int useNum=0;
-
-    public EdgeType edgeType=EdgeType.NO_PASSED;
 
 
     public NfaStateNode getNext() {
@@ -47,37 +40,5 @@ public class EdgeLine implements Serializable {
 
     public void setEdgeAllowInputGather(List<Character> edgeAllowInputGather) {
         this.edgeAllowInputGather = edgeAllowInputGather;
-    }
-
-    public int getLeast() {
-        return least;
-    }
-
-    public void setLeast(int least) {
-        this.least = least;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
-    }
-
-    public int getUseNum() {
-        return useNum;
-    }
-
-    public void setUseNum(int useNum) {
-        this.useNum = useNum;
-    }
-
-    public EdgeType getEdgeType() {
-        return edgeType;
-    }
-
-    public void setEdgeType(EdgeType edgeType) {
-        this.edgeType = edgeType;
     }
 }

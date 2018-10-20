@@ -1,12 +1,12 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.CssTools;
+import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.widget.IFlow;
 import com.wy.manage.platform.core.widget.NormalFlow;
 import com.wy.manage.platform.core.widget.SelectorType;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tianye
@@ -14,63 +14,86 @@ import java.util.Map;
 public class CssParser {
 
     public static NfaStateMachine parser()throws Exception{
+        Properties properties = CssTools.getProperties();
+        //重写，保证读取顺序
+        Set<String> strings = properties.stringPropertyNames();
+        Map<String,NfaStateMachine> map=new HashMap<String, NfaStateMachine>();
+        NfaStateMachine nfaStateMachine=null;
+        for (String str:strings) {
+            String name =str;
+            String value = properties.getProperty(str);
+            if (value != null) {
+                if(value.contains(" ")){
+                    String[] split = value.split(" ");
+                    if(split!=null && split.length!=0){
 
-        NfaStateMachine invokePound = new InvokerImpl("#").relevance(new RelevanceHandle<CssBag>() {
-            public void handle(ModelParam modelParam,CssBag cssBag) {
-                cssBag.setSelectorType(SelectorType.ID_SELECTOR);
-                System.out.println("打印:"+SelectorType.ID_SELECTOR.name());
-            }
-        }).setIsPrint(true).invoke();
-
-        NfaStateMachine invokeSpot = new InvokerImpl("\\.").relevance(new RelevanceHandle<CssBag>() {
-            public void handle(ModelParam modelParam,CssBag cssBag) {
-                cssBag.setSelectorType(SelectorType.CLASS_SELECTOR);
-                System.out.println("打印:"+SelectorType.CLASS_SELECTOR.name());
-            }
-        }).setIsPrint(true).invoke();
-
-        //解析 #|.
-        NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(invokePound, invokeSpot);
-
-        //解析(.)+\{
-        NfaStateMachine invokeFirstFollowUp = new InvokerImpl("[^{ ]+\\{").relevance(new RelevanceHandle<CssBag>() {
-            public void handle(ModelParam modelParam,CssBag cssBag) {
-                List<Character> curModelValue = modelParam.getCurModelValue();
-                curModelValue.remove(curModelValue.size() - 1);
-                StringBuilder str = new StringBuilder();
-                for (Character character : curModelValue) {// 对ArrayList进行遍历，将字符放入StringBuilder中
-                    str.append(character);
+                        for(int i=0;i<split.length;i++){
+                            NfaStateMachine nfaM = map.get(split[i]);
+                            nfaStateMachine = link(nfaStateMachine, nfaM);
+                        }
+                        map.put(name,nfaStateMachine);
+                    }
+                }else {
+                    map.put(name,getNfaStateMachine(name, value));
                 }
-                cssBag.setName(String.valueOf(str));
-                System.out.println("打印:"+cssBag.getName());
             }
-        }).setIsPrint(true).invoke();
+        }
 
-        NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(orNfaStateMachine, invokeFirstFollowUp);
+        return nfaStateMachine;
+    }
 
-        //定义css解析的正则表达式position:static
-        NfaStateMachine invokeStatic = new InvokerImpl("position:static").relevance(new RelevanceHandle<CssBag>() {
-            public void handle(ModelParam modelParam,CssBag cssBag) {
-                Map<String, String> map = cssBag.getMap();
-                map.put("position","static");
-                System.out.println("打印:position:static");
-            }
-        }).setIsPrint(true).invoke();
+    public static NfaStateMachine link(NfaStateMachine link1,NfaStateMachine link2)throws Exception{
+        if(link1==null){
+            return link2;
+        }
+        if(link2==null){
+            return link1;
+        }
+        return NfaManager.createLinkNfaStateMachine(link1,link2);
+    }
 
-        NfaStateMachine invokeRelative = new InvokerImpl("position:relative").relevance(new RelevanceHandle<CssBag>() {
-            public void handle(ModelParam modelParam,CssBag cssBag) {
-                Map<String, String> map = cssBag.getMap();
-                map.put("position","relative");
-                System.out.println("打印:position:relative");
-            }
-        }).setIsPrint(true).invoke();
+    public static NfaStateMachine getNfaStateMachine(String name,String value)throws Exception{
+        if("ignore".equalsIgnoreCase(name)){
+            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
+                public void handle(ModelParam modelParam,CssBag cssBag) {
+                }
+            }).setIsPrint(true).invoke();
 
-        NfaStateMachine orNfaStateMachine1 = NfaManager.createOrNfaStateMachine(invokeStatic, invokeRelative);
+        }else if("attributeTag".equalsIgnoreCase(name)){
+            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
+                public void handle(ModelParam modelParam,CssBag cssBag) {
+                    List<Character> curModelValue = modelParam.getCurModelValue();
+                    if(curModelValue!=null && curModelValue.size()==1){
+                        Character character = curModelValue.get(0);
+                        if(character==46){
+                            cssBag.setSelectorType(SelectorType.ID_SELECTOR);
+                        }else if(character==35){
+                            cssBag.setSelectorType(SelectorType.ID_SELECTOR);
+                        }
+                    }
+                }
+            }).setIsPrint(true).invoke();
 
-        NfaStateMachine linkNfaStateMachine1 = NfaManager.createLinkNfaStateMachine(linkNfaStateMachine, orNfaStateMachine1);
+        }else if("attributeName".equalsIgnoreCase(name)){
+            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
+                public void handle(ModelParam modelParam,CssBag cssBag) {
+                    List<Character> curModelValue = modelParam.getCurModelValue();
+                    StringBuilder str = new StringBuilder();
+                    for (Character character : curModelValue) {// 对ArrayList进行遍历，将字符放入StringBuilder中
+                        str.append(character);
+                    }
+                    cssBag.setName(String.valueOf(str));
+                }
+            }).setIsPrint(true).invoke();
 
+        }else if("attributeFirstOpenCurly".equalsIgnoreCase(name)){
+            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
+                public void handle(ModelParam modelParam,CssBag cssBag) {
+                }
+            }).setIsPrint(true).invoke();
+        }
+        ExceptionTools.ThrowException("没找到相应的正则表达式");
+        return null;
 
-
-        return linkNfaStateMachine1;
     }
 }

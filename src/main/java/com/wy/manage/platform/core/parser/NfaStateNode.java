@@ -7,11 +7,12 @@ import java.util.Set;
 
 /**
  * Created by tianye
+ * nfa节点，每个节点只能有两条连接线
  */
 public class NfaStateNode implements Serializable{
     private static final long serialVersionUID = -6105929014841964509L;
     //状态编号
-    private int stateNum;
+    private String stateNum;
 
     private NfaState state;
 
@@ -19,11 +20,11 @@ public class NfaStateNode implements Serializable{
 
     private RelevanceHandle handle;
 
-    public int getStateNum() {
+    public String getStateNum() {
         return stateNum;
     }
 
-    public void setStateNum(int stateNum) {
+    public void setStateNum(String stateNum) {
         this.stateNum = stateNum;
     }
 

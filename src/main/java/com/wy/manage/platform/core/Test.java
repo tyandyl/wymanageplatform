@@ -1,18 +1,7 @@
 package com.wy.manage.platform.core;
 
-import com.wy.manage.platform.core.attribute.AttributeNameType;
-import com.wy.manage.platform.core.parser.*;
-import com.wy.manage.platform.core.utils.CssTools;
-import com.wy.manage.platform.core.widget.Page;
-import com.wy.manage.platform.core.widget.Widget;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+import com.wy.manage.platform.core.parser.NfaManager;
+import com.wy.manage.platform.core.parser.NfaStateMachine;
 
 /**
  * Created by tianye on 2018/6/29.
@@ -21,11 +10,10 @@ public class Test {
     public static void main(String[] agrs) throws Exception {
 //        NfaStateMachine parser = CssParser.parser();
 //        CssBag cssBag=new CssBag();
-//        AnalyzeExecuteModel.execute("#bcghs_-sssshjkl{position:static",cssBag,parser);
-        String s = "#|\\.[^\r\n\\s{]+[\r\n\\s]+{";
-        char[] chars = s.toCharArray();
-        for(int i=0;i<chars.length;i++) {
-            System.out.println(chars[i]);
-        }
+//        AnalyzeExecuteModel.execute("#sh{",cssBag,parser);
+        NfaStateMachine simplestNfaStateMachine = NfaManager.createSimplestNfaStateMachine(true);
+        NfaStateMachine nfaStateMachine = NfaManager.deepClone(simplestNfaStateMachine);
+        System.out.println("第一个编号："+simplestNfaStateMachine.getStartNode().getStateNum());
+        System.out.println("第二个编号："+nfaStateMachine.getStartNode().getStateNum());
     }
 }
