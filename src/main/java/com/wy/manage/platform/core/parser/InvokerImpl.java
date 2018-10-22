@@ -87,17 +87,22 @@ public class InvokerImpl implements Invoker {
     }
 
     private DfaContext handleMapFirst(NfaStateMachine var)throws Exception{
+        DfaContext context=new DfaContext();
+        context.setStartNodeStateNum(var.getStartNode().getStateNum());
         //key是行数，代表状态
         //Value第一位是输入，这里使用整形0-127代表单个字符，130代表空，135代表字符集(字符集进一步处理，化为单个列)
         //Value第二位是下一个状态
         final Map<String,Map<Integer,List<String>>> map=new HashMap<String, Map<Integer, List<String>>>();
+        final Map<String,NfaStateNode> mapState=new HashMap<String, NfaStateNode>();
+        mapState.put(var.getStartNode().getStateNum(),var.getStartNode());
+        mapState.put(var.getEndNode().getStateNum(),var.getEndNode());
         NfaManager.traverse(var.getStartNode(), var.getEndNode(), new NodeHandle<NfaStateNode>() {
             public void handle(NfaStateNode o, int i)throws Exception {
                 handleMapSec(o,map, i);
             }
         });
-        DfaContext context=new DfaContext();
         context.setMap(map);
+        context.setMapState(mapState);
         return context;
     }
 
