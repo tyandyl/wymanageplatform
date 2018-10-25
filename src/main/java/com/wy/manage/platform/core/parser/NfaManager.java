@@ -363,7 +363,7 @@ public class NfaManager {
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
             ois = new ObjectInputStream(bis);
             NfaStateMachine target = (NfaStateMachine)ois.readObject();
-            traverse(target.getStartNode(), target.getEndNode(), new NodeHandle<NfaStateNode>() {
+            traverse(target.getStartNode(),  new NodeHandle<NfaStateNode>() {
                 public void handle(NfaStateNode o, int i) {
                     o.getEdgeLines()[i].getNext().setStateNum(GUIDTools.randomUUID());
                     o.setStateNum(GUIDTools.randomUUID());
@@ -385,23 +385,18 @@ public class NfaManager {
         return null;
     }
 
-    public static void traverse(NfaStateNode startNode,NfaStateNode endNode,NodeHandle nodeHandle)throws Exception{
+    public static void traverse(NfaStateNode startNode,NodeHandle nodeHandle)throws Exception{
         if(startNode!=null){
             if(startNode.getEdgeLines()[0]!=null){
-                if(startNode.getEdgeLines()[0].getNext()!=endNode){
-                    traverse(startNode.getEdgeLines()[0].getNext(),endNode,nodeHandle);
-                }
-                //处理操作
-                nodeHandle.handle(startNode,0);
-
+                traverse(startNode.getEdgeLines()[0].getNext(),nodeHandle);
             }
+            //处理操作
+            nodeHandle.handle(startNode,0);
             if(startNode.getEdgeLines()[1]!=null){
-                if(startNode.getEdgeLines()[1].getNext()!=endNode){
-                    traverse(startNode.getEdgeLines()[1].getNext(),endNode,nodeHandle);
-                }
-                //处理操作
-                nodeHandle.handle(startNode,1);
+                traverse(startNode.getEdgeLines()[1].getNext(),nodeHandle);
             }
+            //处理操作
+            nodeHandle.handle(startNode,1);
         }
     }
 }

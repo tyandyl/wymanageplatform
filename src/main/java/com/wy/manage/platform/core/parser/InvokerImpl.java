@@ -87,94 +87,68 @@ public class InvokerImpl implements Invoker {
     }
 
     private DfaContext handleMapFirst(NfaStateMachine var)throws Exception{
-        DfaContext context=new DfaContext();
+        final DfaContext context=new DfaContext();
         context.setStartNodeStateNum(var.getStartNode().getStateNum());
-        //key是行数，代表状态
-        //Value第一位是输入，这里使用整形0-127代表单个字符，130代表空，135代表字符集(字符集进一步处理，化为单个列)
-        //Value第二位是下一个状态
-        final Map<String,Map<Integer,List<String>>> map=new HashMap<String, Map<Integer, List<String>>>();
-        final Map<String,NfaStateNode> mapState=new HashMap<String, NfaStateNode>();
-        mapState.put(var.getStartNode().getStateNum(),var.getStartNode());
-        mapState.put(var.getEndNode().getStateNum(),var.getEndNode());
-        NfaManager.traverse(var.getStartNode(), var.getEndNode(), new NodeHandle<NfaStateNode>() {
+        NfaManager.traverse(var.getStartNode(),  new NodeHandle<NfaStateNode>() {
             public void handle(NfaStateNode o, int i)throws Exception {
-                handleMapSec(o,map, i);
+                handleMapSec(o,context, i);
             }
         });
-        context.setMap(map);
-        context.setMapState(mapState);
         return context;
     }
 
-    private void handleMapSec(NfaStateNode o,Map<String,Map<Integer,List<String>>> map,int i)throws Exception{
+    private void handleMapSec(NfaStateNode o,DfaContext context,int i)throws Exception{
+        //判断是开始节点
+        if(o.getState().getState()==NfaState.START.getState()){
+            context.setStartNodeStateNum(o.getStateNum());
+        }
+        //判断是结束节点
+        if(o.getState().getState()==NfaState.END.getState()){
+            context.setEndNodeStateNum(o.getStateNum());
+        }
+        //建立状态码与节点的对应关系
+        context.putMapState(o.getStateNum(),o);
         //获取状态值
         String stateNum = o.getStateNum();
-        Map<Integer, List<String>> integerListMap = map.get(stateNum);
-        //看看有没有当前行
-        if(integerListMap!=null){
-            //获取当前条线
-            EdgeLine edgeLine = o.getEdgeLines()[i];
-            EdgeInputType edgeInputType = edgeLine.getEdgeInputType();
-            //如果当前条线的类型是空
-            if(edgeInputType==EdgeInputType.NULL_GATHER){
-                List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
-                if(edgeAllowInputGather!=null && edgeAllowInputGather.size()>0){
-                    ExceptionTools.ThrowException("空集里边不允许有值，请排查");
-                }
-                //获取空列的下一个状态
-                List<String> list = integerListMap.get(130);
-                //如果下一个状态列表有值，则直接填充
-                if(list!=null){
-                    if(!list.contains(edgeLine.getNext().getStateNum())){
-                        list.add(edgeLine.getNext().getStateNum());
-                    }
-                }else {
-                    List<String> listNew=new ArrayList<String>();
-                    listNew.add(edgeLine.getNext().getStateNum());
-                    integerListMap.put(130,listNew);
-                }
-            }else {
-                List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
-                if(edgeAllowInputGather==null || edgeAllowInputGather.size()==0){
-                    ExceptionTools.ThrowException("条线里边必须有值，请排查");
-                }
-                //单个字符处理
-                if(edgeAllowInputGather.size()==1){
-                    //获取空列的下一个状态
-                    List<String> list = integerListMap.get(edgeAllowInputGather.get(0));
-                    //如果下一个状态列表有值，则直接填充
-                    if(list!=null){
-                        if(!list.contains(edgeLine.getNext().getStateNum())){
-                            list.add(edgeLine.getNext().getStateNum());
-                        }
-                    }else {
-                        List<String> listNew=new ArrayList<String>();
-                        listNew.add(edgeLine.getNext().getStateNum());
-                        Character character = edgeAllowInputGather.get(0);
-                        integerListMap.put(Integer.valueOf(character),listNew);
-                    }
-                }else{
-                    //字符集处理，化为单个列处理
-                    for(Character ch:edgeAllowInputGather){
-                        List<String> list = integerListMap.get(ch);
-                        //如果下一个状态列表有值，则直接填充
-                        if(list!=null){
-                            if(!list.contains(edgeLine.getNext().getStateNum())){
-                                list.add(edgeLine.getNext().getStateNum());
-                            }
-                        }else {
-                            List<String> listNew=new ArrayList<String>();
-                            listNew.add(edgeLine.getNext().getStateNum());
-                            integerListMap.put(Integer.valueOf(ch),listNew);
-                        }
-                    }
-
-                }
-            }
-        }else {
+        Map<Integer, List<String>> integerListMap = context.getMap().get(stateNum);
+        if(integerListMap==null){
             //没有的话，赋值
             Map<Integer,List<String>> map1=new HashMap<Integer, List<String>>();
-            map.put(stateNum,map1);
+            context.getMap().put(stateNum,map1);
+        }
+
+        //获取当前条线
+        EdgeLine edgeLine = o.getEdgeLines()[i];
+        EdgeInputType edgeInputType = edgeLine.getEdgeInputType();
+        //如果当前条线的类型是空
+        if(edgeInputType==EdgeInputType.NULL_GATHER){
+            List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
+            if(edgeAllowInputGather!=null && edgeAllowInputGather.size()>0){
+                ExceptionTools.ThrowException("空集里边不允许有值，请排查");
+            }
+            //记录列
+            context.getInputParams().add(130);
+            context.handleMapCol(integerListMap,130,edgeLine.getNext().getStateNum());
+        }else {
+            List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
+            if(edgeAllowInputGather==null || edgeAllowInputGather.size()==0){
+                ExceptionTools.ThrowException("条线里边必须有值，请排查");
+            }
+            //单个字符处理
+            if(edgeAllowInputGather.size()==1){
+                context.getInputParams().add(Integer.valueOf(edgeAllowInputGather.get(0)));
+
+                context.handleMapCol(integerListMap,
+                        Integer.valueOf(edgeAllowInputGather.get(0))
+                        ,edgeLine.getNext().getStateNum());
+            }else{
+                //字符集处理，化为单个列处理
+                for(Character ch:edgeAllowInputGather){
+                    context.getInputParams().add(Integer.valueOf(ch));
+                    context.handleMapCol(integerListMap,Integer.valueOf(ch),edgeLine.getNext().getStateNum());
+                }
+
+            }
         }
     }
 }
