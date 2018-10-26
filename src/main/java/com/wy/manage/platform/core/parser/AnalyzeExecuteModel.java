@@ -21,7 +21,7 @@ public class AnalyzeExecuteModel {
         execute(modelParam,context);
     }
 
-    public static void execute(ModelParam modelParam,final DfaContext context)throws Exception{
+    public static void execute(final ModelParam modelParam, final DfaContext context)throws Exception{
         List<String> list =context.getMapEmpty().get(context.getStartNodeStateNum());
 
         while (modelParam.getCurInt()<modelParam.getChars().length){
@@ -29,6 +29,7 @@ public class AnalyzeExecuteModel {
             List<String> listNew=new ArrayList<String>();
             new StateMoveHandle<List<String>,List<String>>(){
                 public void move(List<String> strings, List<String> strings2, Integer var) {
+                    modelParam.addCurModelValue(var);
                     if(strings==null || strings.size()==0){
                         System.out.println("d");
                     }
@@ -67,7 +68,7 @@ public class AnalyzeExecuteModel {
                     }
                 }
             }
-            boolean isClear=false;
+
             for(String str:listMost){
                 NfaStateNode nfaStateNode = context.getMapState().get(str);
                 if(nfaStateNode==null){
@@ -76,11 +77,15 @@ public class AnalyzeExecuteModel {
                 }
                 if(nfaStateNode.getHandle()!=null){
                     nfaStateNode.getHandle().handle(modelParam);
-                    isClear=true;
+                    Stack<HandleInfo> handleInfos = modelParam.getHandleInfo();
+                    HandleInfo handleInfo=new HandleInfo(nfaStateNode.getHandle(),
+                            Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]),
+                            nfaStateNode.getStateNum());
+                    handleInfos.push(handleInfo);
                     System.out.println("赶紧执行啊");
                 }
             }
-            modelParam.addInfo(list,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]),isClear);
+            modelParam.addCurInt(list,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));
             list=listMost;
         }
         return;

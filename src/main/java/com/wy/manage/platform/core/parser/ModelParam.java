@@ -13,6 +13,8 @@ public class ModelParam<T> {
     private char[] chars=null;
     private List<Character> curModelValue=new ArrayList<Character>();
     private T t;
+    private Stack<HandleInfo> handleInfo=new Stack<HandleInfo>();
+
 
     public DfaContext handleMapFirst(NfaStateMachine var)throws Exception{
         final DfaContext context=new DfaContext();
@@ -29,15 +31,15 @@ public class ModelParam<T> {
      * 处理辅助数据
      * @param curDfa
      * @param var
-     * @param isClear 是否需要清理，一旦执行动作，边需要清理
      */
-    public void addInfo(List<String> curDfa,int var,boolean isClear){
+    public void addCurInt(List<String> curDfa,int var){
         NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(curDfa,var);
         stackNodes.push(nfaStateNodeRecord);
-        if(!isClear){
-            curModelValue.add((char) var);
-        }
         curInt++;
+    }
+
+    public void addCurModelValue(Integer var){
+        curModelValue.add((char)(var.intValue()));
     }
 
     private void handleMapSec(NfaStateNode o, DfaContext context, int i)throws Exception{
@@ -76,7 +78,7 @@ public class ModelParam<T> {
                 ExceptionTools.ThrowException("空集里边不允许有值，请排查");
             }
             //记录列
-            context.getInputParams().add(130);
+            context.addInputParam(130);
             context.handleMapCol(integerListMap,130,edgeLine.getNext().getStateNum());
         }else {
             List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
@@ -85,7 +87,7 @@ public class ModelParam<T> {
             }
             //单个字符处理
             if(edgeAllowInputGather.size()==1){
-                context.getInputParams().add(Integer.valueOf(edgeAllowInputGather.get(0)));
+                context.addInputParam(Integer.valueOf(edgeAllowInputGather.get(0)));
 
                 context.handleMapCol(integerListMap,
                         Integer.valueOf(edgeAllowInputGather.get(0))
@@ -93,7 +95,7 @@ public class ModelParam<T> {
             }else{
                 //字符集处理，化为单个列处理
                 for(Character ch:edgeAllowInputGather){
-                    context.getInputParams().add(Integer.valueOf(ch));
+                    context.addInputParam(Integer.valueOf(ch));
                     context.handleMapCol(integerListMap,Integer.valueOf(ch),edgeLine.getNext().getStateNum());
                 }
 
@@ -104,6 +106,14 @@ public class ModelParam<T> {
     public ModelParam(T t,char[] chars){
         this.t=t;
         this.chars=chars;
+    }
+
+    public Stack<HandleInfo> getHandleInfo() {
+        return handleInfo;
+    }
+
+    public void setHandleInfo(Stack<HandleInfo> handleInfo) {
+        this.handleInfo = handleInfo;
     }
 
     public T getT() {

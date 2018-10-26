@@ -61,10 +61,8 @@ public class CssParser {
 
     public static NfaStateMachine getNfaStateMachine(String name,String value)throws Exception{
         if("ignore".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle() {
-                public void handle(ModelParam modelParam) {
-                }
-            }).setIsPrint(true).invoke();
+            //如果不需要关联动作，就不要显示的写，如果写了，会报错
+            return new InvokerImpl(value).invoke();
 
         }else if("attributeTag".equalsIgnoreCase(name)){
             return new InvokerImpl(value).relevance(new RelevanceHandle() {
