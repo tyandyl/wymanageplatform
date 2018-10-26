@@ -5,6 +5,7 @@ import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.widget.IFlow;
 import com.wy.manage.platform.core.widget.NormalFlow;
 import com.wy.manage.platform.core.widget.SelectorType;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -39,6 +40,12 @@ public class CssParser {
             }
         }
 
+        if(nfaStateMachine==null && map.size()==1){
+            for(Map.Entry<String,NfaStateMachine> entry:map.entrySet()){
+                return entry.getValue();
+            }
+
+        }
         return nfaStateMachine;
     }
 
@@ -54,41 +61,53 @@ public class CssParser {
 
     public static NfaStateMachine getNfaStateMachine(String name,String value)throws Exception{
         if("ignore".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
-                public void handle(ModelParam modelParam,CssBag cssBag) {
+            return new InvokerImpl(value).relevance(new RelevanceHandle() {
+                public void handle(ModelParam modelParam) {
                 }
             }).setIsPrint(true).invoke();
 
         }else if("attributeTag".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
-                public void handle(ModelParam modelParam,CssBag cssBag) {
-                    List<Character> curModelValue = modelParam.getCurModelValue();
-                    if(curModelValue!=null && curModelValue.size()==1){
-                        Character character = curModelValue.get(0);
-                        if(character==46){
+            return new InvokerImpl(value).relevance(new RelevanceHandle() {
+                public void handle(ModelParam modelParam) {
+                    Object t = modelParam.getT();
+                    if(t instanceof CssBag){
+                        CssBag cssBag=(CssBag)t;
+                        int curInt = modelParam.getCurInt();
+                        char[] chars = modelParam.getChars();
+                        char aChar = chars[curInt];
+                        if(aChar==46){
                             cssBag.setSelectorType(SelectorType.ID_SELECTOR);
-                        }else if(character==35){
+                        }else if(aChar==35){
                             cssBag.setSelectorType(SelectorType.ID_SELECTOR);
                         }
                     }
+
                 }
             }).setIsPrint(true).invoke();
 
         }else if("attributeName".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
-                public void handle(ModelParam modelParam,CssBag cssBag) {
-                    List<Character> curModelValue = modelParam.getCurModelValue();
-                    StringBuilder str = new StringBuilder();
-                    for (Character character : curModelValue) {// 对ArrayList进行遍历，将字符放入StringBuilder中
-                        str.append(character);
+            return new InvokerImpl(value).relevance(new RelevanceHandle() {
+                public void handle(ModelParam modelParam) {
+                    Object t = modelParam.getT();
+                    if(t instanceof CssBag){
+                        CssBag cssBag=(CssBag)t;
+                        int curInt = modelParam.getCurInt();
+                        char[] chars = modelParam.getChars();
+                        char aChar = chars[curInt];
+                        StringBuilder str = new StringBuilder();
+                        if(StringUtils.isNotBlank(cssBag.getName())){
+                            str.append(cssBag.getName());
+                        }
+                        str.append(aChar);
+                        cssBag.setName(String.valueOf(str));
                     }
-                    cssBag.setName(String.valueOf(str));
+
                 }
             }).setIsPrint(true).invoke();
 
         }else if("attributeFirstOpenCurly".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle<CssBag>() {
-                public void handle(ModelParam modelParam,CssBag cssBag) {
+            return new InvokerImpl(value).relevance(new RelevanceHandle() {
+                public void handle(ModelParam modelParam) {
                 }
             }).setIsPrint(true).invoke();
         }

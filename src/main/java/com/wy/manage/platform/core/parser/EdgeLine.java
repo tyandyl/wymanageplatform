@@ -17,6 +17,16 @@ public class EdgeLine implements Serializable {
     //下一个节点
     public NfaStateNode next;
 
+    //是否经过，遍历的时候使用，防止溢出
+    public boolean isPassed;
+
+    public boolean isPassed() {
+        return isPassed;
+    }
+
+    public void setPassed(boolean passed) {
+        isPassed = passed;
+    }
 
     public NfaStateNode getNext() {
         return next;

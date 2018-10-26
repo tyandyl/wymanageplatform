@@ -1,24 +1,28 @@
 package com.wy.manage.platform.core.parser;
 
+import java.util.List;
+
 /**
  * Created by tianye
+ * 当前类记录经过的dfa状态
  */
 public class NfaStateNodeRecord {
-    private NfaStateNode nfaStateNode;
-    //默认值为-2，-1为空集
-    private int cRecord=-2;
+    //dnf状态码集合
+    private List<String> dfaStateNum;
+    //列字符
+    private int cRecord=-1;
 
-    public NfaStateNodeRecord(NfaStateNode nfaStateNode,int cRecord){
-        this.nfaStateNode=nfaStateNode;
+    public NfaStateNodeRecord(List<String> dfaStateNum,int cRecord){
+        this.dfaStateNum=dfaStateNum;
         this.cRecord=cRecord;
     }
 
-    public NfaStateNode getNfaStateNode() {
-        return nfaStateNode;
+    public List<String> getDfaStateNum() {
+        return dfaStateNum;
     }
 
-    public void setNfaStateNode(NfaStateNode nfaStateNode) {
-        this.nfaStateNode = nfaStateNode;
+    public void setDfaStateNum(List<String> dfaStateNum) {
+        this.dfaStateNum = dfaStateNum;
     }
 
     public int getcRecord() {

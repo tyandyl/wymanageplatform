@@ -1,8 +1,11 @@
 package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.utils.ExceptionTools;
+import com.wy.manage.platform.core.utils.GUIDTools;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -10,88 +13,76 @@ import java.util.Stack;
  */
 public class AnalyzeExecuteModel {
 
-    public static void execute(String str,CssBag cssBag,NfaStateMachine nfaStateMachine) throws Exception {
+    public static void execute(String str,CssBag cssBag,NfaStateMachine parser) throws Exception {
 
         char[] chars = str.toCharArray();
-        ModelParam modelParam=new ModelParam(nfaStateMachine.getStartNode(),chars);
-        while (modelParam.getCurInt()<chars.length){
-            if(modelParam.getNum()>=1000){
-                System.out.println("执行失败");
-                break;
-            }
-            analyzeEx( modelParam,cssBag);
-        }
-        if(modelParam.getNum()<1000){
-            System.out.println("执行成功");
-        }
-
+        ModelParam<CssBag> modelParam = new ModelParam<CssBag>(cssBag,chars);
+        DfaContext context = modelParam.handleMapFirst(parser).setParser(parser).buildEmptyStateGather();
+        execute(modelParam,context);
     }
 
+    public static void execute(ModelParam modelParam,final DfaContext context)throws Exception{
+        List<String> list =context.getMapEmpty().get(context.getStartNodeStateNum());
 
+        while (modelParam.getCurInt()<modelParam.getChars().length){
+            //新的状态集合,99页
+            List<String> listNew=new ArrayList<String>();
+            new StateMoveHandle<List<String>,List<String>>(){
+                public void move(List<String> strings, List<String> strings2, Integer var) {
+                    if(strings==null || strings.size()==0){
+                        System.out.println("d");
+                    }
+                    for(String str:strings){
+                        //获取列数
+                        Map<Integer, List<String>> integerListMap =context.getMap().get(str);
+                        if(integerListMap!=null){
+                            //获取var输入的下一个状态
+                            List<String> list1 = integerListMap.get(var);
+                            if(list1!=null && list1.size()>0){
+                                for(String str1:list1){
+                                    if(!strings2.contains(str1)){
+                                        strings2.add(str1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }.move(list,listNew,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));
 
-    public static void analyzeEx(ModelParam modelParam,CssBag cssBag)throws Exception{
-        EdgeLine[] edgeLines = modelParam.getStartNode().getEdgeLines();
-        int i=modelParam.getI();
-        for(;i<2;i++){
-//            if(edgeLines[i]!=null && edgeLines[i].getEdgeType()!=EdgeType.PASSED){
-//                EdgeInputType edgeInputType = edgeLines[i].getEdgeInputType();
-//                if(edgeInputType==EdgeInputType.NULL_GATHER ){
-//                    if(edgeLines[i].getEdgeType()!=EdgeType.MAYBE){
-//                        edgeLines[i].setEdgeType(EdgeType.PASSED);
-//                    }else {
-//                       // System.out.println("当前路径是maybe");
-//                    }
-//                    //记录当前节点和经过的字符
-//                    NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(modelParam.getStartNode(),-1);
-//                    modelParam.getStackNodes().push(nfaStateNodeRecord);
-//
-//                    NfaStateNode next = edgeLines[i].getNext();
-//
-//                    if(next!=null){
-//                        modelParam.setStartNode(next);
-//                        //优先后，恢复默认
-//                        modelParam.setI(0);
-//                        if(next.getHandle()!=null){
-//                            next.getHandle().handle(modelParam,cssBag);
-//                            modelParam.getCurModelValue().clear();
-//                        }
-//                        return;
-//                    }else {
-//                        ExceptionTools.ThrowException("没有与之对应的节点匹配");
-//                    }
-//                }else if(edgeInputType==EdgeInputType.CHARACTER_REPERTOIRE){
-//                    List<Character> edgeAllowInputGather = edgeLines[i].getEdgeAllowInputGather();
-//                    char[] chars = modelParam.getChars();
-//                    int curInt = modelParam.getCurInt();
-//                    if(edgeAllowInputGather.contains(chars[curInt])){
-//                        NfaStateNode next = edgeLines[i].getNext();
-//                        EdgeType edgeType = edgeLines[i].getEdgeType();
-//                        if(edgeType!=EdgeType.MAYBE){
-//                            edgeLines[i].setEdgeType(EdgeType.PASSED);
-//                        }
-//                        NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(modelParam.getStartNode(),chars[curInt]);
-//
-//                        modelParam.getStackNodes().push(nfaStateNodeRecord);
-//                        modelParam.setStartNode(next);
-//                        modelParam.setCurInt(curInt+1);
-//                        modelParam.getCurModelValue().add(chars[curInt]);
-//                        modelParam.setI(0);
-//                        System.out.println("已匹配,当前的字符是:"+chars[curInt]);
-//                        if(next.getHandle()!=null){
-//                            next.getHandle().handle(modelParam,cssBag);
-//                            modelParam.getCurModelValue().clear();
-//                        }
-//                        if((curInt+1)==modelParam.getChars().length){
-//                            System.out.println("识别完毕，退出");
-//                        }
-//                        return;
-//                    }else {
-//                    }
-//                }
-//            }
+            if(listNew.size()==0){
+                System.out.println("报错了,没有dfa状态集合值");
+                break;
+            }
+            List<String> listMost=new ArrayList<String>();
+            for(String str:listNew){
+
+                List<String> list1 = context.getMapEmpty().get(str);
+                if(list1==null ||list1.size()==0){
+                    ExceptionTools.ThrowException("至少包含他自己");
+                }
+                for(String str2:list1){
+                    if(!listMost.contains(str2)){
+                        listMost.add(str2);
+                    }
+                }
+            }
+            boolean isClear=false;
+            for(String str:listMost){
+                NfaStateNode nfaStateNode = context.getMapState().get(str);
+                if(nfaStateNode==null){
+                    System.out.println("报错了,没有nfa状态");
+                    break;
+                }
+                if(nfaStateNode.getHandle()!=null){
+                    nfaStateNode.getHandle().handle(modelParam);
+                    isClear=true;
+                    System.out.println("赶紧执行啊");
+                }
+            }
+            modelParam.addInfo(list,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]),isClear);
+            list=listMost;
         }
-
-        modelParam.analyzeIsBack();
         return;
     }
 }

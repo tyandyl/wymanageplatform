@@ -387,16 +387,24 @@ public class NfaManager {
 
     public static void traverse(NfaStateNode startNode,NodeHandle nodeHandle)throws Exception{
         if(startNode!=null){
-            if(startNode.getEdgeLines()[0]!=null){
+            if(startNode.getEdgeLines()[0]!=null && startNode.getEdgeLines()[0].isPassed==false){
+                startNode.getEdgeLines()[0].setPassed(true);
                 traverse(startNode.getEdgeLines()[0].getNext(),nodeHandle);
+                //处理操作
+                nodeHandle.handle(startNode,0);
             }
-            //处理操作
-            nodeHandle.handle(startNode,0);
-            if(startNode.getEdgeLines()[1]!=null){
+
+
+            if(startNode.getEdgeLines()[1]!=null && startNode.getEdgeLines()[1].isPassed==false){
+                startNode.getEdgeLines()[1].setPassed(true);
                 traverse(startNode.getEdgeLines()[1].getNext(),nodeHandle);
+                //处理操作
+                nodeHandle.handle(startNode,1);
             }
-            //处理操作
-            nodeHandle.handle(startNode,1);
+            if(startNode.getState().getState()==NfaState.END.getState()){
+                nodeHandle.handle(startNode,3);
+            }
+
         }
     }
 }

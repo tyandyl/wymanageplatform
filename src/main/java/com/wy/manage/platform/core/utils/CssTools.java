@@ -85,39 +85,7 @@ public class CssTools extends Properties{
     }
 
     public static NfaStateMachine parser()throws Exception{
-        //定义css解析的正则表达式position:static
-        NfaStateMachine invokeStatic = new InvokerImpl("static").relevance(new RelevanceHandle<IFlow>() {
-            public void handle(ModelParam modelParam,IFlow iFlow) {
-               // return new NormalFlow();
-            }
-        }).setIsPrint(true).invoke();
-
-        //position:relative
-        NfaStateMachine invokeRelative = new InvokerImpl("relative").relevance(new RelevanceHandle<IFlow>() {
-            public void handle(ModelParam modelParam,IFlow iFlow) {
-                //return new RelativeFlow();
-            }
-        }).setIsPrint(true).invoke();
-
-        NfaStateMachine invokeAbsolute = new InvokerImpl("absolute").relevance(new RelevanceHandle<IFlow>() {
-            public void handle(ModelParam modelParam,IFlow iFlow) {
-                //return new AbsoluteFlow();
-            }
-        }).setIsPrint(true).invoke();
-
-        NfaStateMachine invokePosition = new InvokerImpl("position:").relevance(new RelevanceHandle<IFlow>() {
-            public void handle(ModelParam modelParam,IFlow iFlow) {
-                //return new AbsoluteFlow();
-            }
-        }).setIsPrint(true).invoke();
-
-        NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(invokeStatic, invokeRelative);
-
-        NfaStateMachine orNfaStateMachine1 = NfaManager.createOrNfaStateMachine(orNfaStateMachine, invokeAbsolute);
-
-        NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(invokePosition, orNfaStateMachine1);
-        //String str="#|.[^#.]+\\{";
-        return linkNfaStateMachine;
+        return null;
     }
 
     private static String getConfigUrl() {

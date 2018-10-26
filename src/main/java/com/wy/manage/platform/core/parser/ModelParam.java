@@ -1,65 +1,125 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import com.wy.manage.platform.core.utils.ExceptionTools;
+
+import java.util.*;
 
 /**
  * Created by tianye
  */
-public class ModelParam {
-    private NfaStateNode startNode =null;
-    private NfaStateNode startNodeBackup =null;
+public class ModelParam<T> {
     private int curInt=0;
     private Stack<NfaStateNodeRecord> stackNodes=new Stack<NfaStateNodeRecord>();
     private char[] chars=null;
-    private int num=0;//次数
     private List<Character> curModelValue=new ArrayList<Character>();
-    //遇到[a-z1-9]+\{
-    //有转移符号,回退后，该节点有两条边，第一条边是转移+，每次都走这条，所以转移优先2
-    private int i=0;//优先路径
+    private T t;
 
-    public ModelParam analyzeIsBack(){
-        if(stackNodes.empty()){
-            ++num;
-            curInt=0;
-            startNode=startNodeBackup;
-            return this;
-        }
-        NfaStateNodeRecord pop = stackNodes.pop();
-        if(pop.getcRecord()>=0){
-            --curInt;
-            System.out.println("字符不匹配,退位"+chars[curInt]);
-        }
-        this.setStartNode(pop.getNfaStateNode());
-        i=1;
-        return this;
+    public DfaContext handleMapFirst(NfaStateMachine var)throws Exception{
+        final DfaContext context=new DfaContext();
+        context.setStartNodeStateNum(var.getStartNode().getStateNum());
+        NfaManager.traverse(var.getStartNode(),  new NodeHandle<NfaStateNode>() {
+            public void handle(NfaStateNode o, int i)throws Exception {
+                handleMapSec(o,context, i);
+            }
+        });
+        return context;
     }
 
-    public ModelParam(NfaStateNode startNode,char[] chars){
-        this.startNode=startNode;
-        this.startNodeBackup=startNode;
-        this.curInt=0;
+    /**
+     * 处理辅助数据
+     * @param curDfa
+     * @param var
+     * @param isClear 是否需要清理，一旦执行动作，边需要清理
+     */
+    public void addInfo(List<String> curDfa,int var,boolean isClear){
+        NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(curDfa,var);
+        stackNodes.push(nfaStateNodeRecord);
+        if(!isClear){
+            curModelValue.add((char) var);
+        }
+        curInt++;
+    }
+
+    private void handleMapSec(NfaStateNode o, DfaContext context, int i)throws Exception{
+        //建立状态码与节点的对应关系
+        context.putMapState(o.getStateNum(),o);
+        //获取状态值
+        String stateNum = o.getStateNum();
+        Map<Integer, List<String>> integerListMap = context.getMap().get(stateNum);
+        if(integerListMap==null){
+            //没有的话，赋值
+            integerListMap=new HashMap<Integer, List<String>>();
+            context.getMap().put(stateNum,integerListMap);
+        }
+
+        //判断是开始节点
+        if(o.getState().getState()==NfaState.START.getState()){
+            context.setStartNodeStateNum(o.getStateNum());
+        }
+
+        //判断是结束节点
+        if(i==3){
+            context.setEndNodeStateNum(o.getStateNum());
+            return;
+        }
+
+        //获取当前条线
+        EdgeLine edgeLine = o.getEdgeLines()[i];
+        if(edgeLine==null){
+            System.out.println("ss");
+        }
+        EdgeInputType edgeInputType = edgeLine.getEdgeInputType();
+        //如果当前条线的类型是空
+        if(edgeInputType==EdgeInputType.NULL_GATHER){
+            List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
+            if(edgeAllowInputGather!=null && edgeAllowInputGather.size()>0){
+                ExceptionTools.ThrowException("空集里边不允许有值，请排查");
+            }
+            //记录列
+            context.getInputParams().add(130);
+            context.handleMapCol(integerListMap,130,edgeLine.getNext().getStateNum());
+        }else {
+            List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
+            if(edgeAllowInputGather==null || edgeAllowInputGather.size()==0){
+                ExceptionTools.ThrowException("条线里边必须有值，请排查");
+            }
+            //单个字符处理
+            if(edgeAllowInputGather.size()==1){
+                context.getInputParams().add(Integer.valueOf(edgeAllowInputGather.get(0)));
+
+                context.handleMapCol(integerListMap,
+                        Integer.valueOf(edgeAllowInputGather.get(0))
+                        ,edgeLine.getNext().getStateNum());
+            }else{
+                //字符集处理，化为单个列处理
+                for(Character ch:edgeAllowInputGather){
+                    context.getInputParams().add(Integer.valueOf(ch));
+                    context.handleMapCol(integerListMap,Integer.valueOf(ch),edgeLine.getNext().getStateNum());
+                }
+
+            }
+        }
+    }
+
+    public ModelParam(T t,char[] chars){
+        this.t=t;
         this.chars=chars;
     }
 
-
-
-    public NfaStateNode getStartNode() {
-        return startNode;
+    public T getT() {
+        return t;
     }
 
-    public void setStartNode(NfaStateNode startNode) {
-        this.startNode = startNode;
+    public void setT(T t) {
+        this.t = t;
     }
 
     public int getCurInt() {
         return curInt;
     }
 
-    public ModelParam setCurInt(int curInt) {
+    public void setCurInt(int curInt) {
         this.curInt = curInt;
-        return this;
     }
 
     public Stack<NfaStateNodeRecord> getStackNodes() {
@@ -78,27 +138,11 @@ public class ModelParam {
         this.chars = chars;
     }
 
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
-    }
-
     public List<Character> getCurModelValue() {
         return curModelValue;
     }
 
     public void setCurModelValue(List<Character> curModelValue) {
         this.curModelValue = curModelValue;
-    }
-
-    public int getI() {
-        return i;
-    }
-
-    public void setI(int i) {
-        this.i = i;
     }
 }
