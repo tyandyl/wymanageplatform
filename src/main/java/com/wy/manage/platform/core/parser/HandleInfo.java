@@ -1,19 +1,26 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
- * Created by tianye13 on 2018/10/26.
+ * Created by tianye
  */
 public class HandleInfo {
     private RelevanceHandle relevanceHandle;
+    private String handleName;
     private int curChar;
-    private String stateNum;
+    private Set<String> stateNum=new TreeSet<String>();
 
-    public HandleInfo(RelevanceHandle relevanceHandle,int curChar,String stateNum){
+    public HandleInfo(RelevanceHandle relevanceHandle,int curChar,String stateNum,String handleName){
         this.relevanceHandle=relevanceHandle;
         this.curChar=curChar;
-        this.stateNum=stateNum;
+        this.stateNum.add(stateNum);
+        this.handleName=handleName;
+    }
+
+    public void addSet(String stateNum){
+        this.stateNum.add(stateNum);
     }
 
     public RelevanceHandle getRelevanceHandle() {
@@ -30,5 +37,13 @@ public class HandleInfo {
 
     public void setCurChar(int curChar) {
         this.curChar = curChar;
+    }
+
+    public String getHandleName() {
+        return handleName;
+    }
+
+    public void setHandleName(String handleName) {
+        this.handleName = handleName;
     }
 }

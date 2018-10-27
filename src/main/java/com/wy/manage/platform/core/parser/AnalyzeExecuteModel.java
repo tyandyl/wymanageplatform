@@ -72,12 +72,28 @@ public class AnalyzeExecuteModel {
                     break;
                 }
                 if(nfaStateNode.getHandle()!=null){
-                    nfaStateNode.getHandle().handle(modelParam);
                     Stack<HandleInfo> handleInfos = modelParam.getHandleInfo();
-                    HandleInfo handleInfo=new HandleInfo(nfaStateNode.getHandle(),
-                            Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]),
-                            nfaStateNode.getStateNum());
-                    handleInfos.push(handleInfo);
+                    if(!handleInfos.empty()){
+                        HandleInfo peek = handleInfos.peek();
+                        if(peek.getRelevanceHandle()==nfaStateNode.getHandle()){
+                            peek.setCurChar(modelParam.getCurInt());
+                            peek.addSet(nfaStateNode.getStateNum());
+                        }else {
+                            HandleInfo handleInfo=new HandleInfo(nfaStateNode.getHandle(),
+                                    modelParam.getCurInt(),
+                                    nfaStateNode.getStateNum(),
+                                    nfaStateNode.getHandleName());
+                            handleInfos.push(handleInfo);
+                        }
+                    }else {
+                        HandleInfo handleInfo=new HandleInfo(nfaStateNode.getHandle(),
+                                modelParam.getCurInt(),
+                                nfaStateNode.getStateNum(),
+                                nfaStateNode.getHandleName());
+                        handleInfos.push(handleInfo);
+                    }
+
+
                     System.out.println("赶紧执行啊");
                 }
             }
