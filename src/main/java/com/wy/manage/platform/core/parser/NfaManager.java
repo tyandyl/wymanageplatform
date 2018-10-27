@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.GUIDTools;
 
@@ -175,6 +176,7 @@ public class NfaManager {
      * @return
      */
     public static NfaStateMachine createRepetitionStarNfaStateMachine(NfaStateMachine var)throws Exception{
+        NfaStateNode startNode1 = var.getStartNode();
         //防止连接溢出
         NfaStateMachine nfaStateMachine = packNewStartAndEndNode(var);
 
@@ -190,7 +192,7 @@ public class NfaManager {
 
         EdgeLine edgeLine1=new EdgeLine();
         edgeLine1.setEdgeInputType(EdgeInputType.NULL_GATHER);
-        edgeLine1.setNext(startNode);
+        edgeLine1.setNext(startNode1);
         //结束节点指向开始节点
         EdgeLine[] edgeLines1 = endNode.getEdgeLines();
         assignArray(edgeLines1, edgeLine1);
@@ -336,14 +338,14 @@ public class NfaManager {
     public static NfaStateNode createStartNode(){
         NfaStateNode nfaStateNode=new NfaStateNode();
         nfaStateNode.setState(NfaState.START);
-        nfaStateNode.setStateNum(GUIDTools.randomUUID());
+        nfaStateNode.setStateNum(AtomicTools.getUniqueInteger());
         return nfaStateNode;
     }
 
     public static NfaStateNode createEndNode(){
         NfaStateNode nfaStateNode=new NfaStateNode();
         nfaStateNode.setState(NfaState.END);
-        nfaStateNode.setStateNum(GUIDTools.randomUUID());
+        nfaStateNode.setStateNum(AtomicTools.getUniqueInteger());
         return nfaStateNode;
     }
 
@@ -365,8 +367,8 @@ public class NfaManager {
             NfaStateMachine target = (NfaStateMachine)ois.readObject();
             traverse(target.getStartNode(),  new NodeHandle<NfaStateNode>() {
                 public void handle(NfaStateNode o, int i) {
-                    o.getEdgeLines()[i].getNext().setStateNum(GUIDTools.randomUUID());
-                    o.setStateNum(GUIDTools.randomUUID());
+                    o.getEdgeLines()[i].getNext().setStateNum(AtomicTools.getUniqueInteger());
+                    o.setStateNum(AtomicTools.getUniqueInteger());
                 }
             });
 

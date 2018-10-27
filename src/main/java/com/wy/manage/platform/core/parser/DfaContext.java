@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.utils.ExceptionTools;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -31,25 +32,55 @@ public class DfaContext {
 //    private Map<String,List<String>> mapDfa=new HashMap<String, List<String>>();
 
     //key是状态，value表示由状态s经由条件ε可以到达的所有状态的集合
-    private Map<String,List<String>> mapEmpty=new HashMap<String, List<String>>();
+    private Map<String,Set<String>> mapEmpty=new HashMap<String, Set<String>>();
+
+    //存放标记的状态码
+    private String markStateNum;
+    private List<String> markMapKeys=new ArrayList<String>();
+    private Set<String> markMapEmptyKeys=new TreeSet<String>();
 
     //ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
     public DfaContext buildEmptyStateGather(){
         for(Map.Entry<String,Map<Integer,List<String>>> info:map.entrySet()){
-            new StateMoveHandle<String,Map<String,List<String>>>(){
+            StringBuffer buffer=new StringBuffer("该状态是:"+info.getKey());
+            buffer.append("\n");
+            for(Map.Entry<Integer,List<String>> v:info.getValue().entrySet()){
+                StringBuffer buf=new StringBuffer();
+                if(v!=null){
+                    buf.append("输入的字符是:"+v.getKey()+",下一个状态是:");
+                    List<String> value = v.getValue();
+                    if(value!=null && value.size()>0){
+                        for(String str:value){
+                            NfaStateNode nfaStateNode = mapState.get(str);
+                            if(nfaStateNode!=null && StringUtils.isNotBlank(nfaStateNode.getHandleName())){
+                                buf.append(str+",其事件是:"+nfaStateNode.getHandleName()+",");
+                            }else {
+                                buf.append(str+",");
+                            }
 
-                public void move(String s, Map<String, List<String>> mapEmpty, Integer var) {
-                    if(s.equalsIgnoreCase(startNodeStateNum)){
-                        System.out.println("s");
+                        }
                     }
+                    buf.append("\n");
+                }
+
+                buffer.append(buf);
+            }
+            System.out.println(buffer);
+
+            new StateMoveHandle<String,Map<String,Set<String>>>(){
+
+                public void move(String s, Map<String, Set<String>> mapEmpty, Integer var) {
                     //98页
                     Stack<String> stack=new Stack<String>();
-                    List<String> list = mapEmpty.get(s);
+                    Set<String> list = mapEmpty.get(s);
                     if(list==null){
-                        list=new ArrayList<String>();
+                        list=new TreeSet<String>();
                         list.add(s);
                         mapEmpty.put(s,list);
                         stack.push(s);
+                        if(s.equalsIgnoreCase(markStateNum)){
+                            markMapEmptyKeys.add(s);
+                        }
                     }
                     while (!stack.empty()){
                         String pop = stack.pop();
@@ -60,6 +91,9 @@ public class DfaContext {
                                 for(String str:list1){
                                     if(!list.contains(str)){
                                         list.add(str);
+                                        if(str.equalsIgnoreCase(markStateNum)){
+                                            markMapEmptyKeys.add(s);
+                                        }
                                         stack.push(str);
                                     }
                                 }
@@ -69,46 +103,28 @@ public class DfaContext {
 
 
 
-//                    //寻找当前状态下的列，肯定不为空，所以不需要判断
-//                    Map<Integer, List<String>> integerListMap = map.get(s);
-//                   //寻找下一个状态集合
-//                    List<String> list = integerListMap.get(var);
-//                    if(list!=null && list.size()>0){
-//                        for(String str:list){
-//                            List<String> list1 = mapEmpty.get(s);
-//                            if(list1==null){
-//                                list1=new ArrayList<String>();
-//                                //ε到达路径增加本身
-//                                list1.add(s);
-//                                mapEmpty.put(s,list1);
-//                            }
-//                            if(!list1.contains(str)){
-//                                list1.add(str);
-//                                //说明由状态s经由条件ε可以到达的所有状态的集合还没有找过
-//                                if(mapEmpty.get(str)==null){
-//                                    move(str,mapEmpty,130);
-//                                    if(s.equalsIgnoreCase(startNodeStateNum)){
-//                                        System.out.println("s");
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-
-
-
                 }
             }.move(info.getKey(),mapEmpty,130);
+        }
+        for(String str:markMapEmptyKeys){
+            System.out.println("该状态码已经放到空集合的:"+str+" key中");
         }
         return this;
     }
 
+    public Set<String> getMarkMapEmptyKeys() {
+        return markMapEmptyKeys;
+    }
 
-    public Map<String, List<String>> getMapEmpty() {
+    public void setMarkMapEmptyKeys(Set<String> markMapEmptyKeys) {
+        this.markMapEmptyKeys = markMapEmptyKeys;
+    }
+
+    public Map<String, Set<String>> getMapEmpty() {
         return mapEmpty;
     }
 
-    public void setMapEmpty(Map<String, List<String>> mapEmpty) {
+    public void setMapEmpty(Map<String, Set<String>> mapEmpty) {
         this.mapEmpty = mapEmpty;
     }
 
@@ -164,13 +180,6 @@ public class DfaContext {
         this.inputParams = inputParams;
     }
 
-//    public Map<String, List<String>> getMapDfa() {
-//        return mapDfa;
-//    }
-//
-//    public void setMapDfa(Map<String, List<String>> mapDfa) {
-//        this.mapDfa = mapDfa;
-//    }
 
     public String getEndNodeStateNum() {
         return endNodeStateNum;
@@ -198,5 +207,21 @@ public class DfaContext {
 
     public void setStartNodeStateNum(String startNodeStateNum) {
         this.startNodeStateNum = startNodeStateNum;
+    }
+
+    public String getMarkStateNum() {
+        return markStateNum;
+    }
+
+    public void setMarkStateNum(String markStateNum) {
+        this.markStateNum = markStateNum;
+    }
+
+    public List<String> getMarkMapKeys() {
+        return markMapKeys;
+    }
+
+    public void setMarkMapKeys(List<String> markMapKeys) {
+        this.markMapKeys = markMapKeys;
     }
 }

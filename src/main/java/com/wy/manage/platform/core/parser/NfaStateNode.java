@@ -20,6 +20,18 @@ public class NfaStateNode implements Serializable{
 
     private RelevanceHandle handle;
 
+    //打标记使用，看状态码在哪个empty集合中。
+    private boolean isMark = false;
+    private String handleName;
+
+    public boolean isMark() {
+        return isMark;
+    }
+
+    public void setMark(boolean mark) {
+        isMark = mark;
+    }
+
     public String getStateNum() {
         return stateNum;
     }
@@ -50,5 +62,13 @@ public class NfaStateNode implements Serializable{
 
     public void setHandle(RelevanceHandle handle) {
         this.handle = handle;
+    }
+
+    public String getHandleName() {
+        return handleName;
+    }
+
+    public void setHandleName(String handleName) {
+        this.handleName = handleName;
     }
 }

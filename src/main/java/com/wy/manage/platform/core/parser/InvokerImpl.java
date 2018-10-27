@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.utils.ExceptionTools;
+import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -12,7 +13,12 @@ public class InvokerImpl implements Invoker {
     private String regularStr;
     private long sTid = 0L;
     private boolean isPrint = false;
+    //打标记使用，看状态码在哪个empty集合中。
+    private boolean isMark = false;
+
     private RelevanceHandle handle;
+
+    private String handleName;
 
     public InvokerImpl(String regularStr) {
         this.regularStr = regularStr;
@@ -44,29 +50,13 @@ public class InvokerImpl implements Invoker {
     private NfaStateMachine onInvoke(NfaStateMachine nfaStateMachine,RelevanceHandle handle) throws Exception{
         NfaStateNode endNode = nfaStateMachine.getEndNode();
         endNode.setHandle(handle);
-        //traverse(nfaStateMachine.startNode, endNode,0);
+
+        if(StringUtils.isNotBlank(handleName)){
+            endNode.setHandleName(handleName);
+        }
         return nfaStateMachine;
     }
 
-    public static void traverse(NfaStateNode startNode,NfaStateNode endNode,int i){
-        if(startNode!=null){
-            i++;
-            if(startNode.getEdgeLines()[0]!=null){
-                List<Character> edgeAllowInputGather = startNode.getEdgeLines()[0].getEdgeAllowInputGather();
-                System.out.println("第"+i+"个节点的第1条边的输入是:"+(edgeAllowInputGather.size()==0?"空集":String.valueOf((Character[])edgeAllowInputGather.toArray())));
-                if(startNode.getEdgeLines()[0].getNext()!=endNode){
-                    traverse(startNode.getEdgeLines()[0].getNext(),endNode,i);
-                }
-            }
-            if(startNode.getEdgeLines()[1]!=null){
-                List<Character> edgeAllowInputGather = startNode.getEdgeLines()[1].getEdgeAllowInputGather();
-                System.out.println("第"+i+"个节点的第2条边的输入是:"+(edgeAllowInputGather.size()==0?"空集":String.valueOf((Character[])edgeAllowInputGather.toArray())));
-                if(startNode.getEdgeLines()[1].getNext()!=endNode){
-                    traverse(startNode.getEdgeLines()[1].getNext(),endNode,i);
-                }
-            }
-        }
-    }
 
     private NfaStateMachine preInvoke() throws Exception {
         Stack<XContentItem> stack = RegularExpressionParser.parserCss(regularStr.toCharArray());
@@ -76,6 +66,11 @@ public class InvokerImpl implements Invoker {
             if (this.isPrint) {
                 System.out.println("开始解析正则表达式:" + regularStr);
             }
+            if(this.isMark){
+                System.out.println("开始节点的状态码是:" + nfaStateMachine.getStartNode().getStateNum());
+                nfaStateMachine.getStartNode().setMark(true);
+            }
+
             return nfaStateMachine;
         } else {
             System.out.println("栈的长度是:" + stack.size());
@@ -86,5 +81,21 @@ public class InvokerImpl implements Invoker {
 
     }
 
+    public String getHandleName() {
+        return handleName;
+    }
 
+    public InvokerImpl setHandleName(String handleName) {
+        this.handleName = handleName;
+        return this;
+    }
+
+    public boolean isMark() {
+        return isMark;
+    }
+
+    public InvokerImpl setMark(boolean mark) {
+        isMark = mark;
+        return this;
+    }
 }

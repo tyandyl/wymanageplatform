@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by tianye
@@ -8,20 +9,20 @@ import java.util.List;
  */
 public class NfaStateNodeRecord {
     //dnf状态码集合
-    private List<String> dfaStateNum;
+    private Set<String> dfaStateNum;
     //列字符
     private int cRecord=-1;
 
-    public NfaStateNodeRecord(List<String> dfaStateNum,int cRecord){
+    public NfaStateNodeRecord(Set<String> dfaStateNum,int cRecord){
         this.dfaStateNum=dfaStateNum;
         this.cRecord=cRecord;
     }
 
-    public List<String> getDfaStateNum() {
+    public Set<String> getDfaStateNum() {
         return dfaStateNum;
     }
 
-    public void setDfaStateNum(List<String> dfaStateNum) {
+    public void setDfaStateNum(Set<String> dfaStateNum) {
         this.dfaStateNum = dfaStateNum;
     }
 

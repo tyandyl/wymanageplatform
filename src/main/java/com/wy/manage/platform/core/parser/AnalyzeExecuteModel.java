@@ -3,10 +3,7 @@ package com.wy.manage.platform.core.parser;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.GUIDTools;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by tianye
@@ -22,18 +19,18 @@ public class AnalyzeExecuteModel {
     }
 
     public static void execute(final ModelParam modelParam, final DfaContext context)throws Exception{
-        List<String> list =context.getMapEmpty().get(context.getStartNodeStateNum());
-
+        Set<String> list =context.getMapEmpty().get(context.getStartNodeStateNum());
         while (modelParam.getCurInt()<modelParam.getChars().length){
             //新的状态集合,99页
             List<String> listNew=new ArrayList<String>();
-            new StateMoveHandle<List<String>,List<String>>(){
-                public void move(List<String> strings, List<String> strings2, Integer var) {
+            new StateMoveHandle<Set<String>,List<String>>(){
+                public void move(Set<String> strings, List<String> strings2, Integer var) {
                     modelParam.addCurModelValue(var);
-                    if(strings==null || strings.size()==0){
-                        System.out.println("d");
-                    }
+                    //遍历ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
                     for(String str:strings){
+                        if(str.equalsIgnoreCase(context.getMarkStateNum())){
+                            System.out.println("当前状态集中包含标记节点");
+                        }
                         //获取列数
                         Map<Integer, List<String>> integerListMap =context.getMap().get(str);
                         if(integerListMap!=null){
@@ -55,17 +52,16 @@ public class AnalyzeExecuteModel {
                 System.out.println("报错了,没有dfa状态集合值");
                 break;
             }
-            List<String> listMost=new ArrayList<String>();
+            Set<String> listMost=new TreeSet<String>();
             for(String str:listNew){
+                listMost.add(str);
+                Set<String> list1 = context.getMapEmpty().get(str);
 
-                List<String> list1 = context.getMapEmpty().get(str);
                 if(list1==null ||list1.size()==0){
                     ExceptionTools.ThrowException("至少包含他自己");
                 }
                 for(String str2:list1){
-                    if(!listMost.contains(str2)){
-                        listMost.add(str2);
-                    }
+                    listMost.add(str2);
                 }
             }
 

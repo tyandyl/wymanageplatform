@@ -62,7 +62,7 @@ public class CssParser {
     public static NfaStateMachine getNfaStateMachine(String name,String value)throws Exception{
         if("ignore".equalsIgnoreCase(name)){
             //如果不需要关联动作，就不要显示的写，如果写了，会报错
-            return new InvokerImpl(value).invoke();
+            return new InvokerImpl(value).setHandleName("ignore").invoke();
 
         }else if("attributeTag".equalsIgnoreCase(name)){
             return new InvokerImpl(value).relevance(new RelevanceHandle() {
@@ -81,7 +81,7 @@ public class CssParser {
                     }
 
                 }
-            }).setIsPrint(true).invoke();
+            }).setIsPrint(true).setHandleName("attributeTag").invoke();
 
         }else if("attributeName".equalsIgnoreCase(name)){
             return new InvokerImpl(value).relevance(new RelevanceHandle() {
@@ -101,13 +101,10 @@ public class CssParser {
                     }
 
                 }
-            }).setIsPrint(true).invoke();
+            }).setIsPrint(true).setHandleName("attributeName").invoke();
 
         }else if("attributeFirstOpenCurly".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle() {
-                public void handle(ModelParam modelParam) {
-                }
-            }).setIsPrint(true).invoke();
+            return new InvokerImpl(value).setIsPrint(true).setMark(true).setHandleName("attributeFirstOpenCurly").invoke();
         }
         ExceptionTools.ThrowException("没找到相应的正则表达式");
         return null;
