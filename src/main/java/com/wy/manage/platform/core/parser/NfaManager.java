@@ -370,7 +370,7 @@ public class NfaManager {
                     o.getEdgeLines()[i].getNext().setStateNum(AtomicTools.getUniqueInteger());
                     o.setStateNum(AtomicTools.getUniqueInteger());
                 }
-            });
+            },AtomicTools.getBiUniqueInteger());
 
             return target;
         } catch (Exception e) {
@@ -387,19 +387,19 @@ public class NfaManager {
         return null;
     }
 
-    public static void traverse(NfaStateNode startNode,NodeHandle nodeHandle)throws Exception{
+    public static void traverse(NfaStateNode startNode,NodeHandle nodeHandle,int num)throws Exception{
         if(startNode!=null){
-            if(startNode.getEdgeLines()[0]!=null && startNode.getEdgeLines()[0].isPassed==false){
-                startNode.getEdgeLines()[0].setPassed(true);
-                traverse(startNode.getEdgeLines()[0].getNext(),nodeHandle);
+            if(startNode.getEdgeLines()[0]!=null && startNode.getEdgeLines()[0].getPassedNum()<num){
+                startNode.getEdgeLines()[0].setPassedNum(num);
+                traverse(startNode.getEdgeLines()[0].getNext(),nodeHandle,num);
                 //处理操作
                 nodeHandle.handle(startNode,0);
             }
 
 
-            if(startNode.getEdgeLines()[1]!=null && startNode.getEdgeLines()[1].isPassed==false){
-                startNode.getEdgeLines()[1].setPassed(true);
-                traverse(startNode.getEdgeLines()[1].getNext(),nodeHandle);
+            if(startNode.getEdgeLines()[1]!=null && startNode.getEdgeLines()[1].getPassedNum()<num){
+                startNode.getEdgeLines()[1].setPassedNum(num);
+                traverse(startNode.getEdgeLines()[1].getNext(),nodeHandle,num);
                 //处理操作
                 nodeHandle.handle(startNode,1);
             }

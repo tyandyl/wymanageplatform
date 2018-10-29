@@ -19,17 +19,14 @@ public class NfaStateNode implements Serializable{
     private EdgeLine[] edgeLines=new EdgeLine[2];
 
     private RelevanceHandle handle;
-
-    //打标记使用，看状态码在哪个empty集合中。
-    private boolean isMark = false;
     private String handleName;
 
-    public boolean isMark() {
-        return isMark;
+    public String getHandleName() {
+        return handleName;
     }
 
-    public void setMark(boolean mark) {
-        isMark = mark;
+    public void setHandleName(String handleName) {
+        this.handleName = handleName;
     }
 
     public String getStateNum() {
@@ -64,11 +61,4 @@ public class NfaStateNode implements Serializable{
         this.handle = handle;
     }
 
-    public String getHandleName() {
-        return handleName;
-    }
-
-    public void setHandleName(String handleName) {
-        this.handleName = handleName;
-    }
 }

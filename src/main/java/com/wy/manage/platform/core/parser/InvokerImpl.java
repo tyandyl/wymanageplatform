@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import org.apache.commons.lang.StringUtils;
 
@@ -13,8 +14,6 @@ public class InvokerImpl implements Invoker {
     private String regularStr;
     private long sTid = 0L;
     private boolean isPrint = false;
-    //打标记使用，看状态码在哪个empty集合中。
-    private boolean isMark = false;
 
     private RelevanceHandle handle;
 
@@ -50,10 +49,17 @@ public class InvokerImpl implements Invoker {
     private NfaStateMachine onInvoke(NfaStateMachine nfaStateMachine,RelevanceHandle handle) throws Exception{
         NfaStateNode endNode = nfaStateMachine.getEndNode();
         endNode.setHandle(handle);
+        System.out.println("当前正则是:"+handleName+"，其包含节点有:");
+        NfaManager.traverse(nfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
+                public void handle(NfaStateNode o, int i) throws Exception {
+                    o.setHandleName(handleName);
+                    if(StringUtils.isNotBlank(handleName) && (i==0 || i==3)) {
+                        String name = o.getState().getName();
+                        System.out.println(o.getStateNum()+",他是"+name+"节点");
+                    }
+                }
+            }, AtomicTools.getBiUniqueInteger());
 
-        if(StringUtils.isNotBlank(handleName)){
-            endNode.setHandleName(handleName);
-        }
         return nfaStateMachine;
     }
 
@@ -63,12 +69,9 @@ public class InvokerImpl implements Invoker {
         if (stack.size() == 1) {
             XContentItem peek = stack.peek();
             NfaStateMachine nfaStateMachine = peek.getNfaStateMachine();
+
             if (this.isPrint) {
                 System.out.println("开始解析正则表达式:" + regularStr);
-            }
-            if(this.isMark){
-                System.out.println("开始节点的状态码是:" + nfaStateMachine.getStartNode().getStateNum());
-                nfaStateMachine.getStartNode().setMark(true);
             }
 
             return nfaStateMachine;
@@ -87,15 +90,6 @@ public class InvokerImpl implements Invoker {
 
     public InvokerImpl setHandleName(String handleName) {
         this.handleName = handleName;
-        return this;
-    }
-
-    public boolean isMark() {
-        return isMark;
-    }
-
-    public InvokerImpl setMark(boolean mark) {
-        isMark = mark;
         return this;
     }
 }

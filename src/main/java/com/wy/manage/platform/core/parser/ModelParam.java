@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 
 import java.util.*;
@@ -15,16 +16,18 @@ public class ModelParam<T> {
     private T t;
     private Stack<HandleInfo> handleInfo=new Stack<HandleInfo>();
 
+    public DfaContext initDfaContext(NfaStateMachine parser)throws Exception{
+        DfaContext context=new DfaContext();
+        return handleMapFirst(context,parser);
+    }
 
-
-    public DfaContext handleMapFirst(NfaStateMachine var)throws Exception{
-        final DfaContext context=new DfaContext();
+    public DfaContext handleMapFirst(final DfaContext context, NfaStateMachine var)throws Exception{
         context.setStartNodeStateNum(var.getStartNode().getStateNum());
         NfaManager.traverse(var.getStartNode(),  new NodeHandle<NfaStateNode>() {
             public void handle(NfaStateNode o, int i)throws Exception {
                 handleMapSec(o,context, i);
             }
-        });
+        },AtomicTools.getBiUniqueInteger());
         return context;
     }
 
@@ -44,11 +47,6 @@ public class ModelParam<T> {
     }
 
     private void handleMapSec(NfaStateNode o, DfaContext context, int i)throws Exception{
-        if(o.isMark()){
-            System.out.println("当前标记节点已经寻找到");
-            context.setMarkStateNum(o.getStateNum());
-            //因为使用的遍历，肯定是先执行已经标记了mark的节点的handle
-        }
         //建立状态码与节点的对应关系
         context.putMapState(o.getStateNum(),o);
         //获取状态值
@@ -63,13 +61,11 @@ public class ModelParam<T> {
         //判断是开始节点
         if(o.getState().getState()==NfaState.START.getState()){
             context.setStartNodeStateNum(o.getStateNum());
-            System.out.println("开始节点是:"+o.getStateNum());
         }
 
         //判断是结束节点
         if(i==3){
             context.setEndNodeStateNum(o.getStateNum());
-            System.out.println("结束节点是:"+o.getStateNum());
             return;
         }
 
@@ -79,6 +75,7 @@ public class ModelParam<T> {
             System.out.println("ss");
         }
         EdgeInputType edgeInputType = edgeLine.getEdgeInputType();
+        TreeSet<Integer> integers = new TreeSet<Integer>();
         //如果当前条线的类型是空
         if(edgeInputType==EdgeInputType.NULL_GATHER){
             List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
@@ -86,9 +83,8 @@ public class ModelParam<T> {
                 ExceptionTools.ThrowException("空集里边不允许有值，请排查");
             }
             //记录列
-            context.addInputParam(130);
+            context.addInputParam(130,integers);
             context.handleMapCol(integerListMap,130,edgeLine.getNext().getStateNum());
-            processMark(context,o.getStateNum(),edgeLine.getNext().getStateNum());
         }else {
             List<Character> edgeAllowInputGather = edgeLine.getEdgeAllowInputGather();
             if(edgeAllowInputGather==null || edgeAllowInputGather.size()==0){
@@ -96,19 +92,18 @@ public class ModelParam<T> {
             }
             //单个字符处理
             if(edgeAllowInputGather.size()==1){
-                context.addInputParam(Integer.valueOf(edgeAllowInputGather.get(0)));
+                context.addInputParam(Integer.valueOf(edgeAllowInputGather.get(0)),integers);
 
                 context.handleMapCol(integerListMap,
                         Integer.valueOf(edgeAllowInputGather.get(0))
                         ,edgeLine.getNext().getStateNum());
-                processMark(context,o.getStateNum(),edgeLine.getNext().getStateNum());
             }else{
                 //字符集处理，化为单个列处理
                 for(Character ch:edgeAllowInputGather){
-                    context.addInputParam(Integer.valueOf(ch));
+                    integers.add(Integer.valueOf(ch));
                     context.handleMapCol(integerListMap,Integer.valueOf(ch),edgeLine.getNext().getStateNum());
-                    processMark(context,o.getStateNum(),edgeLine.getNext().getStateNum());
                 }
+                context.addInputParam((160+AtomicTools.getBiUniqueInteger()),integers);
 
             }
         }
@@ -119,17 +114,6 @@ public class ModelParam<T> {
         this.chars=chars;
     }
 
-    /**
-     *
-     * @param context
-     * @param cursStateNum 当前节点状态码
-     * @param nextState 下一个状态码
-     */
-    public void processMark(DfaContext context,String cursStateNum,String nextState){
-        if(nextState.equalsIgnoreCase(context.getMarkStateNum())){
-            context.getMarkMapKeys().add(cursStateNum);
-        }
-    }
 
 
     public Stack<HandleInfo> getHandleInfo() {

@@ -1,8 +1,5 @@
 package com.wy.manage.platform.core.parser;
 
-import com.wy.manage.platform.core.utils.ExceptionTools;
-import org.apache.commons.lang.StringUtils;
-
 import java.util.*;
 
 /**
@@ -25,8 +22,8 @@ public class DfaContext {
     //结束节点的状态码
     private String endNodeStateNum;
 
-    //输入的参数，130代表空ε
-    private List<Integer> inputParams=new ArrayList<Integer>();
+    //输入的参数，130代表空ε,160以后代表集合
+    private Map<Integer,Set<Integer>> inputParams=new HashMap<Integer, Set<Integer>>();
 
     //每个Dfa挂几个NFA节点
 //    private Map<String,List<String>> mapDfa=new HashMap<String, List<String>>();
@@ -34,38 +31,29 @@ public class DfaContext {
     //key是状态，value表示由状态s经由条件ε可以到达的所有状态的集合
     private Map<String,Set<String>> mapEmpty=new HashMap<String, Set<String>>();
 
-    //存放标记的状态码
-    private String markStateNum;
-    private List<String> markMapKeys=new ArrayList<String>();
-    private Set<String> markMapEmptyKeys=new TreeSet<String>();
 
     //ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
     public DfaContext buildEmptyStateGather(){
         for(Map.Entry<String,Map<Integer,List<String>>> info:map.entrySet()){
-            StringBuffer buffer=new StringBuffer("该状态是:"+info.getKey());
-            buffer.append("\n");
-            for(Map.Entry<Integer,List<String>> v:info.getValue().entrySet()){
-                StringBuffer buf=new StringBuffer();
-                if(v!=null){
-                    buf.append("输入的字符是:"+v.getKey()+",下一个状态是:");
-                    List<String> value = v.getValue();
-                    if(value!=null && value.size()>0){
-                        for(String str:value){
-                            NfaStateNode nfaStateNode = mapState.get(str);
-                            if(nfaStateNode!=null && StringUtils.isNotBlank(nfaStateNode.getHandleName())){
-                                buf.append(str+",其事件是:"+nfaStateNode.getHandleName()+",");
-                            }else {
-                                buf.append(str+",");
-                            }
-
-                        }
-                    }
-                    buf.append("\n");
-                }
-
-                buffer.append(buf);
-            }
-            System.out.println(buffer);
+//            StringBuffer buffer=new StringBuffer("该状态是:"+info.getKey());
+//            buffer.append("\n");
+//            for(Map.Entry<Integer,List<String>> v:info.getValue().entrySet()){
+//                StringBuffer buf=new StringBuffer();
+//                if(v!=null){
+//                    buf.append("输入的字符是:"+v.getKey()+",下一个状态是:");
+//                    List<String> value = v.getValue();
+//                    if(value!=null && value.size()>0){
+//                        for(String str:value){
+//                            NfaStateNode nfaStateNode = mapState.get(str);
+//                            buf.append(str+",");
+//                        }
+//                    }
+//                    buf.append("\n");
+//                }
+//
+//                buffer.append(buf);
+//            }
+//            System.out.println(buffer);
 
             new StateMoveHandle<String,Map<String,Set<String>>>(){
 
@@ -78,9 +66,6 @@ public class DfaContext {
                         list.add(s);
                         mapEmpty.put(s,list);
                         stack.push(s);
-                        if(s.equalsIgnoreCase(markStateNum)){
-                            markMapEmptyKeys.add(s);
-                        }
                     }
                     while (!stack.empty()){
                         String pop = stack.pop();
@@ -91,9 +76,6 @@ public class DfaContext {
                                 for(String str:list1){
                                     if(!list.contains(str)){
                                         list.add(str);
-                                        if(str.equalsIgnoreCase(markStateNum)){
-                                            markMapEmptyKeys.add(s);
-                                        }
                                         stack.push(str);
                                     }
                                 }
@@ -106,18 +88,7 @@ public class DfaContext {
                 }
             }.move(info.getKey(),mapEmpty,130);
         }
-        for(String str:markMapEmptyKeys){
-            System.out.println("该状态码已经放到空集合的:"+str+" key中");
-        }
         return this;
-    }
-
-    public Set<String> getMarkMapEmptyKeys() {
-        return markMapEmptyKeys;
-    }
-
-    public void setMarkMapEmptyKeys(Set<String> markMapEmptyKeys) {
-        this.markMapEmptyKeys = markMapEmptyKeys;
     }
 
     public Map<String, Set<String>> getMapEmpty() {
@@ -153,9 +124,9 @@ public class DfaContext {
         integerListMap.put(input,list);
     }
 
-    public void addInputParam(Integer param){
-        if(!inputParams.contains(param)){
-            inputParams.add(param);
+    public void addInputParam(Integer integer,Set<Integer> param){
+        if(inputParams.get(integer)==null){
+            inputParams.put(integer,param);
         }
     }
 
@@ -163,23 +134,70 @@ public class DfaContext {
         return parser;
     }
 
-    public DfaContext setParser(NfaStateMachine parser) {
-        this.parser = parser;
-        return this;
+    public void printTable(){
+
+        StringBuffer buffer=new StringBuffer("___________________");
+        buffer.append("\n");
+        buffer.append("|");
+        buffer.append("状态  ");
+        buffer.append("|");
+
+        for(Map.Entry<Integer,Set<Integer>> entry:inputParams.entrySet()){
+            buffer.append(" "+entry.getKey()+" ");
+            buffer.append("|");
+        }
+
+        for(Map.Entry<String,Map<Integer,List<String>>> info:map.entrySet()){
+            buffer.append("\n");
+            buffer.append("___________________");
+            buffer.append("\n");
+            buffer.append("|");
+            buffer.append(" "+info.getKey()+" ");
+            buffer.append("|");
+            for(Map.Entry<Integer,Set<Integer>> str:inputParams.entrySet()){
+                if(str.getKey()>150){
+                    Set<Integer> value = str.getValue();
+                    for(Integer y:value){
+                        List<String> list = info.getValue().get(y);
+                        if(list==null || list.size()==0){
+                            buffer.append("");
+                        }else {
+                            for(String str1:list){
+                                buffer.append(str1);
+                                buffer.append(",");
+                            }
+                        }
+                    }
+                }else {
+                    List<String> list = info.getValue().get(str);
+                    if(list==null || list.size()==0){
+                        buffer.append("");
+                    }else {
+                        for(String str1:list){
+                            buffer.append(str1);
+                            buffer.append(",");
+                        }
+                    }
+                }
+
+                buffer.append("|");
+            }
+
+        }
+        System.out.println(buffer);
     }
 
     public Map<String, NfaStateNode> getMapState() {
         return mapState;
     }
 
-    public List<Integer> getInputParams() {
+    public Map<Integer, Set<Integer>> getInputParams() {
         return inputParams;
     }
 
-    public void setInputParams(List<Integer> inputParams) {
+    public void setInputParams(Map<Integer, Set<Integer>> inputParams) {
         this.inputParams = inputParams;
     }
-
 
     public String getEndNodeStateNum() {
         return endNodeStateNum;
@@ -209,19 +227,4 @@ public class DfaContext {
         this.startNodeStateNum = startNodeStateNum;
     }
 
-    public String getMarkStateNum() {
-        return markStateNum;
-    }
-
-    public void setMarkStateNum(String markStateNum) {
-        this.markStateNum = markStateNum;
-    }
-
-    public List<String> getMarkMapKeys() {
-        return markMapKeys;
-    }
-
-    public void setMarkMapKeys(List<String> markMapKeys) {
-        this.markMapKeys = markMapKeys;
-    }
 }

@@ -18,14 +18,15 @@ public class EdgeLine implements Serializable {
     public NfaStateNode next;
 
     //是否经过，遍历的时候使用，防止溢出
-    public boolean isPassed;
+    //以前是布尔类型的，但是同一个正则需要遍历多次，所以将布尔类型转变为int型
+    public int passedNum;
 
-    public boolean isPassed() {
-        return isPassed;
+    public int getPassedNum() {
+        return passedNum;
     }
 
-    public void setPassed(boolean passed) {
-        isPassed = passed;
+    public void setPassedNum(int passedNum) {
+        this.passedNum = passedNum;
     }
 
     public NfaStateNode getNext() {

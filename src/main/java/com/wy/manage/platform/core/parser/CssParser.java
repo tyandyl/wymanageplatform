@@ -18,7 +18,8 @@ public class CssParser {
         Properties properties = CssTools.getProperties();
         //重写，保证读取顺序
         Set<String> strings = properties.stringPropertyNames();
-        Map<String,NfaStateMachine> map=new HashMap<String, NfaStateMachine>();
+        Map<String,String> map=new HashMap<String, String>();
+
         NfaStateMachine nfaStateMachine=null;
         for (String str:strings) {
             String name =str;
@@ -27,22 +28,29 @@ public class CssParser {
                 if(value.contains(" ")){
                     String[] split = value.split(" ");
                     if(split!=null && split.length!=0){
-
+                        //记录当前Value有几个重复的，比如attributeFirstLine=ignore attributeTag attributeName attributeFirstOpenCurly
+                        //ignore 重复必须重新创建第一个ignore节点
+                        Map<String,Integer> rec=new HashMap<String, Integer>();
                         for(int i=0;i<split.length;i++){
-                            NfaStateMachine nfaM = map.get(split[i]);
-                            nfaStateMachine = link(nfaStateMachine, nfaM);
+                            String valueM = map.get(split[i]);
+                            if(StringUtils.isNotBlank(valueM)){
+                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],valueM));
+                            }else {
+                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],split[i]));
+                            }
+
                         }
-                        map.put(name,nfaStateMachine);
+                        map.put(name,value);
                     }
                 }else {
-                    map.put(name,getNfaStateMachine(name, value));
+                    map.put(name,value);
                 }
             }
         }
 
-        if(nfaStateMachine==null && map.size()==1){
-            for(Map.Entry<String,NfaStateMachine> entry:map.entrySet()){
-                return entry.getValue();
+        if(nfaStateMachine==null && map.size()>0){
+            for(Map.Entry<String,String> entry:map.entrySet()){
+                return getNfaStateMachine(entry.getKey(),entry.getValue());
             }
 
         }
@@ -62,11 +70,7 @@ public class CssParser {
     public static NfaStateMachine getNfaStateMachine(String name,String value)throws Exception{
         if("ignore".equalsIgnoreCase(name)){
             //如果不需要关联动作，就不要显示的写，如果写了，会报错
-            return new InvokerImpl(value).relevance(new RelevanceHandle() {
-                public void handle(ModelParam modelParam) {
-
-                }
-            }).setHandleName("ignore").invoke();
+            return new InvokerImpl(value).setIsPrint(true).setHandleName("ignore").invoke();
 
         }else if("attributeTag".equalsIgnoreCase(name)){
             return new InvokerImpl(value).relevance(new RelevanceHandle() {
@@ -108,10 +112,35 @@ public class CssParser {
             }).setIsPrint(true).setHandleName("attributeName").invoke();
 
         }else if("attributeFirstOpenCurly".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).setIsPrint(true).setMark(true).setHandleName("attributeFirstOpenCurly").invoke();
+            return new InvokerImpl(value)
+                    .setIsPrint(true)
+                    .setHandleName("attributeFirstOpenCurly")
+                    .relevance(new RelevanceHandle(){
+                        public void handle(ModelParam modelParam) {
+
+                        }
+                    })
+                    .invoke();
+        }else if("attributeFirstLine".equalsIgnoreCase(name)){
+            return new InvokerImpl(value)
+                    .setIsPrint(true)
+                    .setHandleName("attributeFirstLine")
+                    .relevance(new RelevanceHandle(){
+                        public void handle(ModelParam modelParam) {
+
+                        }
+                    })
+                    .invoke();
         }
-        ExceptionTools.ThrowException("没找到相应的正则表达式");
-        return null;
+        return new InvokerImpl(value)
+                .setIsPrint(true)
+                .setHandleName(name)
+                .relevance(new RelevanceHandle(){
+                    public void handle(ModelParam modelParam) {
+
+                    }
+                })
+                .invoke();
 
     }
 }

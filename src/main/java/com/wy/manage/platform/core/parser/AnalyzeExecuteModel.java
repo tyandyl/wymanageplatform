@@ -14,7 +14,7 @@ public class AnalyzeExecuteModel {
 
         char[] chars = str.toCharArray();
         ModelParam<CssBag> modelParam = new ModelParam<CssBag>(cssBag,chars);
-        DfaContext context = modelParam.handleMapFirst(parser).setParser(parser).buildEmptyStateGather();
+        DfaContext context = modelParam.initDfaContext(parser).buildEmptyStateGather();
         execute(modelParam,context);
     }
 
@@ -28,9 +28,6 @@ public class AnalyzeExecuteModel {
                     modelParam.addCurModelValue(var);
                     //遍历ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
                     for(String str:strings){
-                        if(str.equalsIgnoreCase(context.getMarkStateNum())){
-                            System.out.println("当前状态集中包含标记节点");
-                        }
                         //获取列数
                         Map<Integer, List<String>> integerListMap =context.getMap().get(str);
                         if(integerListMap!=null){
@@ -64,7 +61,7 @@ public class AnalyzeExecuteModel {
                     listMost.add(str2);
                 }
             }
-
+            System.out.println("当前输入字符是:"+modelParam.getChars()[modelParam.getCurInt()]);
             for(String str:listMost){
                 NfaStateNode nfaStateNode = context.getMapState().get(str);
                 if(nfaStateNode==null){

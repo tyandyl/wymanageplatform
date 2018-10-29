@@ -9,6 +9,6 @@ public class Test {
     public static void main(String[] agrs) throws Exception {
         NfaStateMachine parser = CssParser.parser();
         CssBag cssBag=new CssBag();
-        AnalyzeExecuteModel.execute(" #sh",cssBag,parser);
+        AnalyzeExecuteModel.execute(" .sh{ position : static",cssBag,parser);
     }
 }
