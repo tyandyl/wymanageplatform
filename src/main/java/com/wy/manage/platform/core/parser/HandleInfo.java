@@ -9,12 +9,12 @@ import java.util.TreeSet;
 public class HandleInfo {
     private RelevanceHandle relevanceHandle;
     private String handleName;
-    private int curChar;
+    private int curCharInt;
     private Set<String> stateNum=new TreeSet<String>();
 
-    public HandleInfo(RelevanceHandle relevanceHandle,int curChar,String stateNum,String handleName){
+    public HandleInfo(RelevanceHandle relevanceHandle,int curCharInt,String stateNum,String handleName){
         this.relevanceHandle=relevanceHandle;
-        this.curChar=curChar;
+        this.curCharInt=curCharInt;
         this.stateNum.add(stateNum);
         this.handleName=handleName;
     }
@@ -31,12 +31,12 @@ public class HandleInfo {
         this.relevanceHandle = relevanceHandle;
     }
 
-    public int getCurChar() {
-        return curChar;
+    public int getCurCharInt() {
+        return curCharInt;
     }
 
-    public void setCurChar(int curChar) {
-        this.curChar = curChar;
+    public void setCurCharInt(int curCharInt) {
+        this.curCharInt = curCharInt;
     }
 
     public String getHandleName() {

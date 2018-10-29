@@ -10,6 +10,8 @@ import java.util.*;
  */
 public class AnalyzeExecuteModel {
 
+    private static Character[] specChars={32,10,13};
+
     public static void execute(String str,CssBag cssBag,NfaStateMachine parser) throws Exception {
 
         char[] chars = str.toCharArray();
@@ -25,7 +27,6 @@ public class AnalyzeExecuteModel {
             List<String> listNew=new ArrayList<String>();
             new StateMoveHandle<Set<String>,List<String>>(){
                 public void move(Set<String> strings, List<String> strings2, Integer var) {
-                    modelParam.addCurModelValue(var);
                     //遍历ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
                     for(String str:strings){
                         //获取列数
@@ -73,7 +74,7 @@ public class AnalyzeExecuteModel {
                     if(!handleInfos.empty()){
                         HandleInfo peek = handleInfos.peek();
                         if(peek.getRelevanceHandle()==nfaStateNode.getHandle()){
-                            peek.setCurChar(modelParam.getCurInt());
+                            peek.setCurCharInt(modelParam.getCurInt());
                             peek.addSet(nfaStateNode.getStateNum());
                         }else {
                             HandleInfo handleInfo=new HandleInfo(nfaStateNode.getHandle(),
@@ -97,6 +98,44 @@ public class AnalyzeExecuteModel {
             modelParam.addCurInt(list,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));
             list=listMost;
         }
+        handleEvent( modelParam);
         return;
+    }
+
+    public static void handleEvent(ModelParam modelParam){
+        Stack<HandleInfo> handleInfo = modelParam.getHandleInfo();
+        if(handleInfo!=null){
+            while (!handleInfo.empty()){
+                StringBuffer stringBuffer=new StringBuffer();
+                HandleInfo pop = handleInfo.pop();
+                if(!handleInfo.empty()){
+                    HandleInfo peek = handleInfo.peek();
+                    int curCharInt = pop.getCurCharInt();
+                    int curCharInt1 = peek.getCurCharInt();
+                    if(curCharInt>curCharInt1){
+                        for(int i=curCharInt1+1;i<=curCharInt;i++){
+                            List<Character> characters = Arrays.asList(specChars);
+                            if(!characters.contains(modelParam.getChars()[i])) {
+                                stringBuffer.append(modelParam.getChars()[i]);
+                            }
+                        }
+                    }else if(curCharInt==curCharInt1){
+                        System.out.println("相等，赶紧解决事件优先级"+","+curCharInt);
+                    }else {
+                        System.out.println("小于，奇葩");
+                    }
+
+                }else {
+                    for(int i=0;i<=pop.getCurCharInt();i++){
+                        List<Character> characters = Arrays.asList(specChars);
+                        if(!characters.contains(modelParam.getChars()[i])){
+                            stringBuffer.append(modelParam.getChars()[i]);
+                        }
+                    }
+                }
+                pop.getRelevanceHandle().handle(modelParam.setCurModelValue(stringBuffer));
+                System.out.println("打印字符:"+stringBuffer);
+            }
+        }
     }
 }

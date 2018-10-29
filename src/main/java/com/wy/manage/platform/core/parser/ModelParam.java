@@ -12,7 +12,7 @@ public class ModelParam<T> {
     private int curInt=0;
     private Stack<NfaStateNodeRecord> stackNodes=new Stack<NfaStateNodeRecord>();
     private char[] chars=null;
-    private List<Character> curModelValue=new ArrayList<Character>();
+    private StringBuffer curModelValue=new StringBuffer();
     private T t;
     private Stack<HandleInfo> handleInfo=new Stack<HandleInfo>();
 
@@ -42,9 +42,6 @@ public class ModelParam<T> {
         curInt++;
     }
 
-    public void addCurModelValue(Integer var){
-        curModelValue.add((char)(var.intValue()));
-    }
 
     private void handleMapSec(NfaStateNode o, DfaContext context, int i)throws Exception{
         //建立状态码与节点的对应关系
@@ -156,11 +153,12 @@ public class ModelParam<T> {
         this.chars = chars;
     }
 
-    public List<Character> getCurModelValue() {
+    public StringBuffer getCurModelValue() {
         return curModelValue;
     }
 
-    public void setCurModelValue(List<Character> curModelValue) {
+    public ModelParam setCurModelValue(StringBuffer curModelValue) {
         this.curModelValue = curModelValue;
+        return this;
     }
 }

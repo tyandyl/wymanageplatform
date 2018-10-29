@@ -34,12 +34,13 @@ public class CssParser {
                         for(int i=0;i<split.length;i++){
                             String valueM = map.get(split[i]);
                             if(StringUtils.isNotBlank(valueM)){
-                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],valueM));
+                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],valueM,null));
                             }else {
-                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],split[i]));
+                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],split[i],null));
                             }
 
                         }
+                        getNfaStateMachine(name,null,nfaStateMachine);
                         map.put(name,value);
                     }
                 }else {
@@ -50,7 +51,7 @@ public class CssParser {
 
         if(nfaStateMachine==null && map.size()>0){
             for(Map.Entry<String,String> entry:map.entrySet()){
-                return getNfaStateMachine(entry.getKey(),entry.getValue());
+                return getNfaStateMachine(entry.getKey(),entry.getValue(),null);
             }
 
         }
@@ -67,7 +68,7 @@ public class CssParser {
         return NfaManager.createLinkNfaStateMachine(link1,link2);
     }
 
-    public static NfaStateMachine getNfaStateMachine(String name,String value)throws Exception{
+    public static NfaStateMachine getNfaStateMachine(String name,String value,NfaStateMachine nfaStateMachine)throws Exception{
         if("ignore".equalsIgnoreCase(name)){
             //如果不需要关联动作，就不要显示的写，如果写了，会报错
             return new InvokerImpl(value).setIsPrint(true).setHandleName("ignore").invoke();
@@ -78,9 +79,8 @@ public class CssParser {
                     Object t = modelParam.getT();
                     if(t instanceof CssBag){
                         CssBag cssBag=(CssBag)t;
-                        int curInt = modelParam.getCurInt();
-                        char[] chars = modelParam.getChars();
-                        char aChar = chars[curInt];
+                        StringBuffer curModelValue = modelParam.getCurModelValue();
+                        char aChar = curModelValue.charAt(0);
                         if(aChar==46){
                             cssBag.setSelectorType(SelectorType.ID_SELECTOR);
                         }else if(aChar==35){
@@ -97,40 +97,33 @@ public class CssParser {
                     Object t = modelParam.getT();
                     if(t instanceof CssBag){
                         CssBag cssBag=(CssBag)t;
-                        int curInt = modelParam.getCurInt();
-                        char[] chars = modelParam.getChars();
-                        char aChar = chars[curInt];
-                        StringBuilder str = new StringBuilder();
-                        if(StringUtils.isNotBlank(cssBag.getName())){
-                            str.append(cssBag.getName());
-                        }
-                        str.append(aChar);
-                        cssBag.setName(String.valueOf(str));
+                        cssBag.setName(modelParam.getCurModelValue().toString());
                     }
 
                 }
             }).setIsPrint(true).setHandleName("attributeName").invoke();
 
-        }else if("attributeFirstOpenCurly".equalsIgnoreCase(name)){
+        }else if("positionValue".equalsIgnoreCase(name)){
             return new InvokerImpl(value)
                     .setIsPrint(true)
-                    .setHandleName("attributeFirstOpenCurly")
+                    .setHandleName("positionValue")
                     .relevance(new RelevanceHandle(){
                         public void handle(ModelParam modelParam) {
-
+                            Object t = modelParam.getT();
+                            if(t instanceof CssBag){
+                                CssBag cssBag=(CssBag)t;
+                                cssBag.getMap().put("position",modelParam.getCurModelValue().toString());
+                            }
                         }
                     })
                     .invoke();
-        }else if("attributeFirstLine".equalsIgnoreCase(name)){
-            return new InvokerImpl(value)
-                    .setIsPrint(true)
-                    .setHandleName("attributeFirstLine")
-                    .relevance(new RelevanceHandle(){
-                        public void handle(ModelParam modelParam) {
+        }else if("positionLine".equalsIgnoreCase(name)){
+            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle() {
+                public void handle(ModelParam modelParam) {
+                    System.out.println("-----------成功");
+                }
+            });
 
-                        }
-                    })
-                    .invoke();
         }
         return new InvokerImpl(value)
                 .setIsPrint(true)
