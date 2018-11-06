@@ -5,5 +5,5 @@ package com.wy.manage.platform.core.parser;
  * 节点操作，递归节点时，对每个节点要做什么操作
  */
 public interface NodeHandle<T> {
-    void handle(T t,int i)throws Exception;
+    void handle(T t)throws Exception;
 }

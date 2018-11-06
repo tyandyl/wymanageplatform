@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.CssTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.widget.IFlow;
@@ -18,43 +19,89 @@ public class CssParser {
         Properties properties = CssTools.getProperties();
         //重写，保证读取顺序
         Set<String> strings = properties.stringPropertyNames();
-        Map<String,String> map=new HashMap<String, String>();
-
+        Map<String,NfaStateMachine> map=new HashMap<String, NfaStateMachine>();
+        //记录非原子性正则次数
+        Map<String,Integer> mapInteger=new HashMap<String, Integer>();
+        //记录原子性正则
+        Map<String,String> mapName=new HashMap<String, String>();
         NfaStateMachine nfaStateMachine=null;
         for (String str:strings) {
+            nfaStateMachine=null;
             String name =str;
             String value = properties.getProperty(str);
             if (value != null) {
+                if(name.equalsIgnoreCase("attributeAll")){
+                    System.out.println("attributeAll");
+                }
                 if(value.contains(" ")){
                     String[] split = value.split(" ");
                     if(split!=null && split.length!=0){
                         //记录当前Value有几个重复的，比如attributeFirstLine=ignore attributeTag attributeName attributeFirstOpenCurly
                         //ignore 重复必须重新创建第一个ignore节点
-                        Map<String,Integer> rec=new HashMap<String, Integer>();
+                        boolean isOr=false;
                         for(int i=0;i<split.length;i++){
-                            String valueM = map.get(split[i]);
-                            if(StringUtils.isNotBlank(valueM)){
-                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],valueM,null));
+                            if(split[i].equalsIgnoreCase("|")){
+                                isOr=true;
+                                continue;
+                            }
+                            NfaStateMachine nfaStateMachine1 = map.get(split[i]);
+
+                            if(isOr){
+                                if(nfaStateMachine1!=null){
+                                    Integer integer = mapInteger.get(split[i]);
+                                    if(integer==0){
+                                        nfaStateMachine = or(nfaStateMachine,nfaStateMachine1);
+                                    }else {
+                                        nfaStateMachine = or(nfaStateMachine, NfaManager.deepClone(nfaStateMachine1));
+                                    }
+                                    mapInteger.put(split[i],(integer+1));
+                                }else {
+                                    String valueSingle = mapName.get(split[i]);
+                                    //当存在的时候，使用动作解析
+                                    if(StringUtils.isNotBlank(valueSingle)){
+                                        NfaStateMachine nfaStateMachine2 = getNfaStateMachine(split[i], valueSingle, null);
+                                        nfaStateMachine=or(nfaStateMachine,nfaStateMachine2);
+                                    }else {
+                                        //说明该正则位于产生式中，且没有动作
+                                        NfaStateMachine nfaStateMachine2 = getNfaStateMachine(split[i], split[i], null);
+                                        nfaStateMachine=or(nfaStateMachine,nfaStateMachine2);
+                                    }
+                                }
+                                isOr=false;
                             }else {
-                                nfaStateMachine = link(nfaStateMachine, getNfaStateMachine(split[i],split[i],null));
+                                if(nfaStateMachine1!=null){
+                                    Integer integer = mapInteger.get(split[i]);
+                                    if(integer==0){
+                                        nfaStateMachine = link(nfaStateMachine,nfaStateMachine1);
+                                    }else {
+                                        nfaStateMachine = link(nfaStateMachine, NfaManager.deepClone(nfaStateMachine1));
+                                    }
+                                    mapInteger.put(split[i],(integer+1));
+                                }else {
+                                    String valueSingle = mapName.get(split[i]);
+                                    //当存在的时候，使用动作解析
+                                    if(StringUtils.isNotBlank(valueSingle)){
+                                        NfaStateMachine nfaStateMachine2 = getNfaStateMachine(split[i], valueSingle, null);
+                                        nfaStateMachine=link(nfaStateMachine,nfaStateMachine2);
+                                    }else {
+                                        //说明该正则位于产生式中，且没有动作
+                                        NfaStateMachine nfaStateMachine2 = getNfaStateMachine(split[i], split[i], null);
+                                        nfaStateMachine=link(nfaStateMachine,nfaStateMachine2);
+                                    }
+                                }
                             }
 
+
                         }
-                        getNfaStateMachine(name,null,nfaStateMachine);
-                        map.put(name,value);
+                        map.put(name,getNfaStateMachine(name, value, nfaStateMachine));
+                        mapInteger.put(name,0);
                     }
                 }else {
-                    map.put(name,value);
+                    mapName.put(name,value);
                 }
             }
         }
 
-        if(nfaStateMachine==null && map.size()>0){
-            for(Map.Entry<String,String> entry:map.entrySet()){
-                return getNfaStateMachine(entry.getKey(),entry.getValue(),null);
-            }
-
-        }
         return nfaStateMachine;
     }
 
@@ -65,8 +112,46 @@ public class CssParser {
         if(link2==null){
             return link1;
         }
-        return NfaManager.createLinkNfaStateMachine(link1,link2);
+        final StringBuffer str=new StringBuffer(link1.getStartNode().getHandleName()
+                +" "+link2.getStartNode().getHandleName());
+        NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(link1, link2);
+        final Integer num = AtomicTools.getBiUniqueInteger();
+        System.out.println("状态机:"+str+"的统一标识符是:"+num);
+        NfaManager.traverse(linkNfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
+            public void handle(NfaStateNode o) throws Exception {
+                o.setHandleName(str.toString());
+                if(o.getObjectId()!=num){
+                    o.setObjectId(num);
+                }
+            }
+        }, num);
+        return linkNfaStateMachine;
     }
+
+    public static NfaStateMachine or(NfaStateMachine link1,NfaStateMachine link2)throws Exception{
+        if(link1==null){
+            return link2;
+        }
+        if(link2==null){
+            return link1;
+        }
+        final StringBuffer str=new StringBuffer(link1.getStartNode().getHandleName()
+                +" "+link2.getStartNode().getHandleName());
+
+        NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(link1, link2);
+        final Integer num = AtomicTools.getBiUniqueInteger();
+        System.out.println("状态机:"+str+"的统一标识符是:"+num);
+        NfaManager.traverse(orNfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
+            public void handle(NfaStateNode o) throws Exception {
+                o.setHandleName(str.toString());
+                if(o.getObjectId()!=num){
+                    o.setObjectId(num);
+                }
+            }
+        }, num);
+        return orNfaStateMachine;
+    }
+
 
     public static NfaStateMachine getNfaStateMachine(String name,String value,NfaStateMachine nfaStateMachine)throws Exception{
         if("ignore".equalsIgnoreCase(name)){
@@ -107,33 +192,33 @@ public class CssParser {
             return new InvokerImpl(value)
                     .setIsPrint(true)
                     .setHandleName("positionValue")
-                    .relevance(new RelevanceHandle(){
-                        public void handle(ModelParam modelParam) {
-                            Object t = modelParam.getT();
-                            if(t instanceof CssBag){
-                                CssBag cssBag=(CssBag)t;
-                                cssBag.getMap().put("position",modelParam.getCurModelValue().toString());
-                            }
-                        }
-                    })
                     .invoke();
-        }else if("positionLine".equalsIgnoreCase(name)){
-            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle() {
+        }else if("positionLine".equalsIgnoreCase(name)
+                ||"displayLine".equalsIgnoreCase(name)){
+            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle(){
                 public void handle(ModelParam modelParam) {
-                    System.out.println("-----------成功");
+                    Object t = modelParam.getT();
+                    if(t instanceof CssBag){
+                        CssBag cssBag=(CssBag)t;
+                        String trim = modelParam.getCurModelValue().toString().trim();
+                        String[] split = trim.split(":");
+                        cssBag.getMap().put(split[0],split[1]);
+                    }
                 }
             });
+        }else if("attributeFirstLine".equalsIgnoreCase(name)){
+            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle(){
+                public void handle(ModelParam modelParam) {
 
+                }
+            });
+        }
+        if(nfaStateMachine!=null){
+            return nfaStateMachine;
         }
         return new InvokerImpl(value)
                 .setIsPrint(true)
                 .setHandleName(name)
-                .relevance(new RelevanceHandle(){
-                    public void handle(ModelParam modelParam) {
-
-                    }
-                })
                 .invoke();
-
     }
 }

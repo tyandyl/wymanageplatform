@@ -62,7 +62,7 @@ public class AnalyzeExecuteModel {
                     listMost.add(str2);
                 }
             }
-            System.out.println("当前输入字符是:"+modelParam.getChars()[modelParam.getCurInt()]);
+            //System.out.println("当前输入字符是:"+modelParam.getChars()[modelParam.getCurInt()]);
             for(String str:listMost){
                 NfaStateNode nfaStateNode = context.getMapState().get(str);
                 if(nfaStateNode==null){
@@ -92,7 +92,7 @@ public class AnalyzeExecuteModel {
                     }
 
 
-                    System.out.println("赶紧执行啊");
+                    //System.out.println("赶紧执行啊");
                 }
             }
             modelParam.addCurInt(list,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));

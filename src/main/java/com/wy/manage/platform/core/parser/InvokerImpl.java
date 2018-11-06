@@ -49,16 +49,21 @@ public class InvokerImpl implements Invoker {
     private NfaStateMachine onInvoke(NfaStateMachine nfaStateMachine,RelevanceHandle handle) throws Exception{
         NfaStateNode endNode = nfaStateMachine.getEndNode();
         endNode.setHandle(handle);
-        System.out.println("当前正则是:"+handleName+"，其包含节点有:");
+        //System.out.println("当前正则是:"+handleName+"，其包含节点有:");
+        final Integer num = AtomicTools.getBiUniqueInteger();
+        System.out.println("状态机:"+handleName+"的统一标识符是:"+num);
         NfaManager.traverse(nfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
-                public void handle(NfaStateNode o, int i) throws Exception {
+                public void handle(NfaStateNode o) throws Exception {
                     o.setHandleName(handleName);
-                    if(StringUtils.isNotBlank(handleName) && (i==0 || i==3)) {
-                        String name = o.getState().getName();
-                        System.out.println(o.getStateNum()+",他是"+name+"节点");
+                    if(o.getObjectId()!=num){
+                        o.setObjectId(num);
+                       // System.out.println(o.getStateNum()+",他是"+o.getHandleName()+"节点,其状态是:"+o.getState().getName());
+                        if(o.getStateNum().equalsIgnoreCase("153")){
+                           // System.out.println("153");
+                        }
                     }
                 }
-            }, AtomicTools.getBiUniqueInteger());
+            }, num);
 
         return nfaStateMachine;
     }
@@ -71,7 +76,7 @@ public class InvokerImpl implements Invoker {
             NfaStateMachine nfaStateMachine = peek.getNfaStateMachine();
 
             if (this.isPrint) {
-                System.out.println("开始解析正则表达式:" + regularStr);
+                //System.out.println("开始解析正则表达式:" + handleName);
             }
 
             return nfaStateMachine;

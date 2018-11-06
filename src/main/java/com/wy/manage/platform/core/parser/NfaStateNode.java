@@ -20,6 +20,8 @@ public class NfaStateNode implements Serializable{
 
     private RelevanceHandle handle;
     private String handleName;
+    //objectId
+    private Integer objectId;
 
     public String getHandleName() {
         return handleName;
@@ -61,4 +63,11 @@ public class NfaStateNode implements Serializable{
         this.handle = handle;
     }
 
+    public Integer getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(Integer objectId) {
+        this.objectId = objectId;
+    }
 }

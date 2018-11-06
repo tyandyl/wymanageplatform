@@ -365,12 +365,15 @@ public class NfaManager {
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
             ois = new ObjectInputStream(bis);
             NfaStateMachine target = (NfaStateMachine)ois.readObject();
+            final Integer num = AtomicTools.getBiUniqueInteger();
             traverse(target.getStartNode(),  new NodeHandle<NfaStateNode>() {
-                public void handle(NfaStateNode o, int i) {
-                    o.getEdgeLines()[i].getNext().setStateNum(AtomicTools.getUniqueInteger());
-                    o.setStateNum(AtomicTools.getUniqueInteger());
+                public void handle(NfaStateNode o) {
+                    if(o.getObjectId()!=num){
+                        o.setObjectId(num);
+                        o.setStateNum(AtomicTools.getUniqueInteger());
+                    }
                 }
-            },AtomicTools.getBiUniqueInteger());
+            },num);
 
             return target;
         } catch (Exception e) {
@@ -387,25 +390,26 @@ public class NfaManager {
         return null;
     }
 
+    /**
+     *
+     * @param startNode
+     * @param nodeHandle
+     * @param num 每次执行的代码
+     * @throws Exception
+     */
     public static void traverse(NfaStateNode startNode,NodeHandle nodeHandle,int num)throws Exception{
         if(startNode!=null){
             if(startNode.getEdgeLines()[0]!=null && startNode.getEdgeLines()[0].getPassedNum()<num){
                 startNode.getEdgeLines()[0].setPassedNum(num);
                 traverse(startNode.getEdgeLines()[0].getNext(),nodeHandle,num);
-                //处理操作
-                nodeHandle.handle(startNode,0);
             }
-
 
             if(startNode.getEdgeLines()[1]!=null && startNode.getEdgeLines()[1].getPassedNum()<num){
                 startNode.getEdgeLines()[1].setPassedNum(num);
                 traverse(startNode.getEdgeLines()[1].getNext(),nodeHandle,num);
-                //处理操作
-                nodeHandle.handle(startNode,1);
             }
-            if(startNode.getState().getState()==NfaState.END.getState()){
-                nodeHandle.handle(startNode,3);
-            }
+            //处理操作
+            nodeHandle.handle(startNode);
 
         }
     }
