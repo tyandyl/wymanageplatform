@@ -29,6 +29,7 @@ public class BackSlashCharacterCarveCapacity implements CharacterCarveCapacity{
             NfaStateMachine singleCharacterNfaStateMachine = NfaManager.createSingleCharacterNfaStateMachine(array[i + 1]);
             xContentItemBackSlash.setNfaStateMachine(singleCharacterNfaStateMachine);
             xContentItemBackSlash.addIndex(i);
+            xContentItemBackSlash.addIndex(i+1);
             stack.add(xContentItemBackSlash);
             return 1;
         }else {
@@ -40,6 +41,7 @@ public class BackSlashCharacterCarveCapacity implements CharacterCarveCapacity{
                     if(array[i+1]=='s'){
                         xContentItemBackSlash.setNfaStateMachine(NfaManager.createSingleCharacterNfaStateMachine(SymbolType.SP.getState()));
                         xContentItemBackSlash.addIndex(i);
+                        xContentItemBackSlash.addIndex(i+1);
                         return 1;
                     }else {
                         xContentItemBackSlash.setNfaStateMachine(NfaManager.createSingleCharacterNfaStateMachine(array[i]));
@@ -52,6 +54,7 @@ public class BackSlashCharacterCarveCapacity implements CharacterCarveCapacity{
                     if(array[i+1]=='s'){
                         characterRepertoireNfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(nfaStateMachine,SymbolType.SP.getState());
                         xContentItemBackSlash.addIndex(i);
+                        xContentItemBackSlash.addIndex(i+1);
                         xContentItemBackSlash.setNfaStateMachine(characterRepertoireNfaStateMachine);
                         xContentItemBackSlash.addIndex(pop.getIndex());
                         stack.push(xContentItemBackSlash);

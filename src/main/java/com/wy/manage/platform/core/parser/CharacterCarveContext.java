@@ -1,8 +1,8 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import com.wy.manage.platform.core.action.Action;
+
+import java.util.*;
 
 /**
  * Created by tianye
@@ -16,6 +16,18 @@ public class CharacterCarveContext {
     private Stack<XContentItem> stack=new Stack<XContentItem>();
 
     private List<Integer> charCurly=new ArrayList<Integer>();
+
+    private boolean isOr;
+
+    private Map<String,Action> actions=new HashMap<String, Action>();
+
+    public Map<String, Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(Map<String, Action> actions) {
+        this.actions = actions;
+    }
 
     public List<Integer> getSpecialCclStart() {
         return specialCclStart;
@@ -63,5 +75,13 @@ public class CharacterCarveContext {
 
     public void setCharCurly(List<Integer> charCurly) {
         this.charCurly = charCurly;
+    }
+
+    public boolean isOr() {
+        return isOr;
+    }
+
+    public void setOr(boolean or) {
+        isOr = or;
     }
 }

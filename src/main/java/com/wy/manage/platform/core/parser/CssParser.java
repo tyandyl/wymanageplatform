@@ -112,14 +112,10 @@ public class CssParser {
         if(link2==null){
             return link1;
         }
-        final StringBuffer str=new StringBuffer(link1.getStartNode().getHandleName()
-                +" "+link2.getStartNode().getHandleName());
         NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(link1, link2);
         final Integer num = AtomicTools.getBiUniqueInteger();
-        System.out.println("状态机:"+str+"的统一标识符是:"+num);
         NfaManager.traverse(linkNfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
             public void handle(NfaStateNode o) throws Exception {
-                o.setHandleName(str.toString());
                 if(o.getObjectId()!=num){
                     o.setObjectId(num);
                 }
@@ -135,15 +131,11 @@ public class CssParser {
         if(link2==null){
             return link1;
         }
-        final StringBuffer str=new StringBuffer(link1.getStartNode().getHandleName()
-                +" "+link2.getStartNode().getHandleName());
 
         NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(link1, link2);
         final Integer num = AtomicTools.getBiUniqueInteger();
-        System.out.println("状态机:"+str+"的统一标识符是:"+num);
         NfaManager.traverse(orNfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
             public void handle(NfaStateNode o) throws Exception {
-                o.setHandleName(str.toString());
                 if(o.getObjectId()!=num){
                     o.setObjectId(num);
                 }
@@ -154,71 +146,72 @@ public class CssParser {
 
 
     public static NfaStateMachine getNfaStateMachine(String name,String value,NfaStateMachine nfaStateMachine)throws Exception{
-        if("ignore".equalsIgnoreCase(name)){
-            //如果不需要关联动作，就不要显示的写，如果写了，会报错
-            return new InvokerImpl(value).setIsPrint(true).setHandleName("ignore").invoke();
-
-        }else if("attributeTag".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle() {
-                public void handle(ModelParam modelParam) {
-                    Object t = modelParam.getT();
-                    if(t instanceof CssBag){
-                        CssBag cssBag=(CssBag)t;
-                        StringBuffer curModelValue = modelParam.getCurModelValue();
-                        char aChar = curModelValue.charAt(0);
-                        if(aChar==46){
-                            cssBag.setSelectorType(SelectorType.ID_SELECTOR);
-                        }else if(aChar==35){
-                            cssBag.setSelectorType(SelectorType.ID_SELECTOR);
-                        }
-                    }
-
-                }
-            }).setIsPrint(true).setHandleName("attributeTag").invoke();
-
-        }else if("attributeName".equalsIgnoreCase(name)){
-            return new InvokerImpl(value).relevance(new RelevanceHandle() {
-                public void handle(ModelParam modelParam) {
-                    Object t = modelParam.getT();
-                    if(t instanceof CssBag){
-                        CssBag cssBag=(CssBag)t;
-                        cssBag.setName(modelParam.getCurModelValue().toString());
-                    }
-
-                }
-            }).setIsPrint(true).setHandleName("attributeName").invoke();
-
-        }else if("positionValue".equalsIgnoreCase(name)){
-            return new InvokerImpl(value)
-                    .setIsPrint(true)
-                    .setHandleName("positionValue")
-                    .invoke();
-        }else if("positionLine".equalsIgnoreCase(name)
-                ||"displayLine".equalsIgnoreCase(name)){
-            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle(){
-                public void handle(ModelParam modelParam) {
-                    Object t = modelParam.getT();
-                    if(t instanceof CssBag){
-                        CssBag cssBag=(CssBag)t;
-                        String trim = modelParam.getCurModelValue().toString().trim();
-                        String[] split = trim.split(":");
-                        cssBag.getMap().put(split[0],split[1]);
-                    }
-                }
-            });
-        }else if("attributeFirstLine".equalsIgnoreCase(name)){
-            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle(){
-                public void handle(ModelParam modelParam) {
-
-                }
-            });
-        }
-        if(nfaStateMachine!=null){
-            return nfaStateMachine;
-        }
-        return new InvokerImpl(value)
-                .setIsPrint(true)
-                .setHandleName(name)
-                .invoke();
+//        if("ignore".equalsIgnoreCase(name)){
+//            //如果不需要关联动作，就不要显示的写，如果写了，会报错
+//            return new InvokerImpl(value).setIsPrint(true).setHandleName("ignore").invoke();
+//
+//        }else if("attributeTag".equalsIgnoreCase(name)){
+//            return new InvokerImpl(value).relevance(new RelevanceHandle() {
+//                public void handle(ModelParam modelParam) {
+//                    Object t = modelParam.getT();
+//                    if(t instanceof CssBag){
+//                        CssBag cssBag=(CssBag)t;
+//                        StringBuffer curModelValue = modelParam.getCurModelValue();
+//                        char aChar = curModelValue.charAt(0);
+//                        if(aChar==46){
+//                            cssBag.setSelectorType(SelectorType.ID_SELECTOR);
+//                        }else if(aChar==35){
+//                            cssBag.setSelectorType(SelectorType.ID_SELECTOR);
+//                        }
+//                    }
+//
+//                }
+//            }).setIsPrint(true).setHandleName("attributeTag").invoke();
+//
+//        }else if("attributeName".equalsIgnoreCase(name)){
+//            return new InvokerImpl(value).relevance(new RelevanceHandle() {
+//                public void handle(ModelParam modelParam) {
+//                    Object t = modelParam.getT();
+//                    if(t instanceof CssBag){
+//                        CssBag cssBag=(CssBag)t;
+//                        cssBag.setName(modelParam.getCurModelValue().toString());
+//                    }
+//
+//                }
+//            }).setIsPrint(true).setHandleName("attributeName").invoke();
+//
+//        }else if("positionValue".equalsIgnoreCase(name)){
+//            return new InvokerImpl(value)
+//                    .setIsPrint(true)
+//                    .setHandleName("positionValue")
+//                    .invoke();
+//        }else if("positionLine".equalsIgnoreCase(name)
+//                ||"displayLine".equalsIgnoreCase(name)){
+//            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle(){
+//                public void handle(ModelParam modelParam) {
+//                    Object t = modelParam.getT();
+//                    if(t instanceof CssBag){
+//                        CssBag cssBag=(CssBag)t;
+//                        String trim = modelParam.getCurModelValue().toString().trim();
+//                        String[] split = trim.split(":");
+//                        cssBag.getMap().put(split[0],split[1]);
+//                    }
+//                }
+//            });
+//        }else if("attributeFirstLine".equalsIgnoreCase(name)){
+//            nfaStateMachine.getEndNode().setHandle(new RelevanceHandle(){
+//                public void handle(ModelParam modelParam) {
+//
+//                }
+//            });
+//        }
+//        if(nfaStateMachine!=null){
+//            return nfaStateMachine;
+//        }
+//        return new InvokerImpl(value)
+//                .setIsPrint(true)
+//                .setHandleName(name)
+//                .invoke();
+        return null;
     }
 }

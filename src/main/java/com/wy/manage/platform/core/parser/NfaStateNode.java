@@ -1,5 +1,7 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.action.Action;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +20,9 @@ public class NfaStateNode implements Serializable{
 
     private EdgeLine[] edgeLines=new EdgeLine[2];
 
-    private RelevanceHandle handle;
-    private String handleName;
+    private Action action;
     //objectId
     private Integer objectId;
-
-    public String getHandleName() {
-        return handleName;
-    }
-
-    public void setHandleName(String handleName) {
-        this.handleName = handleName;
-    }
 
     public String getStateNum() {
         return stateNum;
@@ -55,19 +48,19 @@ public class NfaStateNode implements Serializable{
         this.edgeLines = edgeLines;
     }
 
-    public RelevanceHandle getHandle() {
-        return handle;
-    }
-
-    public void setHandle(RelevanceHandle handle) {
-        this.handle = handle;
-    }
-
     public Integer getObjectId() {
         return objectId;
     }
 
     public void setObjectId(Integer objectId) {
         this.objectId = objectId;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
     }
 }

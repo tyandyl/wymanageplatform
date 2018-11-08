@@ -134,58 +134,6 @@ public class DfaContext {
         return parser;
     }
 
-    public void printTable(){
-
-        StringBuffer buffer=new StringBuffer("___________________");
-        buffer.append("\n");
-        buffer.append("|");
-        buffer.append("状态  ");
-        buffer.append("|");
-
-        for(Map.Entry<Integer,Set<Integer>> entry:inputParams.entrySet()){
-            buffer.append(" "+entry.getKey()+" ");
-            buffer.append("|");
-        }
-
-        for(Map.Entry<String,Map<Integer,List<String>>> info:map.entrySet()){
-            buffer.append("\n");
-            buffer.append("___________________");
-            buffer.append("\n");
-            buffer.append("|");
-            buffer.append(" "+info.getKey()+" ");
-            buffer.append("|");
-            for(Map.Entry<Integer,Set<Integer>> str:inputParams.entrySet()){
-                if(str.getKey()>150){
-                    Set<Integer> value = str.getValue();
-                    for(Integer y:value){
-                        List<String> list = info.getValue().get(y);
-                        if(list==null || list.size()==0){
-                            buffer.append("");
-                        }else {
-                            for(String str1:list){
-                                buffer.append(str1);
-                                buffer.append(",");
-                            }
-                        }
-                    }
-                }else {
-                    List<String> list = info.getValue().get(str);
-                    if(list==null || list.size()==0){
-                        buffer.append("");
-                    }else {
-                        for(String str1:list){
-                            buffer.append(str1);
-                            buffer.append(",");
-                        }
-                    }
-                }
-
-                buffer.append("|");
-            }
-
-        }
-        System.out.println(buffer);
-    }
 
     public Map<String, NfaStateNode> getMapState() {
         return mapState;

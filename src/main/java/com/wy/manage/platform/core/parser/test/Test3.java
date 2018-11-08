@@ -9,20 +9,6 @@ import java.util.List;
  */
 public class Test3 {
     public static void main(String[] agrs) throws Exception {
-        String m="a|m";
-        NfaStateMachine nfaStateMachine = RegularExpressionParser.parserCss(m.toCharArray()).peek().getNfaStateMachine();
-        String s = "m";
-        char[] chars = s.toCharArray();
-        NfaStateNode startNode = nfaStateMachine.getStartNode();
-        for(int i=0;i<chars.length;i++){
-            NfaStateNode analyze = analyze(startNode, chars[i],0);
-            if(analyze==null){
-                System.out.println("结束");
-            }else {
-                startNode=analyze;
-            }
-        }
-        System.out.println(startNode);
     }
 
     public static NfaStateNode analyze(NfaStateNode nfaStateNode, char sy, int ny){

@@ -1,7 +1,8 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.action.Action;
 import com.wy.manage.platform.core.utils.ExceptionTools;
-import com.wy.manage.platform.core.utils.GUIDTools;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -62,80 +63,29 @@ public class AnalyzeExecuteModel {
                     listMost.add(str2);
                 }
             }
-            //System.out.println("当前输入字符是:"+modelParam.getChars()[modelParam.getCurInt()]);
+            modelParam.recordCurModelValue(modelParam.getChars()[modelParam.getCurInt()]);
+            System.out.println("当前输入字符是:"+modelParam.getChars()[modelParam.getCurInt()]);
+            List<Action> actionList=new ArrayList<Action>();
             for(String str:listMost){
                 NfaStateNode nfaStateNode = context.getMapState().get(str);
                 if(nfaStateNode==null){
                     System.out.println("报错了,没有nfa状态");
                     break;
                 }
-                if(nfaStateNode.getHandle()!=null){
-                    Stack<HandleInfo> handleInfos = modelParam.getHandleInfo();
-                    if(!handleInfos.empty()){
-                        HandleInfo peek = handleInfos.peek();
-                        if(peek.getRelevanceHandle()==nfaStateNode.getHandle()){
-                            peek.setCurCharInt(modelParam.getCurInt());
-                            peek.addSet(nfaStateNode.getStateNum());
-                        }else {
-                            HandleInfo handleInfo=new HandleInfo(nfaStateNode.getHandle(),
-                                    modelParam.getCurInt(),
-                                    nfaStateNode.getStateNum(),
-                                    nfaStateNode.getHandleName());
-                            handleInfos.push(handleInfo);
-                        }
-                    }else {
-                        HandleInfo handleInfo=new HandleInfo(nfaStateNode.getHandle(),
-                                modelParam.getCurInt(),
-                                nfaStateNode.getStateNum(),
-                                nfaStateNode.getHandleName());
-                        handleInfos.push(handleInfo);
-                    }
-
-
-                    //System.out.println("赶紧执行啊");
+                if(nfaStateNode.getAction()!=null){
+                    System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
+                    actionList.add(nfaStateNode.getAction());
+                    nfaStateNode.getAction().action(modelParam);
+                    modelParam.clearCurModelValue();
                 }
             }
-            modelParam.addCurInt(list,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));
+            if(actionList.size()>1){
+                System.out.println("有两个action，需要设置优先级");
+            }
+            modelParam.addCurInt();
             list=listMost;
         }
-        handleEvent( modelParam);
+       // handleEvent( modelParam);
         return;
-    }
-
-    public static void handleEvent(ModelParam modelParam){
-        Stack<HandleInfo> handleInfo = modelParam.getHandleInfo();
-        if(handleInfo!=null){
-            while (!handleInfo.empty()){
-                StringBuffer stringBuffer=new StringBuffer();
-                HandleInfo pop = handleInfo.pop();
-                if(!handleInfo.empty()){
-                    HandleInfo peek = handleInfo.peek();
-                    int curCharInt = pop.getCurCharInt();
-                    int curCharInt1 = peek.getCurCharInt();
-                    if(curCharInt>curCharInt1){
-                        for(int i=curCharInt1+1;i<=curCharInt;i++){
-                            List<Character> characters = Arrays.asList(specChars);
-                            if(!characters.contains(modelParam.getChars()[i])) {
-                                stringBuffer.append(modelParam.getChars()[i]);
-                            }
-                        }
-                    }else if(curCharInt==curCharInt1){
-                        System.out.println("相等，赶紧解决事件优先级"+","+curCharInt);
-                    }else {
-                        System.out.println("小于，奇葩");
-                    }
-
-                }else {
-                    for(int i=0;i<=pop.getCurCharInt();i++){
-                        List<Character> characters = Arrays.asList(specChars);
-                        if(!characters.contains(modelParam.getChars()[i])){
-                            stringBuffer.append(modelParam.getChars()[i]);
-                        }
-                    }
-                }
-                pop.getRelevanceHandle().handle(modelParam.setCurModelValue(stringBuffer));
-                System.out.println("打印字符:"+stringBuffer);
-            }
-        }
     }
 }

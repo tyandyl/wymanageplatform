@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.action.Action;
 import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import org.apache.commons.lang.StringUtils;
@@ -19,8 +20,11 @@ public class InvokerImpl implements Invoker {
 
     private String handleName;
 
-    public InvokerImpl(String regularStr) {
+    private Map<String,Action> actions=new HashMap<String, Action>();
+
+    public InvokerImpl(String regularStr,Map<String,Action> actions) {
         this.regularStr = regularStr;
+        this.actions=actions;
     }
 
 
@@ -47,20 +51,15 @@ public class InvokerImpl implements Invoker {
     }
 
     private NfaStateMachine onInvoke(NfaStateMachine nfaStateMachine,RelevanceHandle handle) throws Exception{
-        NfaStateNode endNode = nfaStateMachine.getEndNode();
-        endNode.setHandle(handle);
+//        NfaStateNode endNode = nfaStateMachine.getEndNode();
+//        endNode.setHandle(handle);
         //System.out.println("当前正则是:"+handleName+"，其包含节点有:");
         final Integer num = AtomicTools.getBiUniqueInteger();
-        System.out.println("状态机:"+handleName+"的统一标识符是:"+num);
         NfaManager.traverse(nfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
                 public void handle(NfaStateNode o) throws Exception {
-                    o.setHandleName(handleName);
                     if(o.getObjectId()!=num){
                         o.setObjectId(num);
                        // System.out.println(o.getStateNum()+",他是"+o.getHandleName()+"节点,其状态是:"+o.getState().getName());
-                        if(o.getStateNum().equalsIgnoreCase("153")){
-                           // System.out.println("153");
-                        }
                     }
                 }
             }, num);
@@ -70,13 +69,13 @@ public class InvokerImpl implements Invoker {
 
 
     private NfaStateMachine preInvoke() throws Exception {
-        Stack<XContentItem> stack = RegularExpressionParser.parserCss(regularStr.toCharArray());
+        Stack<XContentItem> stack = RegularExpressionParser.parser(regularStr.toCharArray(),actions,false);
         if (stack.size() == 1) {
             XContentItem peek = stack.peek();
             NfaStateMachine nfaStateMachine = peek.getNfaStateMachine();
 
             if (this.isPrint) {
-                //System.out.println("开始解析正则表达式:" + handleName);
+                System.out.println("开始解析正则表达式:" + handleName);
             }
 
             return nfaStateMachine;

@@ -10,11 +10,9 @@ import java.util.*;
  */
 public class ModelParam<T> {
     private int curInt=0;
-    private Stack<NfaStateNodeRecord> stackNodes=new Stack<NfaStateNodeRecord>();
     private char[] chars=null;
     private StringBuffer curModelValue=new StringBuffer();
     private T t;
-    private Stack<HandleInfo> handleInfo=new Stack<HandleInfo>();
 
     public DfaContext initDfaContext(NfaStateMachine parser)throws Exception{
         DfaContext context=new DfaContext();
@@ -37,13 +35,16 @@ public class ModelParam<T> {
 
     /**
      * 处理辅助数据
-     * @param curDfa
-     * @param var
      */
-    public void addCurInt(Set<String> curDfa,int var){
-        NfaStateNodeRecord nfaStateNodeRecord=new NfaStateNodeRecord(curDfa,var);
-        stackNodes.push(nfaStateNodeRecord);
+    public void addCurInt(){
         curInt++;
+    }
+
+    public void recordCurModelValue(char i){
+        curModelValue.append(i);
+    }
+    public void clearCurModelValue(){
+        curModelValue=new StringBuffer();
     }
 
 
@@ -121,14 +122,6 @@ public class ModelParam<T> {
 
 
 
-    public Stack<HandleInfo> getHandleInfo() {
-        return handleInfo;
-    }
-
-    public void setHandleInfo(Stack<HandleInfo> handleInfo) {
-        this.handleInfo = handleInfo;
-    }
-
     public T getT() {
         return t;
     }
@@ -145,14 +138,6 @@ public class ModelParam<T> {
         this.curInt = curInt;
     }
 
-    public Stack<NfaStateNodeRecord> getStackNodes() {
-        return stackNodes;
-    }
-
-    public void setStackNodes(Stack<NfaStateNodeRecord> stackNodes) {
-        this.stackNodes = stackNodes;
-    }
-
     public char[] getChars() {
         return chars;
     }
@@ -165,8 +150,4 @@ public class ModelParam<T> {
         return curModelValue;
     }
 
-    public ModelParam setCurModelValue(StringBuffer curModelValue) {
-        this.curModelValue = curModelValue;
-        return this;
-    }
 }

@@ -1,7 +1,11 @@
 package com.wy.manage.platform.core.parser;
 
+import com.wy.manage.platform.core.action.Action;
+import com.wy.manage.platform.core.model.Model;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -9,8 +13,10 @@ import java.util.Stack;
  */
 public class RegularExpressionParser {
 
-    public static Stack<XContentItem> parserCss(char[] array) throws Exception {
+    public static Stack<XContentItem> parser(char[] array, Map<String,Action> actions,boolean isOr) throws Exception {
         CharacterCarveContext context=new CharacterCarveContext();
+        context.setActions(actions);
+        context.setOr(isOr);
         for(int i=0;i<array.length;i++){
             SymbolType symbolType = SymbolType.findSymbolType(array[i]);
             switch (symbolType){
@@ -59,7 +65,8 @@ public class RegularExpressionParser {
                     break;
                 case OR:
                     CharacterCarveCapacity orCharacterCarveCapacity = NfaStateMachineFactory.getOrCharacterCarveCapacity();
-                    orCharacterCarveCapacity.carve(context,array,i);
+                    int carve3 = orCharacterCarveCapacity.carve(context, array, i);
+                    i=(i+carve3);
                     break;
                 case BACKSLASH:
                     CharacterCarveCapacity backSlashCharacterCarveCapacity = NfaStateMachineFactory.getBackSlashCharacterCarveCapacity();
@@ -74,7 +81,14 @@ public class RegularExpressionParser {
                     break;
                 case CLOSE_PAREN:
                     CharacterCarveCapacity parenClosedCharacterCarveCapacity = NfaStateMachineFactory.getPARENClosedCharacterCarveCapacity();
-                    parenClosedCharacterCarveCapacity.carve(context,array,i);
+                    int carve2 = parenClosedCharacterCarveCapacity.carve(context, array, i);
+                    //carve2是)的位置
+                    if(carve2>0){
+                        Stack<XContentItem> stack = context.getStack();
+                        XContentItem peek = stack.peek();
+                        peek.setBigger(carve2);
+                        return stack;
+                    }
                     break;
                 case COMMA:
                     CharacterCarveCapacity commaCharacterCarveCapacity = NfaStateMachineFactory.getCommaCharacterCarveCapacity();
@@ -107,12 +121,12 @@ public class RegularExpressionParser {
                     //普通字符
                     break;
             }
-            if(symbolType==SymbolType.OR){
-                break;
-            }
 
         }
         Stack<XContentItem> stack = context.getStack();
+        if(stack.size()>1){
+            System.out.println("大于1，报错");
+        }
         return stack;
     }
 

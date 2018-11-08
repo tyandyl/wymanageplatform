@@ -1,9 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by tianye
@@ -11,9 +8,15 @@ import java.util.Set;
 public class XContentItem {
     private int legend;
     //index融合，数目较大
-    private Set<Integer> index =new HashSet<Integer>();
+    private Set<Integer> index =new TreeSet<Integer>(new Comparator<Integer>() {
+        public int compare(Integer o1, Integer o2) {
+            return o1.compareTo(o2);
+        }
+    });
     private MeanType meanType;
     private NfaStateMachine nfaStateMachine=null;
+    //|回退时，记录index
+    private int bigger;
 
     public XContentItem(int legend,int index){
         this.legend=legend;
@@ -70,4 +73,11 @@ public class XContentItem {
         this.index = index;
     }
 
+    public int getBigger() {
+        return bigger;
+    }
+
+    public void setBigger(int bigger) {
+        this.bigger = bigger;
+    }
 }

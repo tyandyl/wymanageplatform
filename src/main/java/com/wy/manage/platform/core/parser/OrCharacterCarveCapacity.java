@@ -3,6 +3,7 @@ package com.wy.manage.platform.core.parser;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -45,14 +46,17 @@ public class OrCharacterCarveCapacity implements CharacterCarveCapacity{
                 XContentItem pop = stack.pop();
                 char[] arrayCp=new char[i1];
                 System.arraycopy(array,(i+1),arrayCp,0,i1);
-                XContentItem peek = RegularExpressionParser.parserCss(arrayCp).peek();
+                XContentItem peek = RegularExpressionParser.parser(arrayCp,context.getActions(),true).peek();
                 NfaStateMachine nfaStateMachine =peek.getNfaStateMachine();
-                xContentItemClosure.addIndex(peek.getIndex());
+                for(int y=0;y<=peek.getBigger();y++){
+                    xContentItemClosure.addIndex(y+i);
+                }
                 xContentItemClosure.setMeanType(MeanType.CHANGE_MEANING);
                 NfaStateMachine orNfaStateMachine = NfaManager.createOrNfaStateMachine(pop.getNfaStateMachine(), nfaStateMachine);
                 xContentItemClosure.setNfaStateMachine(orNfaStateMachine);
                 xContentItemClosure.addIndex(pop.getIndex());
                 stack.push(xContentItemClosure);
+                return peek.getBigger();
             }
         }
         return 0;
