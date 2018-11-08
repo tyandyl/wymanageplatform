@@ -15,11 +15,13 @@ public class Test1 {
     public static void main(String[] agrs) throws Exception {
         CssModel cssModel=new CssModel();
         cssModel.defineAction();
-        cssModel.execute(".sh{ position : absolute;" +
-                " \n display:block;" +
-                "\n top:10px;"+
-                "\n right:20px;"+
-                "\n bottom:20px;"+
-                "\n left:30px;}");
+        cssModel.execute("#wintop{\n" +
+                "position:absolute;\n" +
+                "display:block;\n" +
+                "top:0px;\n" +
+                "left:0px;\n" +
+                "right:0px;\n" +
+                "height: 70px;\n" +
+                "background: #0382AD url(winpic/r_x.png) repeat-x;}");
     }
 }
