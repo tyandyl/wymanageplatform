@@ -14,7 +14,7 @@ public class CharacterCarveContext {
     private List<Integer> specialAtBol=new ArrayList<Integer>();
     //放进栈中的item都有自动机
     private Stack<XContentItem> stack=new Stack<XContentItem>();
-
+    //存放{后的字符
     private List<Integer> charCurly=new ArrayList<Integer>();
 
     private boolean isOr;

@@ -2,7 +2,9 @@ package com.wy.manage.platform.core.model;
 
 import com.wy.manage.platform.core.action.Action;
 import com.wy.manage.platform.core.parser.*;
+import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.CssProperties;
+import com.wy.manage.platform.core.widget.Page;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.HashMap;
@@ -32,7 +34,19 @@ public abstract class BasicModel implements Model{
 
     public void execute(String str)throws Exception{
         String s = parserCompile();
-        Stack<XContentItem> parser = RegularExpressionParser.parser(s.toCharArray(), this.valueActions,false);
+        char[] chars1 = s.toCharArray();
+        StringBuffer stringBuffer=new StringBuffer();
+        for(int w=0;w<chars1.length;w++){
+            if(chars1[w]==10){
+                stringBuffer.append("\\n");
+            }else if(chars1[w]==13) {
+                stringBuffer.append("\\r");
+            }else {
+                stringBuffer.append(chars1[w]);
+            }
+        }
+        System.out.println(stringBuffer.toString());
+        Stack<XContentItem> parser = RegularExpressionParser.parser(chars1, this.valueActions,false);
         XContentItem peek = parser.peek();
         Set<Integer> index = peek.getIndex();
         int y=0;
@@ -42,8 +56,13 @@ public abstract class BasicModel implements Model{
             }
             y++;
         }
-        CssBag cssBag=new CssBag();
-        AnalyzeExecuteModel.execute(str,cssBag,peek.getNfaStateMachine());
+        check( peek);
+//        CssBag cssBag=new CssBag();
+        Page page=new Page();
+        char[] chars = str.toCharArray();
+        ModelParam<Page> modelParam = new ModelParam<Page>(page,chars);
+
+        AnalyzeExecuteModel.execute(modelParam,peek.getNfaStateMachine());
 
     }
 
@@ -103,6 +122,19 @@ public abstract class BasicModel implements Model{
             action.setValue(value);
             valueActions.put(value,action);
         }
+    }
+
+    private void check(XContentItem peek)throws Exception{
+        NfaStateMachine nfaStateMachine = peek.getNfaStateMachine();
+        //检查actions
+        final Integer num = AtomicTools.getBiUniqueInteger();
+        NfaManager.traverse(nfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
+            public void handle(NfaStateNode o) throws Exception {
+                if(o.getAction()!=null){
+                    System.out.println(o.getAction().getName()+",当前状态码是:"+o.getStateNum());
+                }
+            }
+        }, num);
     }
 
     public String getRegular() {

@@ -1,5 +1,6 @@
-package com.wy.manage.platform.core.action;
+package com.wy.manage.platform.core.action.cssAction;
 
+import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.widget.SelectorType;
@@ -7,7 +8,7 @@ import com.wy.manage.platform.core.widget.SelectorType;
 /**
  * Created by tianye
  */
-public class AttributeTagAction extends BasicAction{
+public class AttributeTagAction extends BasicAction {
     public void action(ModelParam modelParam) {
         Object t = modelParam.getT();
         if(t instanceof CssBag){
@@ -25,6 +26,7 @@ public class AttributeTagAction extends BasicAction{
     public String getName() {
         return "attributeTag";
     }
+
 
     @Override
     public String getGroup() {

@@ -11,6 +11,10 @@ public abstract class BasicAction implements Action{
 
     public abstract String getName();
 
+    public boolean isNeedExecute(){
+        return true;
+    }
+
     public String getValue() {
         return value;
     }

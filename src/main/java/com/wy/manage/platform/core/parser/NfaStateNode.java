@@ -22,7 +22,9 @@ public class NfaStateNode implements Serializable{
 
     private Action action;
     //objectId
-    private Integer objectId;
+    private int objectId;
+
+    private String belongRegular;
 
     public String getStateNum() {
         return stateNum;
@@ -48,11 +50,11 @@ public class NfaStateNode implements Serializable{
         this.edgeLines = edgeLines;
     }
 
-    public Integer getObjectId() {
+    public int getObjectId() {
         return objectId;
     }
 
-    public void setObjectId(Integer objectId) {
+    public void setObjectId(int objectId) {
         this.objectId = objectId;
     }
 
@@ -62,5 +64,13 @@ public class NfaStateNode implements Serializable{
 
     public void setAction(Action action) {
         this.action = action;
+    }
+
+    public String getBelongRegular() {
+        return belongRegular;
+    }
+
+    public void setBelongRegular(String belongRegular) {
+        this.belongRegular = belongRegular;
     }
 }

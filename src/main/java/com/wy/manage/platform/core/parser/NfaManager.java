@@ -235,9 +235,9 @@ public class NfaManager {
         if(n>m){
             ExceptionTools.ThrowException("{}解析错误,n不能大于m");
         }
-        int i=0;
+        int i=1;
         //创建N的连接节点
-        NfaStateMachine linkNfaStateMachine=var;
+        NfaStateMachine linkNfaStateMachine=deepClone(var);
         while (i<n){
             NfaStateMachine nfaStateMachineVar = deepClone(var);
             linkNfaStateMachine = createLinkNfaStateMachine(linkNfaStateMachine, nfaStateMachineVar);
@@ -284,6 +284,11 @@ public class NfaManager {
      */
     public static NfaStateMachine createRepetitionQuestionMarkNfaStateMachine(NfaStateMachine var)throws Exception{
         NfaStateMachine nfaStateMachine = packNewStartAndEndNode( var);
+        EdgeLine edgeLine=new EdgeLine();
+        edgeLine.setEdgeInputType(EdgeInputType.NULL_GATHER);
+        edgeLine.setNext(nfaStateMachine.getEndNode());
+        EdgeLine[] edgeLines = nfaStateMachine.getStartNode().getEdgeLines();
+        assignArray(edgeLines, edgeLine);
         return nfaStateMachine;
     }
 
@@ -408,8 +413,13 @@ public class NfaManager {
                 startNode.getEdgeLines()[1].setPassedNum(num);
                 traverse(startNode.getEdgeLines()[1].getNext(),nodeHandle,num);
             }
-            //处理操作
-            nodeHandle.handle(startNode);
+            //处理操作，保证唯一
+            if(startNode.getObjectId()!=num){
+                //处理操作
+                nodeHandle.handle(startNode);
+                startNode.setObjectId(num);
+            }
+
 
         }
     }

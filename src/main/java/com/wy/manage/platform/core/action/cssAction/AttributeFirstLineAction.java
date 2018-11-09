@@ -1,12 +1,13 @@
-package com.wy.manage.platform.core.action;
+package com.wy.manage.platform.core.action.cssAction;
 
+import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
 
 /**
  * Created by tianye
  */
-public class AttributeFirstLineAction extends BasicAction{
+public class AttributeFirstLineAction extends BasicAction {
     public void action(ModelParam modelParam) {
         Object t = modelParam.getT();
         if(t instanceof CssBag){
@@ -20,6 +21,7 @@ public class AttributeFirstLineAction extends BasicAction{
     public String getName() {
         return "attributeFirstLine";
     }
+
 
     @Override
     public String getGroup() {

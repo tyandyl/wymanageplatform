@@ -1,6 +1,8 @@
 package com.wy.manage.platform.core.model;
 
-import com.wy.manage.platform.core.action.*;
+import com.wy.manage.platform.core.action.cssAction.AttributeFirstLineAction;
+import com.wy.manage.platform.core.action.cssAction.AttributeTagAction;
+import com.wy.manage.platform.core.action.cssAction.CssAttributeFullAction;
 
 /**
  * Created by tianye

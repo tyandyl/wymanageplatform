@@ -13,4 +13,5 @@ public interface Action {
     void setValue(String value);
     String getGroup();
     String getPriority();
+    boolean isNeedExecute();
 }

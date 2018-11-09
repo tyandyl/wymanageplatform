@@ -1,12 +1,13 @@
-package com.wy.manage.platform.core.action;
+package com.wy.manage.platform.core.action.cssAction;
 
+import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
 
 /**
  * Created by tianye
  */
-public class CssAttributeFullAction extends BasicAction{
+public class CssAttributeFullAction extends BasicAction {
     public void action(ModelParam modelParam) {
         Object t = modelParam.getT();
         if(t instanceof CssBag){
@@ -37,5 +38,6 @@ public class CssAttributeFullAction extends BasicAction{
     public String getPriority() {
         return null;
     }
+
 
 }

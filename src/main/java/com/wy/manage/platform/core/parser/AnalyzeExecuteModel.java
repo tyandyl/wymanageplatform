@@ -13,17 +13,19 @@ public class AnalyzeExecuteModel {
 
     private static Character[] specChars={32,10,13};
 
-    public static void execute(String str,CssBag cssBag,NfaStateMachine parser) throws Exception {
+    public static void execute(ModelParam modelParam,NfaStateMachine parser) throws Exception {
 
-        char[] chars = str.toCharArray();
-        ModelParam<CssBag> modelParam = new ModelParam<CssBag>(cssBag,chars);
+//        char[] chars = str.toCharArray();
+//        ModelParam<CssBag> modelParam = new ModelParam<CssBag>(cssBag,chars);
         DfaContext context = modelParam.initDfaContext(parser).buildEmptyStateGather();
         execute(modelParam,context);
     }
 
     public static void execute(final ModelParam modelParam, final DfaContext context)throws Exception{
         Set<String> list =context.getMapEmpty().get(context.getStartNodeStateNum());
+        //System.out.println("输入字符是:");
         while (modelParam.getCurInt()<modelParam.getChars().length){
+            System.out.println("输入字符是:"+modelParam.getChars()[modelParam.getCurInt()]);
             //新的状态集合,99页
             List<String> listNew=new ArrayList<String>();
             new StateMoveHandle<Set<String>,List<String>>(){
@@ -48,7 +50,7 @@ public class AnalyzeExecuteModel {
             }.move(list,listNew,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));
 
             if(listNew.size()==0){
-                System.out.println("报错了,没有dfa状态集合值");
+                System.out.println("当前字符不符合规则,");
                 break;
             }
             Set<String> listMost=new TreeSet<String>();
@@ -64,16 +66,24 @@ public class AnalyzeExecuteModel {
                 }
             }
             modelParam.recordCurModelValue(modelParam.getChars()[modelParam.getCurInt()]);
-            System.out.println("当前输入字符是:"+modelParam.getChars()[modelParam.getCurInt()]);
+
             List<Action> actionList=new ArrayList<Action>();
+            if(modelParam.getCurInt()==modelParam.getChars().length-1){
+                System.out.println();
+            }
+            System.out.println("------------");
             for(String str:listMost){
                 NfaStateNode nfaStateNode = context.getMapState().get(str);
                 if(nfaStateNode==null){
                     System.out.println("报错了,没有nfa状态");
                     break;
                 }
+                if(modelParam.getCurInt()==modelParam.getChars().length-1){
+
+                }
+                System.out.println(nfaStateNode.getBelongRegular());
                 if(nfaStateNode.getAction()!=null){
-                    System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
+                   // System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
                     actionList.add(nfaStateNode.getAction());
                     nfaStateNode.getAction().action(modelParam);
                     modelParam.clearCurModelValue();

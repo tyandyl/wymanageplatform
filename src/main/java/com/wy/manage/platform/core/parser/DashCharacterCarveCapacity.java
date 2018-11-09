@@ -27,17 +27,33 @@ public class DashCharacterCarveCapacity implements CharacterCarveCapacity{
                 //-前边的字符
                 XContentItem pop = stack.pop();
                 xContentItemDash.addIndex(pop.getIndex());
-                if(pop.getLegend()>=(int)array[i+1]){
-                    ExceptionTools.ThrowException("不允许-后比-前小");
+                if(Character.isLetterOrDigit(array[i+1])){
+                    if(pop.getLegend()>=(int)array[i+1]){
+                        ExceptionTools.ThrowException("不允许-后比-前小");
+                    }
+                    xContentItemDash.addIndex(i+1);
+                    NfaStateMachine nfaStateMachine=null;
+                    for (int y=pop.getLegend()+1;y<=(int)array[i+1];y++){
+                        nfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(pop.getNfaStateMachine(), y);
+                    }
+                    xContentItemDash.setNfaStateMachine(nfaStateMachine);
+                    stack.push(xContentItemDash);
+                    return 1;
+                }else {
+                    //解决[0-9a-z-] 最后一个-代表或许
+                    NfaStateMachine nfaStateMachine = pop.getNfaStateMachine();
+                    if(nfaStateMachine!=null){
+                        nfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(pop.getNfaStateMachine(), SymbolType.DASH.getState());
+                        xContentItemDash.setNfaStateMachine(nfaStateMachine);
+                        stack.push(xContentItemDash);
+                    }else {
+                        //解决[-]
+                        NfaStateMachine singleCharacterNfaStateMachine = NfaManager.createSingleCharacterNfaStateMachine(array[i]);
+                        xContentItemDash.setNfaStateMachine(singleCharacterNfaStateMachine);
+                        stack.push(xContentItemDash);
+                    }
                 }
-                xContentItemDash.addIndex(i+1);
-                NfaStateMachine nfaStateMachine=null;
-                for (int y=pop.getLegend()+1;y<=(int)array[i+1];y++){
-                    nfaStateMachine = NfaManager.createCharacterRepertoireNfaStateMachine(pop.getNfaStateMachine(), y);
-                }
-                xContentItemDash.setNfaStateMachine(nfaStateMachine);
-                stack.push(xContentItemDash);
-                return 1;
+
             }else {
                 xContentItemDash.setMeanType(MeanType.CHANGE_MEANING);
                 XContentItem pop = stack.pop();
