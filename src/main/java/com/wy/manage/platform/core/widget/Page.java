@@ -11,7 +11,7 @@ import java.util.List;
 public class Page implements IBlock, Serializable {
 
     private static final long serialVersionUID = -2602415919744812735L;
-    private String preposition;
+    private String firstLine;
 
     private List<Meta> metas;
 
@@ -19,13 +19,12 @@ public class Page implements IBlock, Serializable {
 
     private List<Link> links;
 
-
-    public String getPreposition() {
-        return preposition;
+    public String getFirstLine() {
+        return firstLine;
     }
 
-    public void setPreposition(String preposition) {
-        this.preposition = preposition;
+    public void setFirstLine(String firstLine) {
+        this.firstLine = firstLine;
     }
 
     public List<Meta> getMetas() {

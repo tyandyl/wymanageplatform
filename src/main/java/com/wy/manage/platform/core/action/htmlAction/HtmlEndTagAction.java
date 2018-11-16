@@ -15,7 +15,7 @@ public class HtmlEndTagAction extends BasicAction{
         if(t instanceof Page){
             Page page=(Page)t;
             //System.out.println();
-            System.out.println("html结束------------------:"+modelParam.getCurModelValue().toString().replaceAll("\\n", "").replaceAll("\\r", ""));
+            System.out.println("html结束------------------:"+modelParam.getCurModelValue().toString().trim().replaceAll("\\n", "").replaceAll("\\r", ""));
         }
     }
 

@@ -13,7 +13,7 @@ public class FirstLineAction extends BasicAction{
         Object t = modelParam.getT();
         if(t instanceof Page){
             Page page=(Page)t;
-            page.setPreposition(modelParam.getCurModelValue().toString());
+            page.setFirstLine(modelParam.getCurModelValue().toString().trim().replaceAll("\\n", "").replaceAll("\\r", ""));
         }
     }
 

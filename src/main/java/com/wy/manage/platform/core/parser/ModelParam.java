@@ -13,6 +13,11 @@ public class ModelParam<T> {
     private char[] chars=null;
     private StringBuffer curModelValue=new StringBuffer();
     private T t;
+    private Map<String,StringBuffer> regularValue=new HashMap<String, StringBuffer>();
+    private Map<String,Integer> regularNum=new HashMap<String, Integer>();
+    //存放结束节点，因为两个状态机连接时，上一个状态机的结束节点连接下一个状态机的开始节点，这里，我们做个优先级
+    //判断，如果该字符序列的字符属于上个状态机，下一个状态机就不能自动包含了
+    private List<Integer> numList=new ArrayList<Integer>();
 
     public DfaContext initDfaContext(NfaStateMachine parser)throws Exception{
         DfaContext context=new DfaContext();
@@ -150,4 +155,41 @@ public class ModelParam<T> {
         return curModelValue;
     }
 
+    public Map<String, StringBuffer> getRegularValue() {
+        return regularValue;
+    }
+
+    public void setRegularValue(Map<String, StringBuffer> regularValue) {
+        this.regularValue = regularValue;
+    }
+
+    public Map<String, Integer> getRegularNum() {
+        return regularNum;
+    }
+
+    public void setRegularNum(Map<String, Integer> regularNum) {
+        this.regularNum = regularNum;
+    }
+
+    public boolean addRegularNum(String key,Integer num){
+        Integer integer = regularNum.get(key);
+        if(integer==null){
+            //解决正则的最后一个字符和下一个正则连接的问题
+            if(numList.contains(num)){
+                return false;
+            }
+            regularNum.put(key,num);
+            return true;
+        }else {
+            //解决同一个字符同一个正则，多次使用的问题
+            if(integer.intValue()==num.intValue()){
+                return false;
+            }else {
+                regularNum.put(key,num);
+                numList.add(num);
+                return true;
+            }
+
+        }
+    }
 }
