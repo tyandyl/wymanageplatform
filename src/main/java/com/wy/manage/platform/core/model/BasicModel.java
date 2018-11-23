@@ -131,10 +131,12 @@ public abstract class BasicModel implements Model{
         NfaManager.traverse(nfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
             public void handle(NfaStateNode o) throws Exception {
                 if(o.getAction()!=null){
-                    System.out.println(o.getAction().getName()+",当前状态码是:"+o.getStateNum());
+                    //System.out.println(o.getAction().getName()+",当前状态码是:"+o.getStateNum());
                 }
             }
         }, num);
+        System.out.println("-----------------------------------");
+        System.out.println();
     }
 
     public String getRegular() {

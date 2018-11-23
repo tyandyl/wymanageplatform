@@ -73,14 +73,16 @@ public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity
                     Map<String, Action> actions = context.getActions();
                     final Action action = actions.get(substring);
                     if(action!=null){
-                        //System.out.println("打印动作:"+action.getName());
+                        System.out.println("打印动作:"+action.getName());
                         final Integer num = AtomicTools.getBiUniqueInteger();
                         NfaManager.traverse(xContentItemParen.getNfaStateMachine().getStartNode(),new NodeHandle<NfaStateNode>(){
                             public void handle(NfaStateNode o) throws Exception {
-                                o.setBelongRegular(action.getName());
+                                o.addBelongRegular(action.getName());
+                                o.setMainBelongRegular(action.getName());
                             }
                         }, num);
                         xContentItemParen.getNfaStateMachine().getEndNode().setAction(action);
+
                     }
                     //(([\r\n\s]*)position([\r\n\s]*)解决这种，(前边是position，需要合并
                     if(!stack.empty()){

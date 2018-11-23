@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by tianye
  */
-public class LinkLineAction extends BasicAction{
+public class DocTypeHtml5ValueAction extends BasicAction {
     @Override
     public void action(ModelParam modelParam) {
         Map regularValue = modelParam.getRegularValue();
@@ -20,7 +20,7 @@ public class LinkLineAction extends BasicAction{
 
     @Override
     public String getName() {
-        return "linkLine";
+        return "docTypeHtml5Value";
     }
 
     @Override

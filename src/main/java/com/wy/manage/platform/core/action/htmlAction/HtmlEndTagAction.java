@@ -4,6 +4,8 @@ import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.widget.Page;
 
+import java.util.Map;
+
 /**
  * Created by tianye
  */
@@ -11,11 +13,10 @@ public class HtmlEndTagAction extends BasicAction{
 
     @Override
     public void action(ModelParam modelParam) {
-        Object t = modelParam.getT();
-        if(t instanceof Page){
-            Page page=(Page)t;
-            //System.out.println();
-            System.out.println("html结束------------------:"+modelParam.getCurModelValue().toString().trim().replaceAll("\\n", "").replaceAll("\\r", ""));
+        Map regularValue = modelParam.getRegularValue();
+        if(regularValue!=null && regularValue.get(this.getName())!=null){
+            String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
+            System.out.println(this.getName()+"的代码是:"+s);
         }
     }
 
@@ -30,8 +31,8 @@ public class HtmlEndTagAction extends BasicAction{
     }
 
     @Override
-    public String getPriority() {
-        return null;
+    public int getPriority() {
+        return 0;
     }
 
 }

@@ -35,8 +35,8 @@ public class CssAttributeFullAction extends BasicAction {
     }
 
     @Override
-    public String getPriority() {
-        return null;
+    public int getPriority() {
+        return 0;
     }
 
 

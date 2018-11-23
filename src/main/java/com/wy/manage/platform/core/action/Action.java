@@ -12,6 +12,5 @@ public interface Action {
     String getValue();
     void setValue(String value);
     String getGroup();
-    String getPriority();
-    boolean isNeedClearCode();
+    int getPriority();
 }

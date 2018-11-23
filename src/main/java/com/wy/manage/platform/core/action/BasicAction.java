@@ -11,10 +11,6 @@ public abstract class BasicAction implements Action{
 
     public abstract String getName();
 
-    public boolean isNeedClearCode(){
-        return true;
-    }
-
     public String getValue() {
         return value;
     }
@@ -25,5 +21,5 @@ public abstract class BasicAction implements Action{
 
     public abstract String getGroup();
 
-    public abstract String getPriority();
+    public abstract int getPriority();
 }

@@ -3,9 +3,7 @@ package com.wy.manage.platform.core.parser;
 import com.wy.manage.platform.core.action.Action;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by tianye
@@ -24,7 +22,9 @@ public class NfaStateNode implements Serializable{
     //objectId
     private int objectId;
 
-    private String belongRegular;
+    private List<String> belongRegular=new ArrayList<String>();
+    private String mainBelongRegular;
+
 
     public String getStateNum() {
         return stateNum;
@@ -66,11 +66,25 @@ public class NfaStateNode implements Serializable{
         this.action = action;
     }
 
-    public String getBelongRegular() {
+    public List<String> getBelongRegular() {
         return belongRegular;
     }
 
-    public void setBelongRegular(String belongRegular) {
+    public void setBelongRegular(List<String> belongRegular) {
         this.belongRegular = belongRegular;
+    }
+
+    public void addBelongRegular(String str){
+        if(!this.belongRegular.contains(str)){
+            this.belongRegular.add(str);
+        }
+    }
+
+    public String getMainBelongRegular() {
+        return mainBelongRegular;
+    }
+
+    public void setMainBelongRegular(String mainBelongRegular) {
+        this.mainBelongRegular = mainBelongRegular;
     }
 }
