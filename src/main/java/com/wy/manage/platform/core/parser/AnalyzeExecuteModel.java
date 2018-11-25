@@ -97,22 +97,25 @@ public class AnalyzeExecuteModel {
                             regularValueMain.put(mainBelongRegular,bufferMain);
                         }
                     }
-
                     for(String belongRegular:belongRegulars){
                         if(StringUtils.isNotBlank(belongRegular)){
+                            if(belongRegular.equalsIgnoreCase(mainBelongRegular)){
+                                continue;
+                            }
                             Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
                             StringBuffer buffer = regularValue.get(belongRegular);
                             if(buffer==null){
-                                if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt(),false)){
+                                //加1的目的是避免小正则头一个字符获取下一个状态的问题
+                                if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt()+1,false)){
                                     StringBuffer buffer1=new StringBuffer();
-                                    buffer1.append(modelParam.getChars()[modelParam.getCurInt()]);
+                                    buffer1.append(modelParam.getChars()[modelParam.getCurInt()+1]);
                                     regularValue.put(belongRegular,buffer1);
-                                    modelParam.addRegularNum(belongRegular,modelParam.getCurInt(),false);
+                                    modelParam.addRegularNum(belongRegular,modelParam.getCurInt()+1,false);
                                 }
 
                             }else {
-                                if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt(),false)){
-                                    buffer.append(modelParam.getChars()[modelParam.getCurInt()]);
+                                if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt()+1,false)){
+                                    buffer.append(modelParam.getChars()[modelParam.getCurInt()+1]);
                                     regularValue.put(belongRegular,buffer);
                                 }
                             }

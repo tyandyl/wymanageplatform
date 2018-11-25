@@ -208,7 +208,27 @@ public class ModelParam<T> {
             }
         }else {
             //解决大正则下的小正则的分析关系
-            return false;
+            Integer integer = regularNumSmall.get(key);
+            if(integer==null){
+                //解决正则的最后一个字符和下一个正则连接的问题
+                if(numListSmall.contains(num)){
+                    return false;
+                }
+                regularNumSmall.put(key,num);
+                return true;
+            }else {
+                //解决同一个字符同一个正则，多次使用的问题
+                if(integer.intValue()==num.intValue()){
+                    return false;
+                }else {
+                    regularNumSmall.put(key,num);
+                    if(!numListSmall.contains(num)){
+                        numListSmall.add(num);
+                    }
+                    return true;
+                }
+
+            }
         }
 
     }
