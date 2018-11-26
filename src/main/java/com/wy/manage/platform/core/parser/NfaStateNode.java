@@ -23,7 +23,6 @@ public class NfaStateNode implements Serializable{
     private int objectId;
 
     private List<String> belongRegular=new ArrayList<String>();
-    private String mainBelongRegular;
 
 
     public String getStateNum() {
@@ -78,13 +77,5 @@ public class NfaStateNode implements Serializable{
         if(!this.belongRegular.contains(str)){
             this.belongRegular.add(str);
         }
-    }
-
-    public String getMainBelongRegular() {
-        return mainBelongRegular;
-    }
-
-    public void setMainBelongRegular(String mainBelongRegular) {
-        this.mainBelongRegular = mainBelongRegular;
     }
 }

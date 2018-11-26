@@ -32,6 +32,38 @@ public class AnalyzeExecuteModel {
                 public void move(Set<String> strings, List<String> strings2, Integer var) {
                     //遍历ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
                     for(String str:strings){
+                        NfaStateNode nfaStateNode = context.getMapState().get(str);
+                        if(nfaStateNode==null){
+                            System.out.println("报错了,没有nfa状态");
+                            break;
+                        }
+                        List<String> belongRegulars = nfaStateNode.getBelongRegular();
+                        if(belongRegulars!=null && belongRegulars.size()>0){
+                            for(String belongRegular:belongRegulars){
+                                if(StringUtils.isNotBlank(belongRegular)){
+                                    Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
+                                    StringBuffer buffer = regularValue.get(belongRegular);
+                                    if(buffer==null){
+                                        if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt())){
+                                            StringBuffer buffer1=new StringBuffer();
+                                            buffer1.append(modelParam.getChars()[modelParam.getCurInt()]);
+                                            regularValue.put(belongRegular,buffer1);
+                                        }
+                                    }else {
+                                        if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt())){
+                                            buffer.append(modelParam.getChars()[modelParam.getCurInt()]);
+                                            regularValue.put(belongRegular,buffer);
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                        if(nfaStateNode.getAction()!=null){
+                            //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
+                            nfaStateNode.getAction().action(modelParam);
+                            nfaStateNode.getAction().setExecuted(true);
+                        }
                         //获取列数
                         Map<Integer, List<String>> integerListMap =context.getMap().get(str);
                         if(integerListMap!=null){
@@ -69,71 +101,25 @@ public class AnalyzeExecuteModel {
             modelParam.recordCurModelValue(modelParam.getChars()[modelParam.getCurInt()]);
 
             List<Action> actionList=new ArrayList<Action>();
+            if(actionList.size()>1){
+                System.out.println("有两个action，需要设置优先级");
+            }
+            modelParam.addCurInt();
+            //解决最后一个字符的动作问题
+            if(modelParam.getCurInt()==modelParam.getChars().length){
             for(String str:listMost){
                 NfaStateNode nfaStateNode = context.getMapState().get(str);
                 if(nfaStateNode==null){
                     System.out.println("报错了,没有nfa状态");
                     break;
                 }
-
-                //System.out.println(nfaStateNode.getBelongRegular());
-                List<String> belongRegulars = nfaStateNode.getBelongRegular();
-                if(belongRegulars!=null && belongRegulars.size()>0){
-
-                    String mainBelongRegular = nfaStateNode.getMainBelongRegular();
-                    Map<String, StringBuffer> regularValueMain = modelParam.getRegularValue();
-                    StringBuffer bufferMain = regularValueMain.get(mainBelongRegular);
-                    if(bufferMain==null){
-                        if(modelParam.addRegularNum(mainBelongRegular, modelParam.getCurInt(),true)){
-                            StringBuffer buffer1=new StringBuffer();
-                            buffer1.append(modelParam.getChars()[modelParam.getCurInt()]);
-                            regularValueMain.put(mainBelongRegular,buffer1);
-                            modelParam.addRegularNum(mainBelongRegular,modelParam.getCurInt(),true);
-                        }
-
-                    }else {
-                        if(modelParam.addRegularNum(mainBelongRegular, modelParam.getCurInt(),true)){
-                            bufferMain.append(modelParam.getChars()[modelParam.getCurInt()]);
-                            regularValueMain.put(mainBelongRegular,bufferMain);
-                        }
-                    }
-                    for(String belongRegular:belongRegulars){
-                        if(StringUtils.isNotBlank(belongRegular)){
-                            if(belongRegular.equalsIgnoreCase(mainBelongRegular)){
-                                continue;
-                            }
-                            Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
-                            StringBuffer buffer = regularValue.get(belongRegular);
-                            if(buffer==null){
-                                //加1的目的是避免小正则头一个字符获取下一个状态的问题
-                                if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt()+1,false)){
-                                    StringBuffer buffer1=new StringBuffer();
-                                    buffer1.append(modelParam.getChars()[modelParam.getCurInt()+1]);
-                                    regularValue.put(belongRegular,buffer1);
-                                    modelParam.addRegularNum(belongRegular,modelParam.getCurInt()+1,false);
-                                }
-
-                            }else {
-                                if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt()+1,false)){
-                                    buffer.append(modelParam.getChars()[modelParam.getCurInt()+1]);
-                                    regularValue.put(belongRegular,buffer);
-                                }
-                            }
-
-                        }
-                    }
-
-                }
-
-                if(nfaStateNode.getAction()!=null){
+                if(nfaStateNode.getAction()!=null && !nfaStateNode.getAction().isExecuted()){
                     //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
                     nfaStateNode.getAction().action(modelParam);
                 }
             }
-            if(actionList.size()>1){
-                System.out.println("有两个action，需要设置优先级");
             }
-            modelParam.addCurInt();
+
             list=listMost;
         }
        // handleEvent( modelParam);

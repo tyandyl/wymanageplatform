@@ -15,9 +15,13 @@ import java.util.Stack;
  */
 public class Test2 {
     public static void main(String[] agrs) throws Exception {
-        Stack<XContentItem> parser = RegularExpressionParser.parser("[0-9]?y".toCharArray(), new HashMap<String, Action>(),false);
-        System.out.println(parser.size());
-        CssBag cssBag=new CssBag();
+        Integer i=632008;
+        Integer y=632008;
+        if (i.equals(y)){
+            System.out.println("相等");
+        }else {
+            System.out.println("不相等");
+        }
     }
 
 

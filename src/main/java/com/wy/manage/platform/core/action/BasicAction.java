@@ -7,6 +7,7 @@ import com.wy.manage.platform.core.parser.ModelParam;
  */
 public abstract class BasicAction implements Action{
     public String value;
+    public boolean isExecuted;
     public abstract void action(ModelParam modelParam);
 
     public abstract String getName();
@@ -22,4 +23,11 @@ public abstract class BasicAction implements Action{
     public abstract String getGroup();
 
     public abstract int getPriority();
+
+    public boolean isExecuted(){
+        return isExecuted;
+    }
+    public void setExecuted(boolean isExecuted){
+        this.isExecuted=isExecuted;
+    }
 }
