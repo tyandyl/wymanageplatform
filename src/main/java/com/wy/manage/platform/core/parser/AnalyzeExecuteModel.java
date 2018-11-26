@@ -41,6 +41,7 @@ public class AnalyzeExecuteModel {
                         if(belongRegulars!=null && belongRegulars.size()>0){
                             for(String belongRegular:belongRegulars){
                                 if(StringUtils.isNotBlank(belongRegular)){
+
                                     Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
                                     StringBuffer buffer = regularValue.get(belongRegular);
                                     if(buffer==null){
@@ -51,6 +52,9 @@ public class AnalyzeExecuteModel {
                                         }
                                     }else {
                                         if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt())){
+                                            if(belongRegular.equalsIgnoreCase("scriptLine")){
+                                                belongRegular.trim();
+                                            }
                                             buffer.append(modelParam.getChars()[modelParam.getCurInt()]);
                                             regularValue.put(belongRegular,buffer);
                                         }
