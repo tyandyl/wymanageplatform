@@ -15,6 +15,7 @@ public class Test {
                 "<html>\n" +
                 "<head>\n" +
                 "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
+                "    <meta http-equiv=\"refresh\" content=\"text/html; charset=utf-8\">\n" +
                 "    <script type=\"text/javascript\" src=\"jquery-1.6.2.min.js\"></script>\n" +
                 "    <link rel=\"stylesheet\" style=\"text/css\" href=\"win.css\" />\n" +
                 "</head>\n" +
