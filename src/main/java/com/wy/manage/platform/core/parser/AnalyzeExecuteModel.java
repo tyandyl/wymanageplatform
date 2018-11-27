@@ -41,7 +41,6 @@ public class AnalyzeExecuteModel {
                         if(belongRegulars!=null && belongRegulars.size()>0){
                             for(String belongRegular:belongRegulars){
                                 if(StringUtils.isNotBlank(belongRegular)){
-
                                     Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
                                     StringBuffer buffer = regularValue.get(belongRegular);
                                     if(buffer==null){
@@ -52,7 +51,8 @@ public class AnalyzeExecuteModel {
                                         }
                                     }else {
                                         if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt())){
-                                            if(belongRegular.equalsIgnoreCase("scriptLine")){
+                                            if(belongRegular.equalsIgnoreCase("scriptLine")
+                                                    && modelParam.getChars()[modelParam.getCurInt()]=='m'){
                                                 belongRegular.trim();
                                             }
                                             buffer.append(modelParam.getChars()[modelParam.getCurInt()]);
@@ -66,7 +66,10 @@ public class AnalyzeExecuteModel {
                         if(nfaStateNode.getAction()!=null){
                             //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
                             nfaStateNode.getAction().action(modelParam);
-                            nfaStateNode.getAction().setExecuted(true);
+                            //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充
+                            if(nfaStateNode.getAction().getPriority()==0){
+                                modelParam.getRegularValue().clear();
+                            }
                         }
                         //获取列数
                         Map<Integer, List<String>> integerListMap =context.getMap().get(str);
@@ -111,17 +114,18 @@ public class AnalyzeExecuteModel {
             modelParam.addCurInt();
             //解决最后一个字符的动作问题
             if(modelParam.getCurInt()==modelParam.getChars().length){
-            for(String str:listMost){
-                NfaStateNode nfaStateNode = context.getMapState().get(str);
-                if(nfaStateNode==null){
-                    System.out.println("报错了,没有nfa状态");
-                    break;
+                for(String str:listMost){
+                    NfaStateNode nfaStateNode = context.getMapState().get(str);
+                    if(nfaStateNode==null){
+                        System.out.println("报错了,没有nfa状态");
+                        break;
+                    }
+
+                    if(nfaStateNode.getAction()!=null){
+                        //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
+                        nfaStateNode.getAction().action(modelParam);
+                    }
                 }
-                if(nfaStateNode.getAction()!=null && !nfaStateNode.getAction().isExecuted()){
-                    //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
-                    nfaStateNode.getAction().action(modelParam);
-                }
-            }
             }
 
             list=listMost;

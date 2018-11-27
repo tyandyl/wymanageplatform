@@ -30,6 +30,6 @@ public class DocTypeHtml5ValueAction extends BasicAction {
 
     @Override
     public int getPriority() {
-        return 0;
+        return 1;
     }
 }

@@ -13,6 +13,4 @@ public interface Action {
     void setValue(String value);
     String getGroup();
     int getPriority();
-    boolean isExecuted();
-    void setExecuted(boolean isExecuted);
 }
