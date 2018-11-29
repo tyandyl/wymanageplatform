@@ -82,7 +82,7 @@ public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity
                                 }
                             }
                         }, num);
-                        System.out.println();
+                        //System.out.println();
                         xContentItemParen.getNfaStateMachine().getEndNode().setAction(action);
 
                     }

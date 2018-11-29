@@ -91,6 +91,7 @@ public class AnalyzeExecuteModel {
             if(listNew.size()==0){
                 System.out.println("当前字符不符合规则,当前字符是:"+modelParam.getChars()[modelParam.getCurInt()]
                         +",其积累的字符串是:"+modelParam.getCurModelValue());
+                System.out.println("完毕");
                 break;
             }
             Set<String> listMost=new TreeSet<String>();

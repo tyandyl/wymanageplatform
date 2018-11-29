@@ -21,6 +21,8 @@ public class HtmlModel  extends BasicModel{
         defineAction(new LinkLineAction());
         defineAction(new MetaLineAction());
         defineAction(new ScriptLineAction());
-        defineAction(new DocTypeHtml5ValueAction());
+        defineAction(new MetaLinesAction());
+        defineAction(new ScriptLinesAction());
+        defineAction(new LinkLinesAction());
     }
 }

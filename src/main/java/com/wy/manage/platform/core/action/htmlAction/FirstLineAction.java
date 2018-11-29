@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.action.htmlAction;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
+import com.wy.manage.platform.core.widget.DocType;
 import com.wy.manage.platform.core.widget.Page;
 
 import java.util.Map;
@@ -19,7 +20,18 @@ public class FirstLineAction extends BasicAction{
             if(regularValue!=null && regularValue.get(this.getName())!=null){
                 String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
                 System.out.println(this.getName()+"的代码是:"+s);
-                page.setFirstLine(s);
+                if(s.contains("transitional")){
+                    page.setDocType(DocType.TRANSITIONAL);
+                }else if(s.contains("strict")){
+                    page.setDocType(DocType.STRICT);
+                }else if(s.contains("frameset")){
+                    page.setDocType(DocType.FRAMESET);
+                }else if(s.contains("mobile")){
+                    page.setDocType(DocType.MOBILE);
+                }else {
+                    page.setDocType(DocType.HTML5);
+                }
+                page.getStr().append(s);
             }
 
         }

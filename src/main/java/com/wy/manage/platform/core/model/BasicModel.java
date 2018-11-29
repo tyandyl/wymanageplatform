@@ -86,11 +86,7 @@ public abstract class BasicModel implements Model{
                         for(int i=0;i<split.length;i++){
                             String contextValue = nValue.get(split[i]);
                             if(StringUtils.isNotBlank(contextValue)){
-                                if(split[i].contains("*")){
-                                    line.append(("(("+contextValue+")*)"));
-                                }else {
-                                    line.append(("("+contextValue+")"));
-                                }
+                                line.append(("("+contextValue+")"));
 
                             }else {
                                 line.append(split[i]);

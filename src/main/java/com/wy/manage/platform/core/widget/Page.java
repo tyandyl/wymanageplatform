@@ -3,32 +3,38 @@ package com.wy.manage.platform.core.widget;
 import com.wy.manage.platform.core.attribute.Properties;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by tianye on 2018/6/28.
  */
-public class Page implements IBlock, Serializable {
+public class Page implements Serializable {
 
     private static final long serialVersionUID = -2602415919744812735L;
-    private String firstLine;
+    private DocType docType;
 
-    private List<Meta> metas;
+    private List<Meta> metas=new ArrayList<Meta>();
 
-    private List<Script> scripts;
+    private List<Script> scripts=new ArrayList<Script>();
 
-    private List<Link> links;
+    private List<Link> links=new ArrayList<Link>();
 
-    public String getFirstLine() {
-        return firstLine;
+    private StringBuffer str=new StringBuffer();
+
+    public DocType getDocType() {
+        return docType;
     }
 
-    public void setFirstLine(String firstLine) {
-        this.firstLine = firstLine;
+    public void setDocType(DocType docType) {
+        this.docType = docType;
     }
 
     public List<Meta> getMetas() {
         return metas;
+    }
+    public void addMeta(Meta meta){
+        this.metas.add(meta);
     }
 
     public void setMetas(List<Meta> metas) {
@@ -43,6 +49,10 @@ public class Page implements IBlock, Serializable {
         this.scripts = scripts;
     }
 
+    public void addScript(Script script){
+        this.scripts.add(script);
+    }
+
     public List<Link> getLinks() {
         return links;
     }
@@ -51,31 +61,15 @@ public class Page implements IBlock, Serializable {
         this.links = links;
     }
 
-    public Properties getProperties() {
-        return null;
+    public void addLink(Link link){
+        this.links.add(link);
     }
 
-    public void setProperties(Properties properties) {
-
+    public StringBuffer getStr() {
+        return str;
     }
 
-    public TagType getTagType() {
-        return null;
-    }
-
-    public void setTagType(TagType tagType) {
-
-    }
-
-    public List<IBlock> getChildren() {
-        return null;
-    }
-
-    public void setChildren(List<IBlock> list) {
-
-    }
-
-    public void invoke() throws Exception {
-
+    public void setStr(StringBuffer str) {
+        this.str = str;
     }
 }

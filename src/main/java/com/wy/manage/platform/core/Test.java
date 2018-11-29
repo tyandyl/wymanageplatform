@@ -14,10 +14,15 @@ public class Test {
         cssModel.execute("<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
-                "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
-                "    <meta http-equiv=\"refresh\" content=\"text/html; charset=utf-8\">\n" +
-                "    <script type=\"text/javascript\" src=\"jquery-1.6.2.min.js\"></script>\n" +
-                "    <link rel=\"stylesheet\" style=\"text/css\" href=\"win.css\" />\n" +
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"> \n" +
+                "<script type=\"text/javascript\" src=\"jquery-1.6.2.min.js\"></script>\n" +
+                "<script src=\"win.js\"></script>\n" +
+                "<script type=\"text/javascript\" src=\"./tree/jquery.tree.js\"></script>\n" +
+                "<script type=\"text/javascript\" src=\"./contextmenu/contextmenu.js\"></script>\n" +
+                "<link rel=\"stylesheet\" style=\"text/css\" href=\"win.css\" />\n" +
+                "\n" +
+                "<link rel=\"stylesheet\" style=\"text/css\" href=\"./tree/tree.css\" />\n" +
+                "<link rel=\"stylesheet\" style=\"text/css\" href=\"./contextmenu/contextmenu.css\" />" +
                 "</head>\n" +
                 "</html>");
     }
