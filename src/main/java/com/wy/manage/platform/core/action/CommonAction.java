@@ -1,23 +1,19 @@
-package com.wy.manage.platform.core.action.htmlAction;
+package com.wy.manage.platform.core.action;
 
-import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tianye
  */
-public class ScriptLinesAction extends BasicAction{
+public abstract class CommonAction extends BasicAction{
     @Override
     public void action(ModelParam modelParam) {
     }
 
     @Override
-    public String getName() {
-        return "scriptLines";
-    }
+    public abstract String getName();
 
     @Override
     public List<String> getGroupNames() {
@@ -26,6 +22,6 @@ public class ScriptLinesAction extends BasicAction{
 
     @Override
     public int getPriority() {
-        return 0;
+        return 999;
     }
 }

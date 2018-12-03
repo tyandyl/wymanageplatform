@@ -4,6 +4,8 @@ import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
 
+import java.util.List;
+
 /**
  * Created by tianye
  */
@@ -30,7 +32,7 @@ public class CssAttributeFullAction extends BasicAction {
     }
 
     @Override
-    public String getGroup() {
+    public List<String> getGroupNames() {
         return null;
     }
 

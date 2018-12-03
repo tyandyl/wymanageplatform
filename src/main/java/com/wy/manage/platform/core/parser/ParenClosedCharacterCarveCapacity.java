@@ -78,11 +78,12 @@ public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity
                         NfaManager.traverse(xContentItemParen.getNfaStateMachine().getStartNode(),new NodeHandle<NfaStateNode>(){
                             public void handle(NfaStateNode o) throws Exception {
                                 o.addBelongRegular(action.getName());
-                                if(action.getName().equalsIgnoreCase("scriptLine")){
-                                }
                             }
                         }, num);
-                        //System.out.println();
+
+                        if(action.getName().equalsIgnoreCase("linkRelValue")){
+                            System.out.println();
+                        }
                         xContentItemParen.getNfaStateMachine().getEndNode().setAction(action);
 
                     }

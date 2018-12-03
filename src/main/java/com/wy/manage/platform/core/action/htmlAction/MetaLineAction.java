@@ -4,6 +4,7 @@ import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.widget.Page;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ public class MetaLineAction extends BasicAction{
     }
 
     @Override
-    public String getGroup() {
+    public List<String> getGroupNames() {
         return null;
     }
 

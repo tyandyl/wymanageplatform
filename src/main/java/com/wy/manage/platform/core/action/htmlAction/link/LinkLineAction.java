@@ -1,9 +1,11 @@
-package com.wy.manage.platform.core.action.htmlAction;
+package com.wy.manage.platform.core.action.htmlAction.link;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.widget.Page;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,8 +33,12 @@ public class LinkLineAction extends BasicAction{
     }
 
     @Override
-    public String getGroup() {
-        return null;
+    public List<String> getGroupNames() {
+        List<String> list=new ArrayList<String>();
+        list.add("linkRelValue");
+        list.add("linkStyleValue");
+        list.add("linkHref");
+        return list;
     }
 
     @Override

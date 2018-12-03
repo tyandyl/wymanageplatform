@@ -49,12 +49,8 @@ public class AnalyzeExecuteModel {
                                             buffer1.append(modelParam.getChars()[modelParam.getCurInt()]);
                                             regularValue.put(belongRegular,buffer1);
                                         }
-                                    }else {
+                                    }else if(!modelParam.getLockRegularName().contains(belongRegular)){
                                         if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt())){
-                                            if(belongRegular.equalsIgnoreCase("scriptLine")
-                                                    && modelParam.getChars()[modelParam.getCurInt()]=='m'){
-                                                belongRegular.trim();
-                                            }
                                             buffer.append(modelParam.getChars()[modelParam.getCurInt()]);
                                             regularValue.put(belongRegular,buffer);
                                         }
@@ -69,6 +65,9 @@ public class AnalyzeExecuteModel {
                             //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充
                             if(nfaStateNode.getAction().getPriority()==0){
                                 modelParam.getRegularValue().clear();
+                                modelParam.getLockRegularName().clear();
+                            }else {
+                                modelParam.getLockRegularName().add(nfaStateNode.getAction().getName());
                             }
                         }
                         //获取列数

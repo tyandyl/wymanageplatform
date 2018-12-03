@@ -5,6 +5,7 @@ import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.widget.DocType;
 import com.wy.manage.platform.core.widget.Page;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,9 +44,10 @@ public class FirstLineAction extends BasicAction{
     }
 
     @Override
-    public String getGroup() {
+    public List<String> getGroupNames() {
         return null;
     }
+
 
     @Override
     public int getPriority() {

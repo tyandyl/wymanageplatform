@@ -3,6 +3,7 @@ package com.wy.manage.platform.core.action.htmlAction;
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ public class HeadStartTagAction extends BasicAction{
     }
 
     @Override
-    public String getGroup() {
+    public List<String> getGroupNames() {
         return null;
     }
 

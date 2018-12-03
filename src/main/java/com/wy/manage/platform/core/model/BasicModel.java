@@ -1,16 +1,15 @@
 package com.wy.manage.platform.core.model;
 
 import com.wy.manage.platform.core.action.Action;
+import com.wy.manage.platform.core.action.BasicAction;
+import com.wy.manage.platform.core.action.CommonAction;
 import com.wy.manage.platform.core.parser.*;
 import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.CssProperties;
 import com.wy.manage.platform.core.widget.Page;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by tianye
@@ -28,6 +27,19 @@ public abstract class BasicModel implements Model{
 
     public void defineAction(Action action) {
         nameActions.put(action.getName(),action);
+        List<String> groupNames = action.getGroupNames();
+        if(groupNames!=null && groupNames.size()>0){
+            for(final String str:groupNames){
+                if(nameActions.get(str)==null){
+                    nameActions.put(str, new CommonAction() {
+                        @Override
+                        public String getName() {
+                            return str;
+                        }
+                    });
+                }
+            }
+        }
     }
 
 

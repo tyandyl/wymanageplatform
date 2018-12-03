@@ -1,6 +1,8 @@
 package com.wy.manage.platform.core.model;
 
 import com.wy.manage.platform.core.action.htmlAction.*;
+import com.wy.manage.platform.core.action.htmlAction.link.LinkLineAction;
+import com.wy.manage.platform.core.action.htmlAction.link.LinkLinesAction;
 
 /**
  * Created by tianye

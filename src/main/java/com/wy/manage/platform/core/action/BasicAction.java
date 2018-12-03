@@ -2,6 +2,8 @@ package com.wy.manage.platform.core.action;
 
 import com.wy.manage.platform.core.parser.ModelParam;
 
+import java.util.List;
+
 /**
  * Created by tianye
  */
@@ -19,7 +21,7 @@ public abstract class BasicAction implements Action{
         this.value=value;
     }
 
-    public abstract String getGroup();
+    public abstract List<String> getGroupNames();
 
     public abstract int getPriority();
 }

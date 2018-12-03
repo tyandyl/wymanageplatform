@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import com.sun.org.apache.bcel.internal.generic.PUSH;
 import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 
@@ -15,6 +16,8 @@ public class ModelParam<T> {
     private T t;
     private Map<String,StringBuffer> regularValue=new HashMap<String, StringBuffer>();
     private Map<String,Integer> regularNum=new HashMap<String, Integer>();
+    //锁住组内正则
+    private List<String> lockRegularName=new ArrayList<String>();
 
     public DfaContext initDfaContext(NfaStateMachine parser)throws Exception{
         DfaContext context=new DfaContext();
@@ -182,5 +185,19 @@ public class ModelParam<T> {
         regularNum.put(key,num);
         return true;
 
+    }
+
+    public List<String> getLockRegularName() {
+        return lockRegularName;
+    }
+
+    public void addLockRegularName(String str){
+        if(!lockRegularName.contains(str)){
+            lockRegularName.add(str);
+        }
+    }
+
+    public void setLockRegularName(List<String> lockRegularName) {
+        this.lockRegularName = lockRegularName;
     }
 }
