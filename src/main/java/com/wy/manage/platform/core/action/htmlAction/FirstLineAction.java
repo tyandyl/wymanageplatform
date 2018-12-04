@@ -33,6 +33,7 @@ public class FirstLineAction extends BasicAction{
                     page.setDocType(DocType.HTML5);
                 }
                 page.getStr().append(s);
+                page.getStr().append("\n");
             }
 
         }

@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.action.Action;
 import com.wy.manage.platform.core.utils.ExceptionTools;
+import com.wy.manage.platform.core.widget.Page;
 import com.wy.manage.platform.core.widget.StyleSheetType;
 import org.apache.commons.lang.StringUtils;
 
@@ -155,7 +156,12 @@ public class AnalyzeExecuteModel {
 
             list=listMost;
         }
-       // handleEvent( modelParam);
+        Object t = modelParam.getT();
+        if(t instanceof Page) {
+            Page page = (Page) t;
+            System.out.println(page.getStr());
+        }
+
         return;
     }
 }

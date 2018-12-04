@@ -33,6 +33,7 @@ public class ScriptLineAction extends BasicAction{
                 }
                 page.addScript(script);
                 page.getStr().append(s);
+                page.getStr().append("\n");
             }
         }
 

@@ -36,6 +36,7 @@ public class LinkLineAction extends BasicAction{
                 }
                 page.addLink(link);
                 page.getStr().append(s);
+                page.getStr().append("\n");
                // System.out.println(this.getName()+"的代码是:"+s);
             }
         }

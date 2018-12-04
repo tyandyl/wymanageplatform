@@ -33,6 +33,7 @@ public class MetaLineAction extends BasicAction{
                 }
                 page.addMeta(meta);
                 page.getStr().append(s);
+                page.getStr().append("\n");
 
             }
         }
