@@ -24,6 +24,8 @@ public class NfaStateNode implements Serializable{
 
     private List<String> belongRegular=new ArrayList<String>();
 
+    private int priority;
+
 
     public String getStateNum() {
         return stateNum;
@@ -77,5 +79,13 @@ public class NfaStateNode implements Serializable{
         if(!this.belongRegular.contains(str)){
             this.belongRegular.add(str);
         }
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

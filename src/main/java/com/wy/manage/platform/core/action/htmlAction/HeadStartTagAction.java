@@ -15,7 +15,7 @@ public class HeadStartTagAction extends BasicAction{
         Map regularValue = modelParam.getRegularValue();
         if(regularValue!=null && regularValue.get(this.getName())!=null){
             String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
-            System.out.println(this.getName()+"的代码是:"+s);
+            //System.out.println(this.getName()+"的代码是:"+s);
         }
     }
 
@@ -25,13 +25,13 @@ public class HeadStartTagAction extends BasicAction{
     }
 
     @Override
-    public List<String> getGroupNames() {
+    public List<String> getIntraGroupNames() {
         return null;
     }
 
     @Override
     public int getPriority() {
-        return 0;
+        return 1;
     }
 
 }

@@ -1,8 +1,8 @@
-package com.wy.manage.platform.core.action.htmlAction.link;
+package com.wy.manage.platform.core.action.htmlAction.meta;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
-import com.wy.manage.platform.core.widget.Link;
+import com.wy.manage.platform.core.widget.Meta;
 import com.wy.manage.platform.core.widget.Page;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by tianye
  */
-public class LinkLineAction extends BasicAction{
+public class MetaLineAction extends BasicAction{
     @Override
     public void action(ModelParam modelParam) {
         Object t = modelParam.getT();
@@ -21,38 +21,33 @@ public class LinkLineAction extends BasicAction{
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null){
                 String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
-                Link link=new Link();
-                StringBuffer linkRelValue = (StringBuffer)regularValue.get("linkRelValue");
-                if(linkRelValue!=null){
-                    link.setRel(linkRelValue.toString());
-                }
-                StringBuffer linkStyleValue = (StringBuffer) regularValue.get("linkStyleValue");
-                if(linkStyleValue!=null){
-                    link.setStyle(linkStyleValue.toString());
-                }
-                StringBuffer linkHref = (StringBuffer) regularValue.get("linkHref");
-                if(linkHref!=null){
-                    link.setHref(linkHref.toString());
-                }
-                page.addLink(link);
-                page.getStr().append(s);
                // System.out.println(this.getName()+"的代码是:"+s);
+                Meta meta=new Meta();
+                StringBuffer httpEquivValue = (StringBuffer)regularValue.get("httpEquivValue");
+                if(httpEquivValue!=null){
+                    meta.setHttp_equiv(httpEquivValue.toString());
+                }
+                StringBuffer metaContentValue = (StringBuffer)regularValue.get("metaContentValue");
+                if(metaContentValue!=null){
+                    meta.setContent(metaContentValue.toString());
+                }
+                page.addMeta(meta);
+                page.getStr().append(s);
+
             }
         }
 
     }
-
     @Override
     public String getName() {
-        return "linkLine";
+        return "metaLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
         List<String> list=new ArrayList<String>();
-        list.add("linkRelValue");
-        list.add("linkStyleValue");
-        list.add("linkHref");
+        list.add("httpEquivValue");
+        list.add("metaContentValue");
         list.add(this.getName());
         return list;
     }
@@ -61,5 +56,4 @@ public class LinkLineAction extends BasicAction{
     public int getPriority() {
         return 2;
     }
-
 }

@@ -1,9 +1,9 @@
-package com.wy.manage.platform.core.action.htmlAction.link;
+package com.wy.manage.platform.core.action.htmlAction.script;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
-import com.wy.manage.platform.core.widget.Link;
 import com.wy.manage.platform.core.widget.Page;
+import com.wy.manage.platform.core.widget.Script;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by tianye
  */
-public class LinkLineAction extends BasicAction{
+public class ScriptLineAction extends BasicAction{
     @Override
     public void action(ModelParam modelParam) {
         Object t = modelParam.getT();
@@ -21,22 +21,18 @@ public class LinkLineAction extends BasicAction{
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null){
                 String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
-                Link link=new Link();
-                StringBuffer linkRelValue = (StringBuffer)regularValue.get("linkRelValue");
-                if(linkRelValue!=null){
-                    link.setRel(linkRelValue.toString());
+                //System.out.println(this.getName()+"的代码是:"+s);
+                Script script=new Script();
+                StringBuffer scriptTypeValue = (StringBuffer)regularValue.get("scriptTypeValue");
+                if(scriptTypeValue!=null){
+                    script.setType(scriptTypeValue.toString());
                 }
-                StringBuffer linkStyleValue = (StringBuffer) regularValue.get("linkStyleValue");
-                if(linkStyleValue!=null){
-                    link.setStyle(linkStyleValue.toString());
+                StringBuffer scriptSrcValue = (StringBuffer)regularValue.get("scriptSrcValue");
+                if(scriptSrcValue!=null){
+                    script.setSrc(scriptSrcValue.toString());
                 }
-                StringBuffer linkHref = (StringBuffer) regularValue.get("linkHref");
-                if(linkHref!=null){
-                    link.setHref(linkHref.toString());
-                }
-                page.addLink(link);
+                page.addScript(script);
                 page.getStr().append(s);
-               // System.out.println(this.getName()+"的代码是:"+s);
             }
         }
 
@@ -44,15 +40,14 @@ public class LinkLineAction extends BasicAction{
 
     @Override
     public String getName() {
-        return "linkLine";
+        return "scriptLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
         List<String> list=new ArrayList<String>();
-        list.add("linkRelValue");
-        list.add("linkStyleValue");
-        list.add("linkHref");
+        list.add("scriptTypeValue");
+        list.add("scriptSrcValue");
         list.add(this.getName());
         return list;
     }
@@ -61,5 +56,4 @@ public class LinkLineAction extends BasicAction{
     public int getPriority() {
         return 2;
     }
-
 }

@@ -27,7 +27,7 @@ public abstract class BasicModel implements Model{
 
     public void defineAction(Action action) {
         nameActions.put(action.getName(),action);
-        List<String> groupNames = action.getGroupNames();
+        List<String> groupNames = action.getIntraGroupNames();
         if(groupNames!=null && groupNames.size()>0){
             for(final String str:groupNames){
                 if(nameActions.get(str)==null){

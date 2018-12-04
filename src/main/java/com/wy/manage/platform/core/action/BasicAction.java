@@ -21,7 +21,7 @@ public abstract class BasicAction implements Action{
         this.value=value;
     }
 
-    public abstract List<String> getGroupNames();
+    public abstract List<String> getIntraGroupNames();
 
     public abstract int getPriority();
 }

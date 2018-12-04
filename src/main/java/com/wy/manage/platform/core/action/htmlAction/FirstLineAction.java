@@ -20,7 +20,7 @@ public class FirstLineAction extends BasicAction{
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null){
                 String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
-                System.out.println(this.getName()+"的代码是:"+s);
+                //System.out.println(this.getName()+"的代码是:"+s);
                 if(s.contains("transitional")){
                     page.setDocType(DocType.TRANSITIONAL);
                 }else if(s.contains("strict")){
@@ -44,7 +44,7 @@ public class FirstLineAction extends BasicAction{
     }
 
     @Override
-    public List<String> getGroupNames() {
+    public List<String> getIntraGroupNames() {
         return null;
     }
 

@@ -30,6 +30,7 @@ public class AnalyzeExecuteModel {
             List<String> listNew=new ArrayList<String>();
             new StateMoveHandle<Set<String>,List<String>>(){
                 public void move(Set<String> strings, List<String> strings2, Integer var) {
+                    List<NfaStateNode> nodes=new ArrayList<NfaStateNode>();
                     //遍历ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
                     for(String str:strings){
                         NfaStateNode nfaStateNode = context.getMapState().get(str);
@@ -37,38 +38,13 @@ public class AnalyzeExecuteModel {
                             System.out.println("报错了,没有nfa状态");
                             break;
                         }
-                        List<String> belongRegulars = nfaStateNode.getBelongRegular();
-                        if(belongRegulars!=null && belongRegulars.size()>0){
-                            for(String belongRegular:belongRegulars){
-                                if(StringUtils.isNotBlank(belongRegular)){
-                                    Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
-                                    StringBuffer buffer = regularValue.get(belongRegular);
-                                    if(buffer==null){
-                                        if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt())){
-                                            StringBuffer buffer1=new StringBuffer();
-                                            buffer1.append(modelParam.getChars()[modelParam.getCurInt()]);
-                                            regularValue.put(belongRegular,buffer1);
-                                        }
-                                    }else if(!modelParam.getLockRegularName().contains(belongRegular)){
-                                        if(modelParam.addRegularNum(belongRegular, modelParam.getCurInt())){
-                                            buffer.append(modelParam.getChars()[modelParam.getCurInt()]);
-                                            regularValue.put(belongRegular,buffer);
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
                         if(nfaStateNode.getAction()!=null){
-                            //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
-                            nfaStateNode.getAction().action(modelParam);
-                            //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充
-                            if(nfaStateNode.getAction().getPriority()==0){
-                                modelParam.getRegularValue().clear();
-                                modelParam.getLockRegularName().clear();
-                            }else {
-                                modelParam.getLockRegularName().add(nfaStateNode.getAction().getName());
+                            nodes.add(nfaStateNode);
+                            if(nfaStateNode.getAction().getName().equalsIgnoreCase("linkRelValue")){
+                                //System.out.println();
                             }
+                            //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
+
                         }
                         //获取列数
                         Map<Integer, List<String>> integerListMap =context.getMap().get(str);
@@ -84,15 +60,83 @@ public class AnalyzeExecuteModel {
                             }
                         }
                     }
+                    Collections.sort(nodes, new Comparator<NfaStateNode>() {
+                        public int compare(NfaStateNode o1, NfaStateNode o2) {
+                            int priority1 = o1.getPriority();
+                            int priority2 = o2.getPriority();
+                            if(priority1>priority2){
+                                return -1;
+                            }else if(priority1==priority2){
+                                return 0;
+                            }else {
+                                return 0;
+                            }
+                        }
+                    });
+                    for(NfaStateNode nfaStateNode:nodes){
+                        nfaStateNode.getAction().action(modelParam);
+                        //优先级低的执行完了需要锁死
+                        if(nfaStateNode.getAction().getPriority()>1){
+                            modelParam.getLockRegularName().add(nfaStateNode.getAction().getName());
+                        }
+                        //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充
+                        if(nfaStateNode.getAction().getPriority()==1){
+                            modelParam.getRegularValue().clear();
+                            modelParam.getLockRegularName().clear();
+                        }
+
+                        if(nfaStateNode.getAction().getIntraGroupNames()!=null
+                                && nfaStateNode.getAction().getIntraGroupNames().size()>0
+                                && nfaStateNode.getAction().getPriority()>1){
+                            for(String actionName:nfaStateNode.getAction().getIntraGroupNames()){
+                                modelParam.getRegularValue().remove(actionName);
+                                modelParam.getLockRegularName().remove(actionName);
+                            }
+
+                        }
+                    }
+
                 }
+
             }.move(list,listNew,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));
 
+            for(String str:list){
+                NfaStateNode nfaStateNode = context.getMapState().get(str);
+                if(nfaStateNode==null){
+                    System.out.println("报错了,没有nfa状态");
+                    break;
+                }
+                List<String> belongRegulars = nfaStateNode.getBelongRegular();
+                if(belongRegulars!=null && belongRegulars.size()>0){
+                    for(String belongRegular:belongRegulars){
+                        if(StringUtils.isNotBlank(belongRegular)){
+                            Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
+                            StringBuffer buffer = regularValue.get(belongRegular);
+                            int i = modelParam.getCurInt();
+                            if(buffer==null){
+                                if(modelParam.addRegularNum(belongRegular, i)){
+                                    StringBuffer buffer1=new StringBuffer();
+                                    buffer1.append(modelParam.getChars()[i]);
+                                    regularValue.put(belongRegular,buffer1);
+                                }
+                            }else if(!modelParam.getLockRegularName().contains(belongRegular)){
+                                if(modelParam.addRegularNum(belongRegular, i)){
+                                    buffer.append(modelParam.getChars()[i]);
+                                    regularValue.put(belongRegular,buffer);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
             if(listNew.size()==0){
                 System.out.println("当前字符不符合规则,当前字符是:"+modelParam.getChars()[modelParam.getCurInt()]
                         +",其积累的字符串是:"+modelParam.getCurModelValue());
                 System.out.println("完毕");
                 break;
             }
+
             Set<String> listMost=new TreeSet<String>();
             for(String str:listNew){
                 listMost.add(str);
@@ -107,26 +151,7 @@ public class AnalyzeExecuteModel {
             }
             modelParam.recordCurModelValue(modelParam.getChars()[modelParam.getCurInt()]);
 
-            List<Action> actionList=new ArrayList<Action>();
-            if(actionList.size()>1){
-                System.out.println("有两个action，需要设置优先级");
-            }
             modelParam.addCurInt();
-            //解决最后一个字符的动作问题
-            if(modelParam.getCurInt()==modelParam.getChars().length){
-                for(String str:listMost){
-                    NfaStateNode nfaStateNode = context.getMapState().get(str);
-                    if(nfaStateNode==null){
-                        System.out.println("报错了,没有nfa状态");
-                        break;
-                    }
-
-                    if(nfaStateNode.getAction()!=null){
-                        //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
-                        nfaStateNode.getAction().action(modelParam);
-                    }
-                }
-            }
 
             list=listMost;
         }

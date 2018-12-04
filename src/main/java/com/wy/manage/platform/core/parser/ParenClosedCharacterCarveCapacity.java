@@ -85,6 +85,7 @@ public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity
                             System.out.println();
                         }
                         xContentItemParen.getNfaStateMachine().getEndNode().setAction(action);
+                        xContentItemParen.getNfaStateMachine().getEndNode().setPriority(action.getPriority());
 
                     }
                     //(([\r\n\s]*)position([\r\n\s]*)解决这种，(前边是position，需要合并

@@ -16,7 +16,7 @@ public abstract class CommonAction extends BasicAction{
     public abstract String getName();
 
     @Override
-    public List<String> getGroupNames() {
+    public List<String> getIntraGroupNames() {
         return null;
     }
 

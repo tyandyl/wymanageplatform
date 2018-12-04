@@ -13,6 +13,6 @@ public interface Action {
     String getName();
     String getValue();
     void setValue(String value);
-    List<String> getGroupNames();
+    List<String> getIntraGroupNames();
     int getPriority();
 }

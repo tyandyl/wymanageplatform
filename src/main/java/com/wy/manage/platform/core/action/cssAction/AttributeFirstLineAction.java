@@ -26,13 +26,13 @@ public class AttributeFirstLineAction extends BasicAction {
 
 
     @Override
-    public List<String> getGroupNames() {
+    public List<String> getIntraGroupNames() {
         return null;
     }
 
     @Override
     public int getPriority() {
-        return 0;
+        return 1;
     }
 
 }
