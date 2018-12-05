@@ -3,6 +3,7 @@ package com.wy.manage.platform.core.parser;
 import com.wy.manage.platform.core.widget.SelectorType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Map;
 public class CssBag {
     private SelectorType selectorType;
     private String name;
-    private Map<String,String> map=new HashMap<String, String>();
+    private Map<String,List<String>> map=new HashMap<String, List<String>>();
 
     public String getName() {
         return name;
@@ -21,11 +22,11 @@ public class CssBag {
         this.name = name;
     }
 
-    public Map<String, String> getMap() {
+    public Map<String, List<String>> getMap() {
         return map;
     }
 
-    public void setMap(Map<String, String> map) {
+    public void setMap(Map<String, List<String>> map) {
         this.map = map;
     }
 

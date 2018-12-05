@@ -13,15 +13,15 @@ import java.util.List;
  */
 public class Test1 {
     public static void main(String[] agrs) throws Exception {
-        CssModel cssModel=new CssModel();
-        cssModel.defineAction();
-        cssModel.execute("#wintop{\n" +
-                "position:absolute;\n" +
-                "display:block;\n" +
-                "top:0px;\n" +
-                "left:0px;\n" +
-                "right:0px;\n" +
-                "height: 70px;\n" +
-                "background: #0382AD url(winpic/r_x.png) repeat-x;}");
+//        CssModel cssModel=new CssModel();
+//        cssModel.defineAction();
+//        cssModel.execute("#wintop{\n" +
+//                "position:absolute;\n" +
+//                "display:block;\n" +
+//                "top:0px;\n" +
+//                "left:0px;\n" +
+//                "right:0px;\n" +
+//                "height: 70px;\n" +
+//                "background: #0382AD url(winpic/r_x.png) repeat-x;}");
     }
 }

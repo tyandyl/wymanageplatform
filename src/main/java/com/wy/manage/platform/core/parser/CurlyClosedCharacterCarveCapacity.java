@@ -39,6 +39,7 @@ public class CurlyClosedCharacterCarveCapacity implements CharacterCarveCapacity
                 peek.setNfaStateMachine(repetitionAddNumNfaStateMachine);
                 peek.addIndex(pop.getIndex());
                 peek.addIndex(i);
+                charCurly.clear();
             } else {
                 ExceptionTools.ThrowException("{}解析错误,{}内无值或者多值");
             }

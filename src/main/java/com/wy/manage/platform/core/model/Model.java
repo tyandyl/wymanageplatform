@@ -7,7 +7,7 @@ import com.wy.manage.platform.core.parser.NfaStateMachine;
  * Created by tianye
  * 解析css模型
  */
-public interface Model {
+public interface Model<T> {
     String getAddress();
     //解释模型
     NfaStateMachine parserExplain()throws Exception;
@@ -15,6 +15,6 @@ public interface Model {
     String parserCompile();
     void defineAction();
     void defineAction(Action action);
-    void execute(String str)throws Exception;
+    void execute(String str,T t)throws Exception;
 
 }

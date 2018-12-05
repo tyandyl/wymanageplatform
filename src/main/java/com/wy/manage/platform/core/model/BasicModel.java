@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by tianye
  */
-public abstract class BasicModel implements Model{
+public abstract class BasicModel<T> implements Model<T>{
     private Map<String,Action> nameActions=new HashMap<String, Action>();
     private Map<String,Action> valueActions=new HashMap<String, Action>();
     private Map<String,String> nValue=new HashMap<String, String>();
@@ -44,7 +44,7 @@ public abstract class BasicModel implements Model{
 
 
 
-    public void execute(String str)throws Exception{
+    public void execute(String str,T t)throws Exception{
         String s = parserCompile();
         char[] chars1 = s.toCharArray();
         StringBuffer stringBuffer=new StringBuffer();
@@ -70,9 +70,9 @@ public abstract class BasicModel implements Model{
         }
         check( peek);
 //        CssBag cssBag=new CssBag();
-        Page page=new Page();
+//        Page page=new Page();
         char[] chars = str.toCharArray();
-        ModelParam<Page> modelParam = new ModelParam<Page>(page,chars);
+        ModelParam<T> modelParam = new ModelParam<T>(t,chars);
 
         AnalyzeExecuteModel.execute(modelParam,peek.getNfaStateMachine());
 
@@ -133,16 +133,6 @@ public abstract class BasicModel implements Model{
     }
 
     private void check(XContentItem peek)throws Exception{
-        NfaStateMachine nfaStateMachine = peek.getNfaStateMachine();
-        //检查actions
-        final Integer num = AtomicTools.getBiUniqueInteger();
-        NfaManager.traverse(nfaStateMachine.getStartNode(),new NodeHandle<NfaStateNode>(){
-            public void handle(NfaStateNode o) throws Exception {
-                if(o.getAction()!=null){
-                    //System.out.println(o.getAction().getName()+",当前状态码是:"+o.getStateNum());
-                }
-            }
-        }, num);
         System.out.println("-----------------------------------");
         System.out.println();
     }

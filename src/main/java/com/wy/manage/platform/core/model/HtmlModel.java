@@ -11,7 +11,7 @@ import com.wy.manage.platform.core.action.htmlAction.script.ScriptLinesAction;
 /**
  * Created by tianye
  */
-public class HtmlModel  extends BasicModel{
+public class HtmlModel<T>  extends BasicModel<T>{
     public String getAddress() {
         return  "regular/html.properties";
     }
