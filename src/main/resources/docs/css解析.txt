@@ -32,3 +32,28 @@ DTD声明的4种方式:
 注释：<!DOCTYPE> 标签没有结束标签。
 提示：<!DOCTYPE> 声明不区分大小写。
 
+-webkit-linear-gradient和-webkit-gradient有什么区别
+个人理解。
+-webkit-gradient(linear
+第一个参数为linear 时， 和-webkit-linear-gradient没区别。
+这里属于重复调用。删除任意一个不影响。
+
+用线性渐变创建图像
+语法：
+<linear-gradient> = linear-gradient([ [ <angle> | to <side-or-corner> ] ,]? <color-stop>[, <color-stop>]+)
+<side-or-corner> = [left | right] || [top | bottom]
+<color-stop> = <color> [ <length> | <percentage> ]?
+
+取值：
+
+下述值用来表示渐变的方向，可以使用角度或者关键字来设置：
+<angle>：用角度值指定渐变的方向（或角度）。
+to left：设置渐变为从右到左。相当于: 270deg
+to right：设置渐变从左到右。相当于: 90deg
+to top：设置渐变从下到上。相当于: 0deg
+to bottom：设置渐变从上到下。相当于: 180deg。这是默认值，等同于留空不写。
+<color-stop>：用于指定渐变的起止颜色：
+<color>：指定颜色。
+<length>：用长度值指定起止色位置。不允许负值
+<percentage>：用百分比指定起止色位置。
+
