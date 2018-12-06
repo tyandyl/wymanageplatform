@@ -1,7 +1,6 @@
 package com.wy.manage.platform.core.model;
 
-import com.wy.manage.platform.core.action.cssAction.AttributeFirstLineAction;
-import com.wy.manage.platform.core.action.cssAction.CssAttributeFullAction;
+import com.wy.manage.platform.core.action.cssAction.*;
 
 /**
  * Created by tianye
@@ -15,7 +14,16 @@ public class CssModel<T> extends BasicModel<T>{
     public void defineAction() {
         super.defineAction();
         defineAction(new AttributeFirstLineAction());
-        defineAction(new CssAttributeFullAction());
+        defineAction(new PositionLineAction());
+        defineAction(new DisplayLineAction());
+        defineAction(new PxLineAction());
+        defineAction(new BackgroundLineFullAction());
+        defineAction(new BorderStyleLineAction());
+        defineAction(new BorderColorLineAction());
+        defineAction(new OverflowLineAction());
+        defineAction(new CursorLineAction());
+        defineAction(new FontLineAction());
+        defineAction(new BorderLineAction());
     }
 
 

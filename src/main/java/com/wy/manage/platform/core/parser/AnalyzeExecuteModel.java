@@ -41,10 +41,6 @@ public class AnalyzeExecuteModel {
                         }
                         if(nfaStateNode.getAction()!=null){
                             nodes.add(nfaStateNode);
-                            if(nfaStateNode.getAction().getName().equalsIgnoreCase("linkRelValue")){
-                                //System.out.println();
-                            }
-                            //System.out.println("当前动作是:"+nfaStateNode.getAction().getName());
 
                         }
                         //获取列数
@@ -75,6 +71,9 @@ public class AnalyzeExecuteModel {
                         }
                     });
                     for(NfaStateNode nfaStateNode:nodes){
+                        if(nfaStateNode.getAction().getName().equalsIgnoreCase("backgrounds")){
+                            System.out.println();
+                        }
                         nfaStateNode.getAction().action(modelParam);
                         //优先级低的执行完了需要锁死
                         if(nfaStateNode.getAction().getPriority()>1){
@@ -100,7 +99,6 @@ public class AnalyzeExecuteModel {
                 }
 
             }.move(list,listNew,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]));
-
             for(String str:list){
                 NfaStateNode nfaStateNode = context.getMapState().get(str);
                 if(nfaStateNode==null){
