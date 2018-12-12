@@ -8,7 +8,7 @@ import com.wy.manage.platform.core.action.cssAction.*;
 public class CssModel<T> extends BasicModel<T>{
     @Override
     public String getAddress() {
-        return "regular/read/read/css.properties";
+        return "regular/read/css.properties";
     }
     @Override
     public void defineAction() {
