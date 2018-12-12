@@ -13,7 +13,7 @@ import com.wy.manage.platform.core.action.htmlAction.script.ScriptLinesAction;
  */
 public class HtmlModel<T>  extends BasicModel<T>{
     public String getAddress() {
-        return  "regular/html.properties";
+        return "regular/read/read/html.properties";
     }
 
     @Override

@@ -1,0 +1,58 @@
+#win-screen{
+	position:absolute;
+	display:block;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+}
+
+#win-top{
+	position:absolute;
+	display:block;
+	top:0px;
+	left:0px;
+	right:0px;
+	height: 70px;
+	background: #0382AD url(winpic/r_x.png) repeat-x;
+	background: -moz-linear-gradient(center top,#45B5DA,#0382AD);
+	background: -webkit-gradient(linear,center top,center bottom,from(#45B5DA),to(#0382AD));
+}
+
+#win-bottom{
+	position:absolute;
+	display:block;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	height: 10px;
+	background: #0382AD url(winpic/r_x.png) repeat-x;
+	background: -moz-linear-gradient(center top,#45B5DA,#0382AD);
+	background: -webkit-gradient(linear,center top,center bottom,from(#45B5DA),to(#0382AD));
+}
+
+#win-left{
+	position:absolute;
+	display:block;
+	top:80px;
+	left:10px;
+	bottom:0px;
+	width:250px;
+	border-width:1px;
+	border-style:solid;
+	border-color:#4DABC9;
+}
+
+#win-right{
+	position:absolute;
+	display:block;
+	top:80px;
+	left:265px;
+	right:0px;
+	bottom:0px;
+	border-width:1px;
+	border-style:solid;
+	border-color:#4DABC9;
+}
+
+

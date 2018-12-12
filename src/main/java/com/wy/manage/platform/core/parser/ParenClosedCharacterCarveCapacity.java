@@ -61,6 +61,7 @@ public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity
                 XContentItem pop1 = stack.pop();
                 if(pop1.getMeanType()==MeanType.CHANGE_MEANING
                         &&pop1.getLegend()==SymbolType.OPEN_PAREN.getState()){
+                    //将(增加进去
                     xContentItemParen.addIndex(pop1.getIndex());
                     specialParenStart.remove(specialParenStart.size()-1);
                     Set<Integer> index = xContentItemParen.getIndex();
@@ -89,10 +90,15 @@ public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity
 
                     }
                     //(([\r\n\s]*)position([\r\n\s]*)解决这种，(前边是position，需要合并
+                    //if 如果前边不为空，则和前边的代码相融合，一般字符串都是一个状态机，
+                    //什么时候有栈，stack会增加值而不参与融合呢，总结如下：
+                    //[ ( { 这三者不参与融合，保持单独的栈值
                     if(!stack.empty()){
                         XContentItem peek = stack.peek();
                         NfaStateMachine nfaStateMachine1 = peek.getNfaStateMachine();
+                        //不等于空，则保证不是[({
                         if(nfaStateMachine1!=null){
+                            //然后取值出栈
                             XContentItem pop2 = stack.pop();
                             NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop2.getNfaStateMachine(), xContentItemParen.getNfaStateMachine());
                             xContentItemParen.setNfaStateMachine(linkNfaStateMachine);

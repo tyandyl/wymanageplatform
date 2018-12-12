@@ -27,8 +27,10 @@ public class CssProperties extends Properties {
             curFullDir.append("resources");
             curFullDir.append(File.separator);
             curFullDir.append(address.split("/")[0]);
+            curFullDir.append(File.separator);
+            curFullDir.append(address.split("/")[1]);
             File root=new File(curFullDir.toString());
-            File cssFile = new File(root, address.split("/")[1]);
+            File cssFile = new File(root, address.split("/")[2]);
             if (cssFile.exists()){
                 load(cssFile);
             }
