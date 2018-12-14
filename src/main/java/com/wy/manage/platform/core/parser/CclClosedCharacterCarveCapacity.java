@@ -43,6 +43,20 @@ public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
             XContentItem pop1 = stack.pop();
             pop.addIndex(pop1.getIndex());
             pop.addIndex(i);
+            //解决：([1-9][0-9]) 第二个[0-9]融合问题
+            if(!stack.empty()){
+                //第一个[1-9]
+                NfaStateMachine nfaStateMachine66 = stack.peek().getNfaStateMachine();
+                //不等于空，则保证不是[({
+                if(nfaStateMachine66!=null){
+                    //然后取值出栈
+                    XContentItem pop2 = stack.pop();
+                    NfaStateMachine linkNfaStateMachine = NfaManager.createLinkNfaStateMachine(pop2.getNfaStateMachine(), pop.getNfaStateMachine());
+                    pop.setNfaStateMachine(linkNfaStateMachine);
+                    pop.addIndex(pop2.getIndex());
+                }
+            }
+
             stack.push(pop);
             specialCclStart.remove(specialCclStart.size()-1);
             List<Integer> specialAtBol = context.getSpecialAtBol();
@@ -61,6 +75,7 @@ public class CclClosedCharacterCarveCapacity implements CharacterCarveCapacity{
                 edgeLines.setEdgeAllowInputGather(list);
 
             }
+
         }else {
             ExceptionTools.ThrowException("[]解析错误");
         }

@@ -8,7 +8,7 @@ import com.wy.manage.platform.core.action.cssAction.*;
 public class CssModel<T> extends BasicModel<T>{
     @Override
     public String getAddress() {
-        return "regular/read/css.properties";
+        return "regular/css.properties";
     }
     @Override
     public void defineAction() {
@@ -17,7 +17,7 @@ public class CssModel<T> extends BasicModel<T>{
         defineAction(new PositionLineAction());
         defineAction(new DisplayLineAction());
         defineAction(new PxLineAction());
-        defineAction(new BackgroundLineFullAction());
+        defineAction(new BackgroundLineAction());
         defineAction(new BorderStyleLineAction());
         defineAction(new BorderColorLineAction());
         defineAction(new OverflowLineAction());

@@ -42,6 +42,7 @@ public class BackSlashCharacterCarveCapacity implements CharacterCarveCapacity{
                         xContentItemBackSlash.setNfaStateMachine(NfaManager.createSingleCharacterNfaStateMachine(SymbolType.SP.getState()));
                         xContentItemBackSlash.addIndex(i);
                         xContentItemBackSlash.addIndex(i+1);
+                        stack.push(xContentItemBackSlash);
                         return 1;
                     }else {
                         xContentItemBackSlash.setNfaStateMachine(NfaManager.createSingleCharacterNfaStateMachine(array[i]));

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by tianye
  */
-public class BackgroundLineFullAction extends BasicAction{
+public class BackgroundLineAction extends BasicAction{
     @Override
     public void action(ModelParam modelParam) {
         Object t = modelParam.getT();
@@ -41,15 +41,13 @@ public class BackgroundLineFullAction extends BasicAction{
 
     @Override
     public String getName() {
-        return "backgroundLineFull";
+        return "backgroundLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
         List<String> list=new ArrayList<String>();
-        list.add("backgrounds");
-        list.add("mozLinearGradient");
-        list.add("webkitGradient");
+        list.add("backgroundUnit");
         return list;
     }
 

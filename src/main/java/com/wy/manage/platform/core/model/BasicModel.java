@@ -99,7 +99,6 @@ public abstract class BasicModel<T> implements Model<T>{
                             String contextValue = nValue.get(split[i]);
                             if(StringUtils.isNotBlank(contextValue)){
                                 line.append(("("+contextValue+")"));
-
                             }else {
                                 line.append(split[i]);
 

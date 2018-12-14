@@ -41,7 +41,7 @@ public class CurlyClosedCharacterCarveCapacity implements CharacterCarveCapacity
                 peek.addIndex(i);
                 charCurly.clear();
             } else {
-                ExceptionTools.ThrowException("{}解析错误,{}内无值或者多值");
+                ExceptionTools.ThrowException("{}解析错误,{}内无值或者多值，或者像([1-9][0-9]) 第二个[0-9]融合问题解决问题");
             }
             specialCurlyStart.remove(specialCurlyStart.size()-1);
         }else {

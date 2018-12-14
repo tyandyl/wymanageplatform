@@ -18,6 +18,9 @@ public class RegularExpressionParser {
         context.setActions(actions);
         context.setOr(isOr);
         for(int i=0;i<array.length;i++){
+            if(i==75){
+                System.out.print("");
+            }
             SymbolType symbolType = SymbolType.findSymbolType(array[i]);
             switch (symbolType){
                 case ANY:
