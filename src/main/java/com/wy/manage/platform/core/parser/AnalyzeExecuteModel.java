@@ -157,7 +157,7 @@ public class AnalyzeExecuteModel {
         Object t = modelParam.getT();
         if(t instanceof Page) {
             Page page = (Page) t;
-            System.out.println(page.getStr());
+            //System.out.println(page.getStr());
         }
 
         return;

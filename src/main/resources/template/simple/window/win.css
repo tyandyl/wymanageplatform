@@ -16,18 +16,28 @@
 	height: 70px;
 	background: #0382AD url(winpic/r_x.png) repeat-x;
 	background: -moz-linear-gradient(center top,#45B5DA,#0382AD);
+	/**#webkit最新发布书写语法**/
+	background: -webkit-linear-gradient(center top,#45B5DA,#0382AD);
+	background: -o-linear-gradient(center top,#45B5DA,#0382AD);
+	background: linear-gradient(to center top,#45B5DA,#0382AD);
+	/**#webkit老式语法书写规则**/
 	background: -webkit-gradient(linear,center top,center bottom,from(#45B5DA),to(#0382AD));
 }
 
 #win-bottom{
 	position:absolute;
 	display:block;
+	bottom:0px;
 	left:0px;
 	right:0px;
-	bottom:0px;
 	height: 10px;
-	background: #0382AD url(winpic/r_x.png) repeat-x;
+	background: #0382AD url(winpic/r_x.png) repeat-y;
 	background: -moz-linear-gradient(center top,#45B5DA,#0382AD);
+	/**#webkit最新发布书写语法**/
+	background: -webkit-linear-gradient(center top,#45B5DA,#0382AD);
+	background: -o-linear-gradient(center top,#45B5DA,#0382AD);
+	background: linear-gradient(to center top,#45B5DA,#0382AD);
+	/**#webkit老式语法书写规则**/
 	background: -webkit-gradient(linear,center top,center bottom,from(#45B5DA),to(#0382AD));
 }
 
@@ -54,5 +64,4 @@
 	border-style:solid;
 	border-color:#4DABC9;
 }
-
 

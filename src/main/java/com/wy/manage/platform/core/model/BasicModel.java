@@ -1,12 +1,9 @@
 package com.wy.manage.platform.core.model;
 
 import com.wy.manage.platform.core.action.Action;
-import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.action.CommonAction;
 import com.wy.manage.platform.core.parser.*;
-import com.wy.manage.platform.core.utils.AtomicTools;
-import com.wy.manage.platform.core.utils.CssProperties;
-import com.wy.manage.platform.core.widget.Page;
+import com.wy.manage.platform.core.utils.PropertiesTools;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
@@ -84,7 +81,7 @@ public abstract class BasicModel<T> implements Model<T>{
 
     public String parserCompile() {
         String address = getAddress();
-        CssProperties cssProperties = CssProperties.loadProperties(address);
+        PropertiesTools cssProperties = PropertiesTools.loadProperties(address);
         //重写，保证读取顺序
         Set<String> strings = cssProperties.stringPropertyNames();
         for (String name:strings) {
