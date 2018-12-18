@@ -113,6 +113,10 @@ public class RegularExpressionParser {
                     CharacterCarveCapacity crCharacterCarveCapacity = NfaStateMachineFactory.getCrCharacterCarveCapacity();
                     crCharacterCarveCapacity.carve(context,array,i);
                     break;
+                case HT:
+                    CharacterCarveCapacity htCharacterCarveCapacity = NfaStateMachineFactory.getHtCharacterCarveCapacity();
+                    htCharacterCarveCapacity.carve(context,array,i);
+                    break;
                 case SP:
                     //正则表达式空格的话，也应该当做一个输入处理
                     CharacterCarveCapacity spCharacterCarveCapacity = NfaStateMachineFactory.getSpCharacterCarveCapacity();

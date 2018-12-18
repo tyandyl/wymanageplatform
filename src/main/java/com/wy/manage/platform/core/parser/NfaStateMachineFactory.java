@@ -88,4 +88,8 @@ public class NfaStateMachineFactory {
     public static CharacterCarveCapacity getLpCharacterCarveCapacity(){
         return new LpCharacterCarveCapacity();
     }
+
+    public static CharacterCarveCapacity getHtCharacterCarveCapacity(){
+        return new HtCharacterCarveCapacity();
+    }
 }
