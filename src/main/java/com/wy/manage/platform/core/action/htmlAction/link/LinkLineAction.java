@@ -1,11 +1,19 @@
 package com.wy.manage.platform.core.action.htmlAction.link;
 
 import com.wy.manage.platform.core.action.BasicAction;
+import com.wy.manage.platform.core.model.CssModel;
+import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.widget.Link;
 import com.wy.manage.platform.core.widget.Page;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +45,35 @@ public class LinkLineAction extends BasicAction{
                 page.addLink(link);
                 page.getStr().append(s);
                 page.getStr().append("\n");
-               // System.out.println(this.getName()+"的代码是:"+s);
+                try {
+                    System.out.println("css的地址是:"+link.getHref());
+                    URL resource = LinkLineAction.class.getClassLoader().getResource("template/simple/window/win.css");
+                    File file=new File(resource.toURI());
+
+                    Reader fr = new FileReader(file);
+                    BufferedReader bufr = new BufferedReader(fr);
+                    StringBuffer stringBuffer=new StringBuffer();
+                    String line = null;
+                    while((line = bufr.readLine())!=null) {
+                        if(!(line.contains("/**") || line.contains("**/"))){
+                            stringBuffer.append(line);
+                        }
+
+                    }
+                    System.out.println("打印读取css配置文件的日志:"+stringBuffer);
+                    CssModel<Map<String,CssBag>> cssModel=new CssModel<Map<String,CssBag>>();
+                    cssModel.defineAction();
+//                    List<CssBag> css=new ArrayList<CssBag>();
+                    Map<String,CssBag>css=new HashMap<String, CssBag>();
+                    cssModel.execute(stringBuffer.toString(),css);
+//                    Map<String, List<CssBag>> cssMaps = page.getCssMaps();
+//                    String css1 = link.getHref().replaceAll(".css", "");
+//                    cssMaps.put(css1,css);
+//                    System.out.println(css1);
+                }catch (Exception e){
+                    System.out.println(e);
+                }
+
             }
         }
 

@@ -27,10 +27,6 @@ public interface IBlock {
 
     void setTagType(TagType tagType);
 
-    List<IBlock> getChildren();
-
-    void setChildren(List<IBlock> list);
-
     void invoke()throws Exception;
 
 

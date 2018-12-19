@@ -1,10 +1,13 @@
 package com.wy.manage.platform.core.widget;
 
 import com.wy.manage.platform.core.attribute.Properties;
+import com.wy.manage.platform.core.parser.CssBag;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tianye on 2018/6/28.
@@ -21,6 +24,8 @@ public class Page implements Serializable {
     private List<Link> links=new ArrayList<Link>();
 
     private StringBuffer str=new StringBuffer();
+
+    private Map<String,List<CssBag>> cssMaps=new HashMap<String, List<CssBag>>();
 
     public DocType getDocType() {
         return docType;
@@ -71,5 +76,13 @@ public class Page implements Serializable {
 
     public void setStr(StringBuffer str) {
         this.str = str;
+    }
+
+    public Map<String, List<CssBag>> getCssMaps() {
+        return cssMaps;
+    }
+
+    public void setCssMaps(Map<String, List<CssBag>> cssMaps) {
+        this.cssMaps = cssMaps;
     }
 }

@@ -30,5 +30,6 @@ public class HtmlModel<T>  extends BasicModel<T>{
         defineAction(new MetaLinesAction());
         defineAction(new ScriptLinesAction());
         defineAction(new LinkLinesAction());
+        defineAction(new DivStartLineAction());
     }
 }

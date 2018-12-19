@@ -99,14 +99,6 @@ public class Div implements IWidget{
         iWidget.setTagType(tagType);
     }
 
-    public List<IBlock> getChildren() {
-        return iWidget.getChildren();
-    }
-
-    public void setChildren(List<IBlock> list) {
-        iWidget.setChildren(list);
-    }
-
     public void invoke() throws Exception {
 
 

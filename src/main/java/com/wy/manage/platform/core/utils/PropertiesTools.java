@@ -28,7 +28,7 @@ public class PropertiesTools extends Properties {
 //            curFullDir.append("resources");
 //            curFullDir.append(File.separator);
 
-            URL resource = PropertiesTools.class.getClassLoader().getResource("regular/html.properties");
+            URL resource = PropertiesTools.class.getClassLoader().getResource(address);
 
             File cssFile = new File(resource.toURI());
             if (cssFile.exists()){

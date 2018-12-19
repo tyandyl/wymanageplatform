@@ -71,12 +71,17 @@ public class AnalyzeExecuteModel {
                         }
                     });
                     for(NfaStateNode nfaStateNode:nodes){
-                        if(nfaStateNode.getAction().getName().equalsIgnoreCase("backgrounds")){
-                            System.out.println();
-                        }
                         nfaStateNode.getAction().action(modelParam);
+                        String value = nfaStateNode.getAction().getValue();
+                        char c=0;
+                        if(StringUtils.isNotBlank(value)){
+                            String replace = value.replace(")", "");
+                            c = replace.toCharArray()[replace.length() - 1];
+                        }
+
                         //优先级低的执行完了需要锁死
-                        if(nfaStateNode.getAction().getPriority()>1){
+                        if(nfaStateNode.getAction().getPriority()>1
+                                && c!='+'){
                             modelParam.getLockRegularName().add(nfaStateNode.getAction().getName());
                         }
                         //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充

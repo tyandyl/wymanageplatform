@@ -18,20 +18,21 @@ public class BackgroundLineAction extends BasicAction{
         if(t instanceof List){
             List<CssBag> cssBags=(List)t;
             Map regularValue = modelParam.getRegularValue();
-            if(regularValue!=null && regularValue.get(this.getName())!=null) {
-                String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
+            if(regularValue!=null && regularValue.get("backgroundUnits")!=null) {
+                String s = regularValue.get("backgroundUnits").toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
                 CssBag cssBag = cssBags.get(cssBags.size() - 1);
-                String[] split = s.split(":");
-                if(split!=null && split.length==2){
-                    List<String> list = cssBag.getMap().get("background");
+                List<String> list = cssBag.getMap().get("background");
+                if(s!=null && s.length()>1){
+                    String substring = s.substring(0, s.length() - 1);
                     if(list==null){
                         List<String> list1=new ArrayList<String>();
-                        list1.add(split[1]);
+                        list1.add(substring);
                         cssBag.getMap().put("background",list1);
                     }else {
-                        list.add(split[1]);
+                        list.add(substring);
                     }
                 }
+
 
 
             }
@@ -47,7 +48,7 @@ public class BackgroundLineAction extends BasicAction{
     @Override
     public List<String> getIntraGroupNames() {
         List<String> list=new ArrayList<String>();
-        list.add("backgroundUnit");
+        list.add("backgroundUnits");
         return list;
     }
 

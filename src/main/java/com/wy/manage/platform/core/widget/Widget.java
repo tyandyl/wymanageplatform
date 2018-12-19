@@ -30,7 +30,15 @@ public class Widget implements IWidget, Serializable {
 
     private TagType tagType;
 
-    private List<IBlock> children;
+    public Widget(){
+        if(properties==null){
+            properties=new Properties();
+        }
+        Map<AttributeNameType, IAttributeValue> map = properties.getProperties();
+        if(map==null){
+            map=new HashMap<AttributeNameType, IAttributeValue>();
+        }
+    }
 
 
     /**
@@ -75,12 +83,21 @@ public class Widget implements IWidget, Serializable {
         if(properties==null){
             properties=new Properties();
         }
+        //获取属性值
         IAttributeValue attributeValue = properties.getAttributeValue(var0);
         if(attributeValue==null){
             attributeValue =new AttributeValue();
         }
+
+        attributeValue.setAttributeValue(var1);
+        attributeValue.setSelectorType(var2);
+        attributeValue.setValueIsKeyWord(var3);
+        attributeValue.setStyleSheetType(var4);
+
+        //设置id或者class，默认是id
         if(StringUtils.isBlank(var5)){
             String uuid=null;
+            //如果不存在的话，取当前控件默认的值
             if(properties.getProperties().size()>0){
                 int i=0;
                 do{
@@ -88,20 +105,16 @@ public class Widget implements IWidget, Serializable {
                     if(selectorType==SelectorType.ID_SELECTOR
                             || selectorType==SelectorType.CLASS_SELECTOR){
                         uuid=properties.getProperties().get(i).getSelectorName();
+                        attributeValue.setSelectorType(selectorType);
                         break;
                     }
-
+                    i++;
                 }while (i<properties.getProperties().size());
             }
             attributeValue.setSelectorName(uuid!=null?uuid:GUIDTools.randomUUID());
         }else {
             attributeValue.setSelectorName(var5);
         }
-        attributeValue.setAttributeValue(var1);
-        attributeValue.setSelectorType(var2);
-        attributeValue.setValueIsKeyWord(var3);
-        attributeValue.setStyleSheetType(var4);
-
         properties.getProperties().put(var0,attributeValue);
     }
 
@@ -183,22 +196,8 @@ public class Widget implements IWidget, Serializable {
         this.tagType=tagType;
     }
 
-    public List<IBlock> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<IBlock> var) {
-        this.children=var;
-    }
-
     public void invoke() throws Exception {
-        if(properties==null){
-            properties=new Properties();
-        }
-        Map<AttributeNameType, IAttributeValue> map = properties.getProperties();
-        if(map==null){
-            map=new HashMap<AttributeNameType, IAttributeValue>();
-        }
+
     }
 
 }
