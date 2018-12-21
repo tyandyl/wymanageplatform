@@ -61,15 +61,21 @@ public class LinkLineAction extends BasicAction{
 
                     }
                     System.out.println("打印读取css配置文件的日志:"+stringBuffer);
-                    CssModel<Map<String,CssBag>> cssModel=new CssModel<Map<String,CssBag>>();
+                    CssModel<List<CssBag>> cssModel=new CssModel<List<CssBag>>();
                     cssModel.defineAction();
-//                    List<CssBag> css=new ArrayList<CssBag>();
-                    Map<String,CssBag>css=new HashMap<String, CssBag>();
+                    List<CssBag> css=new ArrayList<CssBag>();
                     cssModel.execute(stringBuffer.toString(),css);
-//                    Map<String, List<CssBag>> cssMaps = page.getCssMaps();
-//                    String css1 = link.getHref().replaceAll(".css", "");
-//                    cssMaps.put(css1,css);
-//                    System.out.println(css1);
+                    if(css!=null){
+                        Map<String,CssBag> map=new HashMap<String, CssBag>();
+                        for(CssBag cssBag:css){
+                            if(map.get(cssBag.getName())!=null){
+                                System.out.println("重复啦啦啦啦啦啦");
+                            }
+                            map.put(cssBag.getName(),cssBag);
+                        }
+                        modelParam.setMap(map);
+                    }
+
                 }catch (Exception e){
                     System.out.println(e);
                 }

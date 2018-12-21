@@ -19,7 +19,7 @@ public class CssModel<T> extends BasicModel<T>{
         defineAction(new PxLineAction());
         defineAction(new BackgroundLineAction());
         defineAction(new BorderStyleLineAction());
-        defineAction(new BorderColorLineAction());
+        defineAction(new ColorLineAction());
         defineAction(new OverflowLineAction());
         defineAction(new CursorLineAction());
         defineAction(new FontLineAction());

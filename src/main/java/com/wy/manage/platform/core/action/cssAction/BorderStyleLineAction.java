@@ -18,19 +18,16 @@ public class BorderStyleLineAction extends BasicAction{
         if(t instanceof List){
             List<CssBag> cssBags=(List)t;
             Map regularValue = modelParam.getRegularValue();
-            if(regularValue!=null && regularValue.get(this.getName())!=null) {
-                String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
+            if(regularValue!=null && regularValue.get("borderStyleValue")!=null) {
+                String s = regularValue.get("borderStyleValue").toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
                 CssBag cssBag = cssBags.get(cssBags.size() - 1);
-                String[] split = s.split(":");
-                if(split!=null && split.length==2){
-                    List<String> list = cssBag.getMap().get("border-style");
-                    if(list==null){
-                        List<String> list1=new ArrayList<String>();
-                        list1.add(split[1]);
-                        cssBag.getMap().put("border-style",list1);
-                    }else {
-                        list.add(split[1]);
-                    }
+                List<String> list = cssBag.getMap().get("border-style");
+                if(list==null){
+                    List<String> list1=new ArrayList<String>();
+                    list1.add(s);
+                    cssBag.getMap().put("border-style",list1);
+                }else {
+                    list.add(s);
                 }
 
 
@@ -46,7 +43,9 @@ public class BorderStyleLineAction extends BasicAction{
 
     @Override
     public List<String> getIntraGroupNames() {
-        return null;
+        List<String> list=new ArrayList<String>();
+        list.add("borderStyleValue");
+        return list;
     }
 
     @Override

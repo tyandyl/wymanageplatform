@@ -19,6 +19,8 @@ public class ModelParam<T> {
     //锁住组内正则
     private List<String> lockRegularName=new ArrayList<String>();
 
+    private Map<String,CssBag> map=new HashMap<String, CssBag>();
+
     public DfaContext initDfaContext(NfaStateMachine parser)throws Exception{
         DfaContext context=new DfaContext();
         return handleMapFirst(context,parser);
@@ -199,5 +201,13 @@ public class ModelParam<T> {
 
     public void setLockRegularName(List<String> lockRegularName) {
         this.lockRegularName = lockRegularName;
+    }
+
+    public Map<String, CssBag> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, CssBag> map) {
+        this.map = map;
     }
 }

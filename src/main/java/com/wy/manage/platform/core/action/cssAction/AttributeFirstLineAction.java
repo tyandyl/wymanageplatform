@@ -15,7 +15,7 @@ import java.util.Map;
 public class AttributeFirstLineAction extends BasicAction {
     public void action(ModelParam modelParam) {
         Object t = modelParam.getT();
-        if(t instanceof Map){
+        if(t instanceof List){
             List<CssBag> cssBags=(List)t;
             CssBag cssBag=new CssBag();
             Map regularValue = modelParam.getRegularValue();
