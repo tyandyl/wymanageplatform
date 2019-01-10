@@ -3,87 +3,75 @@ package com.wy.manage.platform.core.widget;
 import com.wy.manage.platform.core.attribute.AttributeNameType;
 import com.wy.manage.platform.core.attribute.AttributeValue;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by tianye on 2018/6/28.
  */
-public class WidgetNode {
+public class WidgetNode implements Serializable{
 
+    private static final long serialVersionUID = -4783670709072665624L;
     private Widget data;
 
-    private boolean isRoot;
-
     //使用空间换取时间法
+    private String fullCode;
+
     private String code;
 
     private WidgetNode parentNode;
 
+    private boolean isClosed=false;
 
-    public String getWidth() throws Exception {
-        return data.getWidth();
+    private List<WidgetNode> childNodes=new ArrayList<WidgetNode>();
+
+    public Widget getData() {
+        return data;
     }
 
-    public void setWidth(String var) throws Exception {
-        data.setWidth(var);
+    public void setData(Widget data) {
+        this.data = data;
     }
 
-    public String getHeight() throws Exception {
-        return data.getHeight();
+    public WidgetNode getParentNode() {
+        return parentNode;
     }
 
-    public void setHeight(String var) throws Exception {
-        data.setHeight(var);
+    public void setParentNode(WidgetNode parentNode) {
+        this.parentNode = parentNode;
     }
 
-    public IFlow getFlow() {
-        return data.getFlow();
+    public boolean isClosed() {
+        return isClosed;
     }
 
-    public void setFlow(IFlow var) {
-        data.setFlow(var);
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 
-    public String getDescription() {
-        return data.getDescription();
+    public String getFullCode() {
+        return fullCode;
     }
 
-    public void setDescription(String var) {
-        data.setDescription(var);
+    public void setFullCode(String fullCode) {
+        this.fullCode = fullCode;
     }
 
-    public BlockType getBlockType() {
-        return data.getBlockType();
+    public String getCode() {
+        return code;
     }
 
-    public void setBlockType(BlockType var) {
-        data.setBlockType(var);
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getTitle() {
-        return data.getTitle();
+    public List<WidgetNode> getChildNodes() {
+        return childNodes;
     }
 
-    public void setTitle(String var) {
-        data.setTitle(var);
-    }
-
-
-
-    public TagType getTagType() {
-        return data.getTagType();
-    }
-
-    public void setTagType(TagType tagType) {
-
-    }
-
-    public List<IBlock> getChildren() {
-        return null;
-    }
-
-    public void setChildren(List<IBlock> list) {
-
+    public void setChildNodes(List<WidgetNode> childNodes) {
+        this.childNodes = childNodes;
     }
 }

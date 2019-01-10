@@ -184,6 +184,9 @@ public class ModelParam<T> {
         if(integer!=null && integer.intValue()==num.intValue()){
             return false;
         }
+        if(integer!=null && integer>num){
+            return false;
+        }
         regularNum.put(key,num);
         return true;
 

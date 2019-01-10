@@ -35,25 +35,6 @@ public class DfaContext {
     //ε-closure(s)表示由状态s经由条件ε可以到达的所有状态的集合
     public DfaContext buildEmptyStateGather(){
         for(Map.Entry<String,Map<Integer,List<String>>> info:map.entrySet()){
-//            StringBuffer buffer=new StringBuffer("该状态是:"+info.getKey());
-//            buffer.append("\n");
-//            for(Map.Entry<Integer,List<String>> v:info.getValue().entrySet()){
-//                StringBuffer buf=new StringBuffer();
-//                if(v!=null){
-//                    buf.append("输入的字符是:"+v.getKey()+",下一个状态是:");
-//                    List<String> value = v.getValue();
-//                    if(value!=null && value.size()>0){
-//                        for(String str:value){
-//                            NfaStateNode nfaStateNode = mapState.get(str);
-//                            buf.append(str+",");
-//                        }
-//                    }
-//                    buf.append("\n");
-//                }
-//
-//                buffer.append(buf);
-//            }
-//            System.out.println(buffer);
 
             new StateMoveHandle<String,Map<String,Set<String>>>(){
 

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public abstract class BasicAction implements Action{
     public String value;
-    public abstract void action(ModelParam modelParam);
+    public abstract void action(ModelParam modelParam)throws Exception;
 
     public abstract String getName();
 

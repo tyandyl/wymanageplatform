@@ -3,6 +3,8 @@ package com.wy.manage.platform.core.attribute;
 import com.wy.manage.platform.core.widget.SelectorType;
 import com.wy.manage.platform.core.widget.StyleSheetType;
 
+import java.util.List;
+
 /**
  * Created by tianye on 2018/8/8.
  */
@@ -20,11 +22,8 @@ public interface IAttributeValue {
 
     public void setSelectorName(String selectorName);
 
-    public String getAttributeValue();
+    public List<String> getAttributeValue();
 
-    public void setAttributeValue(String attributeValue);
+    public void setAttributeValue(List<String> attributeValue);
 
-    public boolean isValueIsKeyWord() ;
-
-    public void setValueIsKeyWord(boolean valueIsKeyWord);
 }

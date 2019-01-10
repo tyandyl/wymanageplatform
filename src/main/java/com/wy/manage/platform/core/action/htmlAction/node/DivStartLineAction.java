@@ -1,11 +1,12 @@
-package com.wy.manage.platform.core.action.htmlAction;
+package com.wy.manage.platform.core.action.htmlAction.node;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
-import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.IgnoreTools;
 import com.wy.manage.platform.core.widget.Page;
-import com.wy.manage.platform.core.widget.SelectorType;
+import com.wy.manage.platform.core.widget.Widget;
+import com.wy.manage.platform.core.widget.WidgetFactory;
+import com.wy.manage.platform.core.widget.WidgetNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +17,20 @@ import java.util.Map;
  */
 public class DivStartLineAction extends BasicAction {
     @Override
-    public void action(ModelParam modelParam) {
+    public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
         if(t instanceof Page) {
             Page page = (Page) t;
             Map regularValue = modelParam.getRegularValue();
-            if(regularValue!=null && regularValue.get("selectorType")!=null){
-                String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
-                SelectorType selectorType = SelectorType.getSelectorType(s);
-                if(selectorType!=null){
 
-                }
-            }
             if(regularValue!=null && regularValue.get("selectorValue")!=null){
-                String s = IgnoreTools.ignore(regularValue.get("selectorValue").toString());
+                String value = IgnoreTools.ignore(regularValue.get("selectorValue").toString());
+                if(regularValue!=null && regularValue.get("selectorType")!=null){
+                    String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
+                    Widget widget = WidgetFactory.getWidget(page, s, value);
+                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
+                    WidgetFactory.addWidgetNode(page,widgetNode);
+                }
             }
         }
     }
@@ -52,3 +53,4 @@ public class DivStartLineAction extends BasicAction {
         return 1;
     }
 }
+

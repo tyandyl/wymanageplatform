@@ -9,7 +9,7 @@ import java.util.List;
  * 代替RelevanceHandle
  */
 public interface Action {
-    void action(ModelParam modelParam);
+    void action(ModelParam modelParam)throws Exception;
     String getName();
     String getValue();
     void setValue(String value);

@@ -25,7 +25,9 @@ public class Page implements Serializable {
 
     private StringBuffer str=new StringBuffer();
 
-    private Map<String,List<CssBag>> cssMaps=new HashMap<String, List<CssBag>>();
+    private Map<String,CssBag> cssMaps=new HashMap<String,CssBag>();
+
+    private WidgetNodeTree widgetNodeTree;
 
     public DocType getDocType() {
         return docType;
@@ -78,11 +80,19 @@ public class Page implements Serializable {
         this.str = str;
     }
 
-    public Map<String, List<CssBag>> getCssMaps() {
+    public Map<String, CssBag> getCssMaps() {
         return cssMaps;
     }
 
-    public void setCssMaps(Map<String, List<CssBag>> cssMaps) {
+    public void setCssMaps(Map<String, CssBag> cssMaps) {
         this.cssMaps = cssMaps;
+    }
+
+    public WidgetNodeTree getWidgetNodeTree() {
+        return widgetNodeTree;
+    }
+
+    public void setWidgetNodeTree(WidgetNodeTree widgetNodeTree) {
+        this.widgetNodeTree = widgetNodeTree;
     }
 }

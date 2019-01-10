@@ -73,7 +73,7 @@ public class LinkLineAction extends BasicAction{
                             }
                             map.put(cssBag.getName(),cssBag);
                         }
-                        modelParam.setMap(map);
+                        page.getCssMaps().putAll(map);
                     }
 
                 }catch (Exception e){

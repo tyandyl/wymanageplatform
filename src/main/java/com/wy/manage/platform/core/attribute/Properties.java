@@ -11,7 +11,7 @@ public class Properties implements Serializable {
 
     private static final long serialVersionUID = -4141998754885245459L;
 
-    private Map<AttributeNameType,IAttributeValue> properties;
+    private Map<AttributeNameType,IAttributeValue> properties=new HashMap<AttributeNameType, IAttributeValue>();
 
     public Map<AttributeNameType, IAttributeValue> getProperties() {
         return properties;

@@ -4,6 +4,8 @@ import com.wy.manage.platform.core.widget.SelectorType;
 import com.wy.manage.platform.core.widget.StyleSheetType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tianye on 2018/6/29.
@@ -27,9 +29,7 @@ public class AttributeValue implements IAttributeValue, Serializable {
      */
     private String selectorName;
 
-    private String attributeValue;
-
-    private boolean valueIsKeyWord;
+    private List<String> attributeValue=new ArrayList<String>();
 
     public StyleSheetType getStyleSheetType() {
         return styleSheetType;
@@ -55,19 +55,12 @@ public class AttributeValue implements IAttributeValue, Serializable {
         this.selectorName = selectorName;
     }
 
-    public String getAttributeValue() {
+    public List<String> getAttributeValue() {
         return attributeValue;
     }
 
-    public void setAttributeValue(String attributeValue) {
+    public void setAttributeValue(List<String> attributeValue) {
         this.attributeValue = attributeValue;
     }
 
-    public boolean isValueIsKeyWord() {
-        return valueIsKeyWord;
-    }
-
-    public void setValueIsKeyWord(boolean valueIsKeyWord) {
-        this.valueIsKeyWord = valueIsKeyWord;
-    }
 }
