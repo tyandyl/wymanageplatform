@@ -30,6 +30,7 @@ public class WidgetFactory {
                         }
 
                     }
+                    widget.setTitle(selectorValue);
                     return widget;
                 }
             }
@@ -41,15 +42,12 @@ public class WidgetFactory {
 
     public static void addWidgetNode(Page page,WidgetNode widgetNode)throws Exception {
         WidgetNodeTree widgetNodeTree = page.getWidgetNodeTree();
-        if(widgetNodeTree==null){
-            widgetNodeTree=new WidgetNodeTree();
-        }
         WidgetNode root = widgetNodeTree.getRoot();
         if(root==null){
             widgetNodeTree.setRoot(widgetNode);
             widgetNode.setFullCode(widgetNode.getCode());
             widgetNode.setParentNode(null);
-            widgetNodeTree.getNewestNoClosed().push(root);
+            widgetNodeTree.getNewestNoClosed().push(widgetNode);
             return ;
         }
         //如果是闭环
@@ -64,7 +62,6 @@ public class WidgetFactory {
             newestNoClosed.push(widgetNode);
             peek.getChildNodes().add(widgetNode);
         }
-        page.setWidgetNodeTree(widgetNodeTree);
 
 
     }

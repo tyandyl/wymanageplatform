@@ -27,7 +27,7 @@ public class Page implements Serializable {
 
     private Map<String,CssBag> cssMaps=new HashMap<String,CssBag>();
 
-    private WidgetNodeTree widgetNodeTree;
+    private WidgetNodeTree widgetNodeTree=new WidgetNodeTree();
 
     public DocType getDocType() {
         return docType;
