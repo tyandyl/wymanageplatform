@@ -64,6 +64,7 @@ public class WidgetFactory {
             newestNoClosed.push(widgetNode);
             peek.getChildNodes().add(widgetNode);
         }
+        page.setWidgetNodeTree(widgetNodeTree);
 
 
     }

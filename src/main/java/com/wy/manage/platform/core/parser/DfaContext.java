@@ -36,7 +36,7 @@ public class DfaContext {
     public DfaContext buildEmptyStateGather(){
         for(Map.Entry<String,Map<Integer,List<String>>> info:map.entrySet()){
 
-            new StateMoveHandle<String,Map<String,Set<String>>>(){
+            new MoveHandle<String,Map<String,Set<String>>>(){
 
                 public void move(String s, Map<String, Set<String>> mapEmpty, Integer var) {
                     //98页

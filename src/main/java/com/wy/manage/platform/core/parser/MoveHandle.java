@@ -1,18 +1,14 @@
 package com.wy.manage.platform.core.parser;
 
-import java.util.List;
-import java.util.Set;
-
 /**
- * Created by tianye
+ * Created by tianye13 on 2019/1/11.
  */
-public interface StateMoveHandle<T,E,M> {
+public interface MoveHandle<T,E> {
     /**
      *
      * @param t 状态
      * @param e 结果集，存放寻找的结果
      * @param var 条件ε，由哪条 条线寻找
-     * @param m 辅助工具
      */
-    void analyze(T t,E e,Integer var,M m)throws Exception;
+    void move(T t,E e,Integer var);
 }

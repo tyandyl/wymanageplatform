@@ -30,6 +30,7 @@ public class Ingress {
             Page page=new Page();
 
             htmlModel.execute(stringBuffer.toString(),page);
+            System.out.println(page.getWidgetNodeTree());
         }catch (Exception e){
             System.out.println(e);
         }
