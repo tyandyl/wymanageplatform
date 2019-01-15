@@ -30,6 +30,9 @@ public class AnalyzeExecuteModel {
         Set<String> startNodes =context.getMapEmpty().get(context.getStartNodeStateNum());
 
         while (modelParam.getCurInt()<modelParam.getChars().length){
+            if(modelParam.getChars()[modelParam.getCurInt()]=='A'){
+                System.out.print("");
+            }
             for(String mm:startNodes){
                 //对正则表达式的状态进行记录
                 record( modelParam,   context, mm);
@@ -45,8 +48,8 @@ public class AnalyzeExecuteModel {
             //说明有结束节点干扰的前进
             if(result.getNodes().size()>0){
                 int check = check(modelParam.getChars(), modelParam.getCurInt(), result, context);
-                if(check==1){
-                    System.out.println("这个节点需要执行");
+                if(check==1 || check==3){
+                    //System.out.println("这个节点需要执行");
                     List<NfaStateNode> nodes = result.getNodes();
                     Collections.sort(nodes, new Comparator<NfaStateNode>() {
                         public int compare(NfaStateNode o1, NfaStateNode o2) {
@@ -64,6 +67,9 @@ public class AnalyzeExecuteModel {
                     for(NfaStateNode node:nodes){
                         node.getAction().action(modelParam);
                         modelParam.getLockRegularName().add(node.getAction().getName());
+                        if(node.getAction().getName().equalsIgnoreCase("htmlEndTag")){
+                            System.out.print("");
+                        }
                         //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充
                         if(node.getAction().getPriority()==1){
                             modelParam.getRegularValue().clear();
@@ -83,7 +89,7 @@ public class AnalyzeExecuteModel {
 
                 }
                 if(check==2){
-                    System.out.println("这个节点不需要执行");
+                    //System.out.println("这个节点不需要执行");
                 }
                 if(check==3){
                     System.out.println("艹,怎么可能");
@@ -110,6 +116,9 @@ public class AnalyzeExecuteModel {
         List<String> belongRegulars = nfaStateNode.getBelongRegular();
         if(belongRegulars!=null && belongRegulars.size()>0){
             for(String belongRegular:belongRegulars){
+                if(belongRegular.equalsIgnoreCase("htmlEndTag")){
+                    System.out.print("");
+                }
                 if(StringUtils.isNotBlank(belongRegular)){
                     Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
                     StringBuffer buffer = regularValue.get(belongRegular);
@@ -145,7 +154,7 @@ public class AnalyzeExecuteModel {
         StateResult resultB=new StateResult();
         int i=1;
         while (curIntL<guessInt){
-            System.out.println("检测走了"+i+"步");
+            //System.out.println("检测走了"+i+"步");
             //不经过结束节点的集合解析
             new AnalyzeStateMoveHandle().analyze(listL,resultA,Integer.valueOf(chars[curIntL]), context);
             //说明不应该这样走，结束
@@ -153,7 +162,7 @@ public class AnalyzeExecuteModel {
                 return 1;
             }
             if(resultA.getNodes().size()>0){
-                System.out.println("看来我熊大的优势较大");
+                //System.out.println("看来我熊大的优势较大");
             }
             listL=new HashSet<String>(resultA.getList());
             resultA.clear();
@@ -164,7 +173,7 @@ public class AnalyzeExecuteModel {
                 return 2;
             }
             if(resultB.getNodes().size()>0){
-                System.out.println("看来我熊二的优势较大");
+                //System.out.println("看来我熊二的优势较大");
             }
             nodeStateNumList=new HashSet<String>(resultB.getList());
             resultB.clear();

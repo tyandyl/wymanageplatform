@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.action.htmlAction.meta;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
+import com.wy.manage.platform.core.utils.IgnoreTools;
 import com.wy.manage.platform.core.widget.Meta;
 import com.wy.manage.platform.core.widget.Page;
 
@@ -20,7 +21,7 @@ public class MetaLineAction extends BasicAction{
             Page page = (Page) t;
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null){
-                String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
+                String s = IgnoreTools.ignore(regularValue.get(this.getName()).toString());
                // System.out.println(this.getName()+"的代码是:"+s);
                 Meta meta=new Meta();
                 StringBuffer httpEquivValue = (StringBuffer)regularValue.get("httpEquivValue");
@@ -32,8 +33,13 @@ public class MetaLineAction extends BasicAction{
                     meta.setContent(metaContentValue.toString());
                 }
                 page.addMeta(meta);
-                page.getStr().append(s);
-                page.getStr().append("\n");
+                StringBuffer str=new StringBuffer();
+                str.append("<meta ");
+                str.append("http-equiv=\"");
+                str.append(meta.getHttp_equiv()+"\" ");
+                str.append("content=\"");
+                str.append(meta.getContent()+"\">");
+                page.getStr().append(str);
 
             }
         }

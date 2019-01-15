@@ -54,7 +54,10 @@ public class Widget implements IWidget, Serializable {
     }
 
 
-    public void setProperty(AttributeNameType attributeNameType,List<String> attributeValues,SelectorType selectorType)throws Exception {
+    public void setProperty(AttributeNameType attributeNameType,
+                            List<String> attributeValues,
+                            SelectorType selectorType,
+                            String selectorValue)throws Exception {
         if(properties==null){
             properties=new Properties();
         }
@@ -66,6 +69,7 @@ public class Widget implements IWidget, Serializable {
 
         attributeValue.setAttributeValue(attributeValues);
         attributeValue.setSelectorType(selectorType);
+        attributeValue.setSelectorName(selectorValue);
 
         properties.getProperties().put(attributeNameType,attributeValue);
     }

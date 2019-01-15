@@ -5,6 +5,7 @@ import com.wy.manage.platform.core.action.htmlAction.link.LinkLineAction;
 import com.wy.manage.platform.core.action.htmlAction.link.LinkLinesAction;
 import com.wy.manage.platform.core.action.htmlAction.meta.MetaLineAction;
 import com.wy.manage.platform.core.action.htmlAction.meta.MetaLinesAction;
+import com.wy.manage.platform.core.action.htmlAction.node.DivEndLineAction;
 import com.wy.manage.platform.core.action.htmlAction.node.DivStartLineAction;
 import com.wy.manage.platform.core.action.htmlAction.script.ScriptLineAction;
 import com.wy.manage.platform.core.action.htmlAction.script.ScriptLinesAction;
@@ -32,5 +33,8 @@ public class HtmlModel<T>  extends BasicModel<T>{
         defineAction(new ScriptLinesAction());
         defineAction(new LinkLinesAction());
         defineAction(new DivStartLineAction());
+        defineAction(new BodyEndLineAction());
+        defineAction(new DivEndLineAction());
+        defineAction(new BodyStartLineAction());
     }
 }

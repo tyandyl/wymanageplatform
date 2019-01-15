@@ -11,6 +11,8 @@ public class Entrance extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         System.out.println("uuuuuuuuuuuuuuuuuuuuu");
+        Ingress ingress=new Ingress();
+        ingress.handle(request,response);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {

@@ -1,17 +1,13 @@
 package com.wy.manage.platform.core.action.htmlAction;
 
-import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
-import com.wy.manage.platform.core.utils.IgnoreTools;
-import com.wy.manage.platform.core.widget.Page;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tianye
  */
-public class HeadStartTagAction extends HtmlStartTagAction{
+public class BodyEndLineAction extends HtmlStartTagAction{
     @Override
     public void action(ModelParam modelParam) {
         super.action(modelParam);
@@ -19,7 +15,7 @@ public class HeadStartTagAction extends HtmlStartTagAction{
 
     @Override
     public String getName() {
-        return "headStartTag";
+        return "bodyEndLine";
     }
 
     @Override
@@ -31,5 +27,5 @@ public class HeadStartTagAction extends HtmlStartTagAction{
     public int getPriority() {
         return 1;
     }
-
 }
+

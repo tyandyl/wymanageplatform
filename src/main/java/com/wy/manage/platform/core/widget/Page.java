@@ -17,6 +17,12 @@ public class Page implements Serializable {
     private static final long serialVersionUID = -2602415919744812735L;
     private DocType docType;
 
+    private String baseAddress;
+
+    private String htmlAddress;
+
+    private String htmlName;
+
     private List<Meta> metas=new ArrayList<Meta>();
 
     private List<Script> scripts=new ArrayList<Script>();
@@ -94,5 +100,29 @@ public class Page implements Serializable {
 
     public void setWidgetNodeTree(WidgetNodeTree widgetNodeTree) {
         this.widgetNodeTree = widgetNodeTree;
+    }
+
+    public String getBaseAddress() {
+        return baseAddress;
+    }
+
+    public void setBaseAddress(String baseAddress) {
+        this.baseAddress = baseAddress;
+    }
+
+    public String getHtmlAddress() {
+        return htmlAddress;
+    }
+
+    public void setHtmlAddress(String htmlAddress) {
+        this.htmlAddress = htmlAddress;
+    }
+
+    public String getHtmlName() {
+        return htmlName;
+    }
+
+    public void setHtmlName(String htmlName) {
+        this.htmlName = htmlName;
     }
 }

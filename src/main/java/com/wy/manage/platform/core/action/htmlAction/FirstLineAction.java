@@ -23,6 +23,7 @@ public class FirstLineAction extends BasicAction{
                 //System.out.println(this.getName()+"的代码是:"+s);
                 if(s.contains("transitional")){
                     page.setDocType(DocType.TRANSITIONAL);
+                    page.getStr().append("<!DOCTYPE html>");
                 }else if(s.contains("strict")){
                     page.setDocType(DocType.STRICT);
                 }else if(s.contains("frameset")){
@@ -32,8 +33,6 @@ public class FirstLineAction extends BasicAction{
                 }else {
                     page.setDocType(DocType.HTML5);
                 }
-                page.getStr().append(s);
-                page.getStr().append("\n");
             }
 
         }

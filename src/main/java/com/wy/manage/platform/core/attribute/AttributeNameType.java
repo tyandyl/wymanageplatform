@@ -1,5 +1,8 @@
 package com.wy.manage.platform.core.attribute;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by tianye on 2018/6/29.
  */
@@ -12,7 +15,11 @@ public enum AttributeNameType {
     TOP(5,"top"),
     LEFT(6,"left"),
     RIGHT(7,"right"),
-    BOTTOM(8,"bottom");
+    BOTTOM(8,"bottom"),
+    BACKGROUND(9,"background"),
+    BORDERWIDTH(10,"border-width"),
+    BORDERSTYLE(11,"border-style"),
+    BORDERCOLOR(12,"border-color");
     private int code;
     private String name;
 
@@ -28,6 +35,24 @@ public enum AttributeNameType {
             }
         }
         return null;
+    }
+
+    public static List<String> getNameList(){
+        List<String> list=new ArrayList<String>();
+        list.add(DISPLAY.getName());
+        list.add(POSITION.getName());
+        list.add(WIDTH.getName());
+        list.add(HEIGHT.getName());
+        list.add(TOP.getName());
+        list.add(LEFT.getName());
+        list.add(RIGHT.getName());
+        list.add(BOTTOM.getName());
+        list.add(BACKGROUND.getName());
+        list.add(BORDERWIDTH.getName());
+        list.add(BORDERSTYLE.getName());
+        list.add(BORDERCOLOR.getName());
+        return list;
+
     }
 
     public int getCode() {

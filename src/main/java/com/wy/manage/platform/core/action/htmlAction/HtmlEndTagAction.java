@@ -10,15 +10,11 @@ import java.util.Map;
 /**
  * Created by tianye
  */
-public class HtmlEndTagAction extends BasicAction{
+public class HtmlEndTagAction extends HtmlStartTagAction{
 
     @Override
     public void action(ModelParam modelParam) {
-        Map regularValue = modelParam.getRegularValue();
-        if(regularValue!=null && regularValue.get(this.getName())!=null){
-            String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
-            System.out.println(this.getName()+"的代码是:"+s);
-        }
+        super.action(modelParam);
     }
 
     @Override
