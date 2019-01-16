@@ -1,0 +1,5 @@
+<body>
+<div style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;"></div>
+</body>
+右击菜单的时候，必须在body里放入div，且必须有style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;"
+很奇怪

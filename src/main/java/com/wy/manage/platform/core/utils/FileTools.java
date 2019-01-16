@@ -1,5 +1,7 @@
 package com.wy.manage.platform.core.utils;
 
+import com.wy.manage.platform.core.widget.Page;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -29,7 +31,7 @@ public class FileTools {
                 stringBuffer.append(line);
             }
             if(!isOut){
-                stringBuffer.append(line);
+                stringBuffer.append(line+"\n");
             }
             if(isOut && (line.contains("**/") || line.contains("*/"))){
                 isInvalid=false;
@@ -39,9 +41,23 @@ public class FileTools {
         return stringBuffer;
     }
 
-    public static String getJsRegularValue()throws Exception{
-        URL resource = FileTools.class.getClassLoader().getResource("jquery/jquery-1.6.2.min.js");
-        File file=new File(resource.toURI());
-        return null;
+    public static String getFileValue(String scriptSrcValue,Page page,boolean isOut)throws Exception{
+        StringBuffer content=null;
+        if(scriptSrcValue.toString().startsWith("......")){
+            String substring = scriptSrcValue.substring(7, scriptSrcValue.length());
+            content = getContent(substring,isOut);
+        }else if(scriptSrcValue.toString().startsWith("....")){
+            String substring = scriptSrcValue.substring(5, scriptSrcValue.length());
+            String[] split = page.getHtmlAddress().split("/");
+            if(split!=null && split.length>=2){
+                String s = split[0] + "/" + substring;
+                content = getContent(s,isOut);
+            }
+        }else {
+            content = getContent(page.getHtmlAddress()+scriptSrcValue.toString(),isOut);
+        }
+
+        return content.toString();
+
     }
 }

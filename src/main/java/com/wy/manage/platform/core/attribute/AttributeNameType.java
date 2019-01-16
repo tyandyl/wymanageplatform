@@ -19,7 +19,8 @@ public enum AttributeNameType {
     BACKGROUND(9,"background"),
     BORDERWIDTH(10,"border-width"),
     BORDERSTYLE(11,"border-style"),
-    BORDERCOLOR(12,"border-color");
+    BORDERCOLOR(12,"border-color"),
+    BACKGROUNDCOLOR(13,"background-color");
     private int code;
     private String name;
 
@@ -51,6 +52,7 @@ public enum AttributeNameType {
         list.add(BORDERWIDTH.getName());
         list.add(BORDERSTYLE.getName());
         list.add(BORDERCOLOR.getName());
+        list.add(BACKGROUNDCOLOR.getName());
         return list;
 
     }

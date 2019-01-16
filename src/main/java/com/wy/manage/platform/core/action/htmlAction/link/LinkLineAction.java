@@ -44,26 +44,36 @@ public class LinkLineAction extends BasicAction{
                     link.setHref(linkHref.toString());
                 }
                 page.addLink(link);
-//                page.getStr().append(s);
-//                page.getStr().append("\n");
                 try {
-                    System.out.println("css的地址是:"+link.getHref());
-                    StringBuffer stringBuffer = FileTools.getContent(page.getHtmlAddress()+link.getHref(),true);
-                    //System.out.println("打印读取css配置文件的日志:"+stringBuffer);
-                    CssModel<List<CssBag>> cssModel=new CssModel<List<CssBag>>();
-                    cssModel.defineAction();
-                    List<CssBag> css=new ArrayList<CssBag>();
-                    cssModel.execute(stringBuffer.toString(),css);
-                    if(css!=null){
-                        Map<String,CssBag> map=new HashMap<String, CssBag>();
-                        for(CssBag cssBag:css){
-                            if(map.get(cssBag.getName())!=null){
-                                System.out.println("重复啦啦啦啦啦啦");
-                            }
-                            map.put(cssBag.getName(),cssBag);
-                        }
-                        page.getCssMaps().putAll(map);
+                    if(link.getHref().contains("bootstrap")){
+                        StringBuffer str=new StringBuffer();
+                        str.append("<link rel=\"stylesheet\" style=\"text/css\" href=\"");
+                        str.append(link.getHref());
+                        str.append("\" />");
+                        page.getStr().append(str);
                     }
+
+                    System.out.println("css的地址是:"+link.getHref());
+                    //StringBuffer stringBuffer = FileTools.getContent(page.getHtmlAddress()+link.getHref(),true);
+                    //System.out.println("打印读取css配置文件的日志:"+stringBuffer);
+                    if(link.getHref()!=null && !link.getHref().contains("bootstrap")){
+                        String fileValue = FileTools.getFileValue(link.getHref(), page,true);
+                        CssModel<List<CssBag>> cssModel=new CssModel<List<CssBag>>();
+                        cssModel.defineAction();
+                        List<CssBag> css=new ArrayList<CssBag>();
+                        cssModel.execute(fileValue,css);
+                        if(css!=null){
+                            Map<String,CssBag> map=new HashMap<String, CssBag>();
+                            for(CssBag cssBag:css){
+                                if(map.get(cssBag.getName())!=null){
+                                    System.out.println("重复啦啦啦啦啦啦");
+                                }
+                                map.put(cssBag.getName(),cssBag);
+                            }
+                            page.getCssMaps().putAll(map);
+                        }
+                    }
+
 
                 }catch (Exception e){
                     System.out.println(e);

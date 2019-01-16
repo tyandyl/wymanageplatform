@@ -38,9 +38,11 @@ public class ScriptLineAction extends BasicAction{
                 StringBuffer str=new StringBuffer();
                 str.append("<script type=\"");
                 str.append(scriptTypeValue);
+                str.append("\" src=\"");
+                str.append(scriptSrcValue);
                 str.append("\">");
-                StringBuffer content = FileTools.getContent("jquery/jquery-1.6.2.min.js",false);
-                str.append(content);
+//                String content=FileTools.getFileValue(scriptSrcValue.toString(), page,false);
+//                str.append(content);
                 str.append("</script>");
                 page.getStr().append(str);
             }
