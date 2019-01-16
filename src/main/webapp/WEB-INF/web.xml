@@ -9,13 +9,13 @@
     </welcome-file-list>
 
     <servlet>
-        <servlet-name>Demo</servlet-name>
+        <servlet-name>Window</servlet-name>
         <servlet-class>Entrance</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Demo</servlet-name>
-        <url-pattern>/Demo</url-pattern>
+        <servlet-name>Window</servlet-name>
+        <url-pattern>/Window</url-pattern>
     </servlet-mapping>
 
 </web-app>

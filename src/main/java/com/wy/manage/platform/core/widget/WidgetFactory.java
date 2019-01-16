@@ -18,6 +18,7 @@ public class WidgetFactory {
 
     public static Widget getWidget(Page page,String selectorType,String selectorValue)throws Exception{
         Widget widget=new Widget();
+        widget.setCode(GUIDTools.randomUUID());
         Map<String, CssBag> cssMaps = page.getCssMaps();
         CssBag cssBag = cssMaps.get(selectorValue);
         StringBuffer str=new StringBuffer();
@@ -47,24 +48,8 @@ public class WidgetFactory {
 
 
                     }
-//                    for(Map.Entry<String, List<String>> entry:map.entrySet()){
-//                        AttributeNameType attributeNameType = AttributeNameType.getAttributeNameType(entry.getKey().toLowerCase());
-//                        if(attributeNameType!=null){
-//                            widget.setProperty(attributeNameType,entry.getValue(),value,selectorValue);
-//                            //str.append(" style=\"");
-//                            if(entry.getValue()!=null && entry.getValue().size()>0){
-//                                for(String m:entry.getValue()){
-//                                    str.append(attributeNameType.getName());
-//                                    str.append(":");
-//                                    str.append(m);
-//                                    str.append(";");
-//                                }
-//                            }
-//                        }
-//
-//                    }
                     widget.setTitle(selectorValue);
-                    str.append("\">");
+                    str.append("\" id=\""+widget.getCode()+"\">");
                     page.getStr().append(str);
 
                     return widget;
@@ -99,32 +84,12 @@ public class WidgetFactory {
             peek.getChildNodes().add(widgetNode);
         }
 
-//        StringBuffer str = page.getStr();
-//        str.append("<div style=\"");
-//        Map<AttributeNameType, IAttributeValue> properties = widgetNode.getData().getProperties().getProperties();
-//        if(properties.size()>0){
-//            for(Map.Entry<AttributeNameType, IAttributeValue> entry:properties.entrySet()){
-//
-//                List<String> attributeValue = entry.getValue().getAttributeValue();
-//                if(attributeValue!=null && attributeValue.size()>0){
-//                    for(String value:attributeValue){
-//                        str.append(entry.getKey().getName());
-//                        str.append(":");
-//                        str.append(value);
-//                        str.append(";");
-//                    }
-//                }
-//
-//            }
-//        }
-//        str.append("\">");
-
     }
 
     public static WidgetNode getWidgetNode(Widget data,boolean isClosed)throws Exception {
         WidgetNode widgetNode=new WidgetNode();
         widgetNode.setData(data);
-        widgetNode.setCode(GUIDTools.randomUUID());
+        widgetNode.setCode(data.getCode());
         widgetNode.setClosed(isClosed);
         return widgetNode;
     }

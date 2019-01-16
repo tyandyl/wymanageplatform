@@ -30,6 +30,8 @@ public class Widget implements IWidget, Serializable {
 
     private TagType tagType;
 
+    private String code;
+
     /**
      * 获取宽度
      * @return
@@ -160,4 +162,11 @@ public class Widget implements IWidget, Serializable {
 
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }
