@@ -8,23 +8,46 @@ import com.wy.manage.platform.core.widget.*;
 import java.io.*;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tianye
  */
 public class Ingress {
+
+    public String widget;
+
+    public Ingress(String widget){
+        this.widget=widget;
+    }
+
     public void handle(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         try {
-            String baseAddress="template/simple/";
-            String htmlAddress=baseAddress+"window/";
-            String htmlName="window.html";
+            String baseAddress=null;
+            String htmlAddress=null;
+            String htmlName=null;
+            HtmlModel<Page> htmlModel=null;
+            if(widget.equalsIgnoreCase("window")){
+                baseAddress="template/simple/";
+                htmlAddress=baseAddress+"window/";
+                htmlName="window.html";
+                htmlModel=new HtmlModel<Page>();
+            }else if(widget.equalsIgnoreCase("button")){
+                baseAddress="template/simple/";
+                htmlAddress=baseAddress+"button/";
+                htmlName="button.html";
+                htmlModel=new HtmlModel<Page>(){
+                    public String getAddress() {
+                        return "regular/widget.properties";
+                    }
+                };
+            }
             StringBuffer stringBuffer = FileTools.getContent(htmlAddress + htmlName,true);
-            //System.out.println("打印读取窗口日志:"+stringBuffer);
 
-            System.out.println();
-            HtmlModel<Page> htmlModel=new HtmlModel<Page>();
+
             htmlModel.defineAction();
             Page page=new Page();
+            page.setParamMap( request.getParameterMap());
             page.setBaseAddress(baseAddress);
             page.setHtmlAddress(htmlAddress);
             page.setHtmlName(htmlName);
@@ -40,9 +63,16 @@ public class Ingress {
         }
 
 
+
+
     }
 
 
+    public String getWidget() {
+        return widget;
+    }
 
-
+    public void setWidget(String widget) {
+        this.widget = widget;
+    }
 }

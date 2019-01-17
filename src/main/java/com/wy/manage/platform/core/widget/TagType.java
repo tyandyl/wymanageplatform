@@ -5,7 +5,8 @@ package com.wy.manage.platform.core.widget;
  */
 public enum TagType {
 
-    DIV(1,"div");
+    DIV(1,"div"),
+    BUTTON(2,"button");
     private int code;
     private String name;
 
@@ -14,4 +15,19 @@ public enum TagType {
         this.name=name;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

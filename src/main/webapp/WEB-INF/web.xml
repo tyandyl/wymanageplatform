@@ -10,12 +10,22 @@
 
     <servlet>
         <servlet-name>Window</servlet-name>
-        <servlet-class>Entrance</servlet-class>
+        <servlet-class>Window</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>Window</servlet-name>
         <url-pattern>/Window</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Button</servlet-name>
+        <servlet-class>Button</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Button</servlet-name>
+        <url-pattern>/Button</url-pattern>
     </servlet-mapping>
 
 </web-app>

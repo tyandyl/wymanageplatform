@@ -1,0 +1,17 @@
+#search_button {
+	position:absolute;
+	top:5px;
+	left:5px;
+	right:0px;
+	border: 1px solid #0382AD;
+	background-color: #45B5DA;
+	background: -webkit-linear-gradient(#45B5DA,#0382AD);
+	background: linear-gradient(#45B5DA,#0382AD);
+	overflow: visible;
+	border-radius: 3px;
+	cursor: pointer;
+	font: 13px/1.7 verdana,'\5b8b\4f53',arial,georgia,helvetica,sans-serif;
+	color: #FFFFFF;
+	width:55px;
+	height:25px;
+}

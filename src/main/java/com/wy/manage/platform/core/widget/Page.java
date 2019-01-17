@@ -35,6 +35,17 @@ public class Page implements Serializable {
 
     private WidgetNodeTree widgetNodeTree=new WidgetNodeTree();
 
+
+    private Map<String, String[]> paramMap=new HashMap<String, String[]>();
+
+    public Map<String, String[]> getParamMap() {
+        return paramMap;
+    }
+
+    public void setParamMap(Map<String, String[]> paramMap) {
+        this.paramMap = paramMap;
+    }
+
     public DocType getDocType() {
         return docType;
     }

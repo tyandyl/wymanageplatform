@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by tianye
  */
-public class DivStartLineAction extends BasicAction {
+public class ButtonStartLineAction extends BasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
@@ -24,9 +24,7 @@ public class DivStartLineAction extends BasicAction {
                 String value = IgnoreTools.ignore(regularValue.get("selectorValue").toString());
                 if(regularValue!=null && regularValue.get("selectorType")!=null){
                     String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
-                    Widget widget = WidgetFactory.getWidget(page, s, value, TagType.DIV);
-                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
-                    WidgetFactory.addWidgetNode(page,widgetNode);
+                    WidgetFactory.getWidget(page, s, value, TagType.BUTTON);
                 }
             }
         }
@@ -34,7 +32,7 @@ public class DivStartLineAction extends BasicAction {
 
     @Override
     public String getName() {
-        return "divStartLine";
+        return "buttonStartLine";
     }
 
     @Override
@@ -50,4 +48,5 @@ public class DivStartLineAction extends BasicAction {
         return 1;
     }
 }
+
 

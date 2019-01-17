@@ -29,7 +29,6 @@ public class LinkLineAction extends BasicAction{
             Page page = (Page) t;
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null){
-                String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
                 Link link=new Link();
                 StringBuffer linkRelValue = (StringBuffer)regularValue.get("linkRelValue");
                 if(linkRelValue!=null){
@@ -45,18 +44,23 @@ public class LinkLineAction extends BasicAction{
                 }
                 page.addLink(link);
                 try {
+                    System.out.println("css的地址是:"+link.getHref());
+                    String[] isAnalyzes = page.getParamMap().get("isAnalyze");
+
                     if(link.getHref().contains("bootstrap")){
                         StringBuffer str=new StringBuffer();
                         str.append("<link rel=\"stylesheet\" style=\"text/css\" href=\"");
                         str.append(link.getHref());
                         str.append("\" />");
                         page.getStr().append(str);
-                    }
-
-                    System.out.println("css的地址是:"+link.getHref());
-                    //StringBuffer stringBuffer = FileTools.getContent(page.getHtmlAddress()+link.getHref(),true);
-                    //System.out.println("打印读取css配置文件的日志:"+stringBuffer);
-                    if(link.getHref()!=null && !link.getHref().contains("bootstrap")){
+                    }else if(isAnalyzes==null || !isAnalyzes[0].equalsIgnoreCase("1")){
+                        String fileValue = FileTools.getFileValue(link.getHref(), page,true);
+                        StringBuffer str=new StringBuffer();
+                        str.append("<style>");
+                        str.append(fileValue);
+                        str.append("</style>");
+                        page.getStr().append(str);
+                    }else if(isAnalyzes!=null && isAnalyzes[0].equalsIgnoreCase("1")){
                         String fileValue = FileTools.getFileValue(link.getHref(), page,true);
                         CssModel<List<CssBag>> cssModel=new CssModel<List<CssBag>>();
                         cssModel.defineAction();
@@ -65,14 +69,15 @@ public class LinkLineAction extends BasicAction{
                         if(css!=null){
                             Map<String,CssBag> map=new HashMap<String, CssBag>();
                             for(CssBag cssBag:css){
-                                if(map.get(cssBag.getName())!=null){
+                                if(map.get(cssBag.getName().trim())!=null){
                                     System.out.println("重复啦啦啦啦啦啦");
                                 }
-                                map.put(cssBag.getName(),cssBag);
+                                map.put(cssBag.getName().trim(),cssBag);
                             }
                             page.getCssMaps().putAll(map);
                         }
                     }
+
 
 
                 }catch (Exception e){

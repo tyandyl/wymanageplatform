@@ -24,14 +24,14 @@ public class BackgroundLineAction extends BasicAction{
                 CssBag cssBag = cssBags.get(cssBags.size() - 1);
                 List<String> list = cssBag.getMap().get("background");
                 if(s!=null && s.length()>1){
-                    String substring = s.substring(0, s.length() - 1);
+                    String substring = s.substring(0, s.length() - 2);
                     String[] split = substring.split(":");
                     if(list==null){
                         List<String> list1=new ArrayList<String>();
                         list1.add(split[1]);
                         cssBag.getMap().put("background",list1);
                     }else {
-                        list.add(substring);
+                        list.add(split[1]);
                     }
                 }
 
@@ -49,9 +49,7 @@ public class BackgroundLineAction extends BasicAction{
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list=new ArrayList<String>();
-        list.add("backgroundUnits");
-        return list;
+        return null;
     }
 
     @Override

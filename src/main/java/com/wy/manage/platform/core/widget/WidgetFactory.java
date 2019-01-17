@@ -7,23 +7,23 @@ import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.GUIDTools;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by tianye on 2018/7/1.
  */
 public class WidgetFactory {
 
-    public static Widget getWidget(Page page,String selectorType,String selectorValue)throws Exception{
+    public static Widget getWidget(Page page,String selectorType,String selectorValue,TagType tagType)throws Exception{
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
         Map<String, CssBag> cssMaps = page.getCssMaps();
         CssBag cssBag = cssMaps.get(selectorValue);
         StringBuffer str=new StringBuffer();
-        str.append("<div id=\"");
+        str.append("<"+tagType.getName()+" id=\"");
         str.append(selectorValue);
+        str.append("\" wd=\"");
+        str.append(widget.getCode());
         str.append("\"");
         if(cssBag!=null){
             SelectorType value = SelectorType.getSelectorType(selectorType);
@@ -33,6 +33,12 @@ public class WidgetFactory {
                     str.append(" style=\"");
                     for(String strM:AttributeNameType.getNameList()){
                         List<String> list = map.get(strM);
+                        if("top".equalsIgnoreCase(strM) || "left".equalsIgnoreCase(strM)){
+                            String[] tops = page.getParamMap().get(strM);
+                            if(tops!=null && tops.length>0){
+                                list= Arrays.asList(tops);
+                            }
+                        }
                         if(list!=null && list.size()>0){
                             AttributeNameType attributeNameType = AttributeNameType.getAttributeNameType(strM);
                             if(attributeNameType!=null){
@@ -45,11 +51,9 @@ public class WidgetFactory {
                                 }
                             }
                         }
-
-
                     }
                     widget.setTitle(selectorValue);
-                    str.append("\" id=\""+widget.getCode()+"\">");
+                    str.append("\">");
                     page.getStr().append(str);
 
                     return widget;
@@ -57,7 +61,10 @@ public class WidgetFactory {
             }
 
         }
-        return null;
+        widget.setTitle(selectorValue);
+        str.append(">");
+        page.getStr().append(str);
+        return widget;
     }
 
 

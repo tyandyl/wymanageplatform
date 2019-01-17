@@ -92,7 +92,6 @@ public class AnalyzeExecuteModel {
                     //System.out.println("这个节点不需要执行");
                 }
                 if(check==3){
-                    System.out.println("艹,怎么可能");
                 }
             }
             //说明是没有结束节点干扰的前进

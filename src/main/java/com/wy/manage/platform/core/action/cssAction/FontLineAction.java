@@ -3,6 +3,7 @@ package com.wy.manage.platform.core.action.cssAction;
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
+import com.wy.manage.platform.core.utils.IgnoreTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +20,16 @@ public class FontLineAction extends BasicAction{
             List<CssBag> cssBags=(List)t;
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null) {
-                String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
+                String fontValue = IgnoreTools.ignore(regularValue.get("fontValue").toString());
                 CssBag cssBag = cssBags.get(cssBags.size() - 1);
-                String[] split = s.split(":");
-                if(split!=null && split.length==2){
+                if(fontValue!=null){
                     List<String> list = cssBag.getMap().get("font");
                     if(list==null){
                         List<String> list1=new ArrayList<String>();
-                        list1.add(split[1]);
+                        list1.add(fontValue);
                         cssBag.getMap().put("font",list1);
                     }else {
-                        list.add(split[1]);
+                        list.add(fontValue);
                     }
                 }
 
@@ -46,7 +46,9 @@ public class FontLineAction extends BasicAction{
 
     @Override
     public List<String> getIntraGroupNames() {
-        return null;
+        List<String> list=new ArrayList<String>();
+        list.add("fontValue");
+        return list;
     }
 
     @Override

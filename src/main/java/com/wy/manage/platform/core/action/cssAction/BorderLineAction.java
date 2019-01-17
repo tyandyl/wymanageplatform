@@ -19,11 +19,12 @@ public class BorderLineAction extends BasicAction{
             List<CssBag> cssBags=(List)t;
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null) {
-                String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
+                String s = regularValue.get(this.getName()).toString();
                 CssBag cssBag = cssBags.get(cssBags.size() - 1);
-                String[] split = s.split(":");
-                if(split!=null && split.length==2){
-                    List<String> list = cssBag.getMap().get("border");
+                List<String> list = cssBag.getMap().get("border");
+                if(s!=null && s.length()>1){
+                    String substring = s.substring(0, s.length() - 2);
+                    String[] split = substring.split(":");
                     if(list==null){
                         List<String> list1=new ArrayList<String>();
                         list1.add(split[1]);
@@ -32,7 +33,6 @@ public class BorderLineAction extends BasicAction{
                         list.add(split[1]);
                     }
                 }
-
 
             }
 
