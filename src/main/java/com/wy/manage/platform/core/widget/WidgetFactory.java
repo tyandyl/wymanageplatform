@@ -6,6 +6,7 @@ import com.wy.manage.platform.core.attribute.Properties;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.GUIDTools;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -17,14 +18,41 @@ public class WidgetFactory {
     public static Widget getWidget(Page page,String selectorType,String selectorValue,TagType tagType)throws Exception{
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
+        StringBuffer str=new StringBuffer();
+        createTagType( str, tagType);
+        createId( str, selectorType,selectorValue);
+        buildInStyle( page, selectorType, selectorValue, str, widget);
+        widget.setTitle(selectorValue);
+        str.append(">");
+        page.getStr().append(str);
+        return widget;
+    }
+
+    public static void buildInStyle(Page page,String selectorType,String selectorValue,StringBuffer str,Widget widget)throws Exception{
+        if("4".equalsIgnoreCase(page.getStyleType())){
+            if(!page.isFirstIsCame()){
+                createWd( str, widget);
+                String[] tops = page.getParamMap().get("top");
+                String[] lefts = page.getParamMap().get("left");
+                str.append(" style=\"position:absolute;" +
+                        "top:" +tops[0]+"px;"+
+                        "left:" +lefts[0]+"px;"+
+                        "width:350px;" +
+                        "height:400px;" +
+                        "background: #f9836b;\"");
+                page.setFirstIsCame(true);
+            }
+
+        }else {
+            createWd( str, widget);
+            buildInStyleAnalyze( page, selectorType, selectorValue, str, widget);
+        }
+
+    }
+
+    public static void buildInStyleAnalyze(Page page,String selectorType,String selectorValue,StringBuffer str,Widget widget)throws Exception{
         Map<String, CssBag> cssMaps = page.getCssMaps();
         CssBag cssBag = cssMaps.get(selectorValue);
-        StringBuffer str=new StringBuffer();
-        str.append("<"+tagType.getName()+" id=\"");
-        str.append(selectorValue);
-        str.append("\" wd=\"");
-        str.append(widget.getCode());
-        str.append("\"");
         if(cssBag!=null){
             SelectorType value = SelectorType.getSelectorType(selectorType);
             if(cssBag.getSelectorType().getCode()==value.getCode()){
@@ -52,19 +80,28 @@ public class WidgetFactory {
                             }
                         }
                     }
-                    widget.setTitle(selectorValue);
-                    str.append("\">");
-                    page.getStr().append(str);
-
-                    return widget;
+                    str.append("\"");
                 }
             }
 
         }
-        widget.setTitle(selectorValue);
-        str.append(">");
-        page.getStr().append(str);
-        return widget;
+    }
+
+
+    public static void createTagType(StringBuffer str,TagType tagType){
+        str.append("<"+tagType.getName());
+    }
+
+    public static void createId(StringBuffer str,String selectorType,String selectorValue){
+        if(StringUtils.isNotBlank(selectorType)){
+            str.append(" "+selectorType+"='");
+            str.append(selectorValue+"' ");
+        }
+    }
+    public static void createWd(StringBuffer str,Widget widget){
+        str.append(" wd='");
+        str.append(widget.getCode());
+        str.append("'");
     }
 
 

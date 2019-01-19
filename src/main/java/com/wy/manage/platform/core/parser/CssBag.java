@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.parser;
 
 import com.wy.manage.platform.core.widget.SelectorType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ public class CssBag {
     private SelectorType selectorType;
     private String name;
     private Map<String,List<String>> map=new HashMap<String, List<String>>();
+    //存放属性值,过滤用
+    private List<String> values=new ArrayList<String>();
 
     public String getName() {
         return name;
@@ -36,5 +39,13 @@ public class CssBag {
 
     public void setSelectorType(SelectorType selectorType) {
         this.selectorType = selectorType;
+    }
+
+    public List<String> getValues() {
+        return values;
+    }
+
+    public void setValues(List<String> values) {
+        this.values = values;
     }
 }

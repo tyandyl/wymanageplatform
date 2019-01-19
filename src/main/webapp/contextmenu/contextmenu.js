@@ -8,7 +8,7 @@ $(document).ready(
 			{divider: true},
 			{text: '生成窗口', href: '/wy-manage-web/Window'},
 			{text: '生成按钮', onclick: function() {createButton()}},
-			{text: '生成文本框', onclick: function() {alert("你点击了第3个链接")}},
+			{text: '生成小狗动画', onclick: function() {createDog()}},
 			{text: '揍杨蕾', onclick: function() {alert("你揍了杨蕾，好牛逼啊")}},
 			{divider: true},
 			{text: '更多...', href: '#'}
@@ -19,8 +19,13 @@ $(document).ready(
 );
 
 function createButton(){
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop,"isAnalyze":1};
-	openButton(param);
+	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
+	openURL(param,"Button");
+}
+
+function createDog(){
+	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
+	openURL(param,"Dog");
 }
 // 在页面任意位置点击而触发此事件
 $(document).click(function(e) {
@@ -67,15 +72,23 @@ function getOffsetLeft(obj){
 	return tmp;
 }
 
-function openButton(param){
+function openURL(param,url){
 	$.ajax({
 		type: "post",
-		url: "/wy-manage-web/Button",
+		url: "/wy-manage-web/"+url,
 		async: false,
 		data: param,
 		success: function (data) {
 			var div=getElementByAttr('div','wd',wd);
-			div.innerHTML=data;
+			var result=eval("("+data+")");
+			if(result.strStyle!=null && result.strStyle!=""){
+				var style = document.createElement('style');
+				style.type = 'text/css';
+				style.innerHTML=result.strStyle;
+				var head=document.getElementsByTagName('head').item(0);
+				head.appendChild(style);
+			}
+			div.innerHTML=result.str;
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log("error")

@@ -41,6 +41,15 @@ public class Ingress {
                         return "regular/widget.properties";
                     }
                 };
+            }else if(widget.equalsIgnoreCase("dog")){
+                baseAddress="template/simple/";
+                htmlAddress=baseAddress+"cartoon/";
+                htmlName="dog.html";
+                htmlModel=new HtmlModel<Page>(){
+                    public String getAddress() {
+                        return "regular/widget.properties";
+                    }
+                };
             }
             StringBuffer stringBuffer = FileTools.getContent(htmlAddress + htmlName,true);
 
@@ -54,10 +63,15 @@ public class Ingress {
 
             htmlModel.execute(stringBuffer.toString(),page);
 
-            //String strPage = JSONObject.toJSONString(page.getStr());
             response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
             OutputStream out = response.getOutputStream();
-            out.write(page.getStr().toString().getBytes());
+            if(widget.equalsIgnoreCase("window")){
+                out.write(page.getStr().toString().getBytes());
+            }else {
+                String strPage = JSONObject.toJSONString(page);
+                out.write(strPage.getBytes());
+            }
+
         }catch (Exception e){
             System.out.println(e);
         }

@@ -19,16 +19,19 @@ public class DivStartLineAction extends BasicAction {
         if(t instanceof Page) {
             Page page = (Page) t;
             Map regularValue = modelParam.getRegularValue();
-
-            if(regularValue!=null && regularValue.get("selectorValue")!=null){
-                String value = IgnoreTools.ignore(regularValue.get("selectorValue").toString());
-                if(regularValue!=null && regularValue.get("selectorType")!=null){
-                    String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
-                    Widget widget = WidgetFactory.getWidget(page, s, value, TagType.DIV);
-                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
-                    WidgetFactory.addWidgetNode(page,widgetNode);
-                }
+            Object selectorValue = regularValue.get("selectorValue");
+            String value=null;
+            if(selectorValue!=null){
+                value = IgnoreTools.ignore(selectorValue.toString());
             }
+            Object selectorType = regularValue.get("selectorType");
+            String s=null;
+            if(selectorType!=null){
+                s = IgnoreTools.ignore(selectorType.toString());
+            }
+            Widget widget = WidgetFactory.getWidget(page, s, value, TagType.DIV);
+            WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
+            WidgetFactory.addWidgetNode(page,widgetNode);
         }
     }
 

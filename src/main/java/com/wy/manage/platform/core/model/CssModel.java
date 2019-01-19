@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.model;
 
 import com.wy.manage.platform.core.action.cssAction.*;
+import com.wy.manage.platform.core.action.cssAction.font.FontGroupLineAction;
 
 /**
  * Created by tianye
@@ -22,8 +23,9 @@ public class CssModel<T> extends BasicModel<T>{
         defineAction(new ColorLineAction());
         defineAction(new OverflowLineAction());
         defineAction(new CursorLineAction());
-        defineAction(new FontLineAction());
+        defineAction(new FontGroupLineAction());
         defineAction(new BorderLineAction());
+        defineAction(new CssStopAction());
     }
 
 

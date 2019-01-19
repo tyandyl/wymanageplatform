@@ -1,10 +1,13 @@
 package com.wy.manage.platform.core.action.htmlAction.link;
 
 import com.wy.manage.platform.core.action.BasicAction;
+import com.wy.manage.platform.core.entrance.Ingress;
 import com.wy.manage.platform.core.model.CssModel;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
+import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.FileTools;
+import com.wy.manage.platform.core.utils.PropertiesTools;
 import com.wy.manage.platform.core.widget.Link;
 import com.wy.manage.platform.core.widget.Page;
 
@@ -45,22 +48,25 @@ public class LinkLineAction extends BasicAction{
                 page.addLink(link);
                 try {
                     System.out.println("css的地址是:"+link.getHref());
-                    String[] isAnalyzes = page.getParamMap().get("isAnalyze");
-
-                    if(link.getHref().contains("bootstrap")){
+                    PropertiesTools propertiesTools = PropertiesTools.loadProperties("style.properties");
+                    String styleType = (String)(propertiesTools.get(link.getHref()));
+                    page.setStyleType(styleType);
+                    if(styleType==null){
+                        ExceptionTools.ThrowException("styleType不允许没值");
+                    }else if(Integer.valueOf(styleType)==1){
                         StringBuffer str=new StringBuffer();
                         str.append("<link rel=\"stylesheet\" style=\"text/css\" href=\"");
                         str.append(link.getHref());
                         str.append("\" />");
                         page.getStr().append(str);
-                    }else if(isAnalyzes==null || !isAnalyzes[0].equalsIgnoreCase("1")){
+                    }else if(Integer.valueOf(styleType)==2){
                         String fileValue = FileTools.getFileValue(link.getHref(), page,true);
                         StringBuffer str=new StringBuffer();
                         str.append("<style>");
                         str.append(fileValue);
                         str.append("</style>");
                         page.getStr().append(str);
-                    }else if(isAnalyzes!=null && isAnalyzes[0].equalsIgnoreCase("1")){
+                    }else if(Integer.valueOf(styleType)==3){
                         String fileValue = FileTools.getFileValue(link.getHref(), page,true);
                         CssModel<List<CssBag>> cssModel=new CssModel<List<CssBag>>();
                         cssModel.defineAction();
@@ -76,8 +82,11 @@ public class LinkLineAction extends BasicAction{
                             }
                             page.getCssMaps().putAll(map);
                         }
+                    }else if(Integer.valueOf(styleType)==4){
+                        String fileValue = FileTools.getFileValue(link.getHref(), page,true);
+                        String replace = fileValue.replace("\t", "");
+                        page.getStrStyle().append(replace);
                     }
-
 
 
                 }catch (Exception e){

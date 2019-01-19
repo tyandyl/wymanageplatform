@@ -8,7 +8,8 @@ public enum SelectorType {
     ID_SELECTOR(1,"id"),
     CLASS_SELECTOR(2,"class"),
     GROUP_SELECTOR(3,"group"),
-    ATTRIBUTE_SELECTOR(4,"attribute");
+    ATTRIBUTE_SELECTOR(4,"attribute")
+    ;
     private int code;
     private String name;
 

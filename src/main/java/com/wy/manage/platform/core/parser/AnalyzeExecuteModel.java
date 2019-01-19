@@ -37,7 +37,6 @@ public class AnalyzeExecuteModel {
                 //对正则表达式的状态进行记录
                 record( modelParam,   context, mm);
             }
-
             new AnalyzeStateMoveHandle().analyze(startNodes,result,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]), context);
             if(result.getList().size()==0){
                 System.out.println("当前字符不符合规则,当前字符是:"+modelParam.getChars()[modelParam.getCurInt()]
@@ -45,6 +44,7 @@ public class AnalyzeExecuteModel {
                 System.out.println("完毕");
                 break;
             }
+
             //说明有结束节点干扰的前进
             if(result.getNodes().size()>0){
                 int check = check(modelParam.getChars(), modelParam.getCurInt(), result, context);
@@ -67,9 +67,6 @@ public class AnalyzeExecuteModel {
                     for(NfaStateNode node:nodes){
                         node.getAction().action(modelParam);
                         modelParam.getLockRegularName().add(node.getAction().getName());
-                        if(node.getAction().getName().equalsIgnoreCase("htmlEndTag")){
-                            System.out.print("");
-                        }
                         //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充
                         if(node.getAction().getPriority()==1){
                             modelParam.getRegularValue().clear();
@@ -90,8 +87,6 @@ public class AnalyzeExecuteModel {
                 }
                 if(check==2){
                     //System.out.println("这个节点不需要执行");
-                }
-                if(check==3){
                 }
             }
             //说明是没有结束节点干扰的前进
@@ -115,7 +110,7 @@ public class AnalyzeExecuteModel {
         List<String> belongRegulars = nfaStateNode.getBelongRegular();
         if(belongRegulars!=null && belongRegulars.size()>0){
             for(String belongRegular:belongRegulars){
-                if(belongRegular.equalsIgnoreCase("htmlEndTag")){
+                if(belongRegular.equalsIgnoreCase("cssStop")){
                     System.out.print("");
                 }
                 if(StringUtils.isNotBlank(belongRegular)){

@@ -31,12 +31,34 @@ public class Page implements Serializable {
 
     private StringBuffer str=new StringBuffer();
 
+    private StringBuffer strStyle=new StringBuffer();
+
     private Map<String,CssBag> cssMaps=new HashMap<String,CssBag>();
 
     private WidgetNodeTree widgetNodeTree=new WidgetNodeTree();
 
 
     private Map<String, String[]> paramMap=new HashMap<String, String[]>();
+
+    private String styleType;
+
+    private boolean firstIsCame=false;
+
+    public boolean isFirstIsCame() {
+        return firstIsCame;
+    }
+
+    public void setFirstIsCame(boolean firstIsCame) {
+        this.firstIsCame = firstIsCame;
+    }
+
+    public String getStyleType() {
+        return styleType;
+    }
+
+    public void setStyleType(String styleType) {
+        this.styleType = styleType;
+    }
 
     public Map<String, String[]> getParamMap() {
         return paramMap;
@@ -135,5 +157,13 @@ public class Page implements Serializable {
 
     public void setHtmlName(String htmlName) {
         this.htmlName = htmlName;
+    }
+
+    public StringBuffer getStrStyle() {
+        return strStyle;
+    }
+
+    public void setStrStyle(StringBuffer strStyle) {
+        this.strStyle = strStyle;
     }
 }

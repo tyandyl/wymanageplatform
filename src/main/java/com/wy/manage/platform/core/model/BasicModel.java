@@ -27,9 +27,6 @@ public abstract class BasicModel<T> implements Model<T>{
         List<String> groupNames = action.getIntraGroupNames();
         if(groupNames!=null && groupNames.size()>0){
             for(final String str:groupNames){
-                if("borderStyleValue".equalsIgnoreCase(str)){
-                    System.out.println();
-                }
                 if(nameActions.get(str)==null){
                     nameActions.put(str, new CommonAction() {
                         @Override
@@ -57,7 +54,7 @@ public abstract class BasicModel<T> implements Model<T>{
                 stringBuffer.append(chars1[w]);
             }
         }
-        //System.out.println(stringBuffer.toString());
+        System.out.println(stringBuffer.toString());
         Stack<XContentItem> parser = RegularExpressionParser.parser(chars1, this.valueActions,false);
         XContentItem peek = parser.peek();
         Set<Integer> index = peek.getIndex();

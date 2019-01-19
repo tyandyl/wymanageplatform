@@ -28,4 +28,14 @@
         <url-pattern>/Button</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Dog</servlet-name>
+        <servlet-class>Dog</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Dog</servlet-name>
+        <url-pattern>/Dog</url-pattern>
+    </servlet-mapping>
+
 </web-app>
