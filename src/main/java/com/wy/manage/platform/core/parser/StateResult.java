@@ -17,6 +17,8 @@ public class StateResult {
     private Set<String> listL=new HashSet<String>();
 
     private Set<String> nodeStateNumList=new HashSet<String>();
+    //记录那些
+    private Set<String> listRecord=new HashSet<String>();
 
     public Set<String> getList() {
         return list;
@@ -50,6 +52,14 @@ public class StateResult {
         this.nodeStateNumList = nodeStateNumList;
     }
 
+    public Set<String> getListRecord() {
+        return listRecord;
+    }
+
+    public void setListRecord(Set<String> listRecord) {
+        this.listRecord = listRecord;
+    }
+
     public void handle(DfaContext dfaContext){
         if(nodes.size()>0){
             Set<String> all=new HashSet<String>();
@@ -78,5 +88,6 @@ public class StateResult {
         nodes.clear();
         listL.clear();
         nodeStateNumList.clear();
+        listRecord.clear();
     }
 }

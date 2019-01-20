@@ -28,11 +28,15 @@ public class FontGroupLineAction extends CssBasicAction {
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> cssStop = TempTools.createList("font",
+        List<String> list = TempTools.createList("font",
                 "font-family",
                 "-webkit-text-size-adjust",
-                "-ms-text-size-adjust");
-        return cssStop;
+                "-ms-text-size-adjust",
+                "font-size",
+                "font-weight",
+                "font-variant",
+                "font-style");
+        return list;
     }
 
     @Override

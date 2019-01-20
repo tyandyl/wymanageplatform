@@ -28,7 +28,7 @@ public abstract class CssBasicAction extends BasicAction{
                     return;
                 }
 
-                String cssStop = IgnoreTools.ignore(modelParam.getRegularValue().get("cssStop").toString());
+                String cssStop = IgnoreTools.ignore(modelParam.getRegularValue().get("cssStop").toString().trim());
                 if(!(";".equalsIgnoreCase(cssStop.trim()) || "}".equalsIgnoreCase(cssStop.trim()))){
                     ExceptionTools.ThrowException("css结尾有问题"+cssStop);
                 }
@@ -59,17 +59,17 @@ public abstract class CssBasicAction extends BasicAction{
 
                 CssBag cssBag = cssBags.get(cssBags.size() - 1);
                 List<String> values = cssBag.getValues();
-                if(values.contains(cssValue)){
+                if(values.contains(cssValue.split(":")[1].trim())){
                     return;
                 }
-                values.add(cssValue);
+                values.add(cssValue.split(":")[1].trim());
                 List<String> list = cssBag.getMap().get(name);
                 if(list==null){
                     List<String> list1=new ArrayList<String>();
-                    list1.add(cssValue);
+                    list1.add(cssValue.split(":")[1]);
                     cssBag.getMap().put(name,list1);
                 }else {
-                    list.add(cssValue);
+                    list.add(cssValue.split(":")[1]);
                 }
 
 

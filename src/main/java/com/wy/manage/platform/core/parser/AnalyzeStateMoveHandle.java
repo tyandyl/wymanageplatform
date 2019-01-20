@@ -22,6 +22,7 @@ public class AnalyzeStateMoveHandle implements StateMoveHandle<Set<String>,State
                 //获取var输入的下一个状态
                 List<String> list1 = integerListMap.get(var);
                 if(list1!=null && list1.size()>0){
+                    result.getListRecord().add(str);
                     for(String str1:list1){
                         if(!result.getList().contains(str1)){
                             Set<String> listAdd = dfaContext.getMapEmpty().get(str1);

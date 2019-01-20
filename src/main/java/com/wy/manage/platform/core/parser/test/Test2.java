@@ -15,13 +15,10 @@ import java.util.Stack;
  */
 public class Test2 {
     public static void main(String[] agrs) throws Exception {
-        Integer i=632008;
-        Integer y=632008;
-        if (i.equals(y)){
-            System.out.println("相等");
-        }else {
-            System.out.println("不相等");
-        }
+        String ss="html";
+        String substring = ss.substring(0, ss.length());
+        System.out.println(substring);
+
     }
 
 

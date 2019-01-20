@@ -26,17 +26,17 @@ public class AttributeFirstLineAction extends BasicAction {
                 if(!firstLine.contains("{")){
                     ExceptionTools.ThrowException("css开头不包含}");
                 }
-                int i = firstLine.indexOf("{");
-                String cssName=firstLine.substring(0,i);
+                int i = firstLine.trim().indexOf("{");
+                String cssName=firstLine.trim().substring(0,i);
                 if(cssName!=null){
                     if(cssName.contains(".")){
                         cssBag.setSelectorType(SelectorType.CLASS_SELECTOR);
-                        int i1 = cssName.indexOf(".");
-                        cssName=cssName.substring(i1,cssName.length()-1);
+                        int i1 = cssName.indexOf(".")+1;
+                        cssName=cssName.substring(i1,cssName.length());
                     }else if(cssName.contains("#")){
                         cssBag.setSelectorType(SelectorType.ID_SELECTOR);
-                        int i1 = cssName.indexOf("#");
-                        cssName=cssName.substring(i1,cssName.length()-1);
+                        int i1 = cssName.indexOf("#")+1;
+                        cssName=cssName.substring(i1,cssName.length());
                     }else {
 
                     }
@@ -47,6 +47,10 @@ public class AttributeFirstLineAction extends BasicAction {
 
         }
     }
+
+//    public String getCssName(){
+//
+//    }
 
     public String getName() {
         return "attributeFirstLine";

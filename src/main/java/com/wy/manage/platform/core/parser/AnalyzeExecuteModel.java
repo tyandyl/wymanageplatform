@@ -33,16 +33,18 @@ public class AnalyzeExecuteModel {
             if(modelParam.getChars()[modelParam.getCurInt()]=='A'){
                 System.out.print("");
             }
-            for(String mm:startNodes){
-                //对正则表达式的状态进行记录
-                record( modelParam,   context, mm);
-            }
+
             new AnalyzeStateMoveHandle().analyze(startNodes,result,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]), context);
             if(result.getList().size()==0){
                 System.out.println("当前字符不符合规则,当前字符是:"+modelParam.getChars()[modelParam.getCurInt()]
                         +",其积累的字符串是:"+modelParam.getCurModelValue());
                 System.out.println("完毕");
                 break;
+            }
+
+            for(String mm:result.getListRecord()){
+                //对正则表达式的状态进行记录
+                record( modelParam,   context, mm);
             }
 
             //说明有结束节点干扰的前进
@@ -106,34 +108,40 @@ public class AnalyzeExecuteModel {
     public static void record(ModelParam modelParam,  DfaContext context,String y){
         //获取新的状态
         NfaStateNode nfaStateNode = context.getMapState().get(y);
-        //判断下一个状态属于哪个正则
-        List<String> belongRegulars = nfaStateNode.getBelongRegular();
-        if(belongRegulars!=null && belongRegulars.size()>0){
-            for(String belongRegular:belongRegulars){
-                if(belongRegular.equalsIgnoreCase("cssStop")){
-                    System.out.print("");
-                }
-                if(StringUtils.isNotBlank(belongRegular)){
-                    Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
-                    StringBuffer buffer = regularValue.get(belongRegular);
-                    //对当前字符进行总结
-                    int i = modelParam.getCurInt();
-                    if(buffer==null){
-                        if(modelParam.addRegularNum(belongRegular, i)){
-                            StringBuffer buffer1=new StringBuffer();
-                            buffer1.append(modelParam.getChars()[i]);
-                            regularValue.put(belongRegular,buffer1);
-                        }
-                    }else if(!modelParam.getLockRegularName().contains(belongRegular)){
-                        if(modelParam.addRegularNum(belongRegular, i)){
-                            buffer.append(modelParam.getChars()[i]);
-                            regularValue.put(belongRegular,buffer);
-                        }
+        EdgeLine[] edgeLines = nfaStateNode.getEdgeLines();
+        if(edgeLines!=null
+                && ((edgeLines[0]!=null && edgeLines[0].getEdgeAllowInputGather().size()>0)
+                    || (edgeLines[1]!=null && edgeLines[1].getEdgeAllowInputGather().size()>0))){
+            //判断下一个状态属于哪个正则
+            List<String> belongRegulars = nfaStateNode.getBelongRegular();
+            if(belongRegulars!=null && belongRegulars.size()>0){
+                for(String belongRegular:belongRegulars){
+                    if(belongRegular.equalsIgnoreCase("cssStop")){
+                        System.out.print("");
+                    }
+                    if(StringUtils.isNotBlank(belongRegular)){
+                        Map<String, StringBuffer> regularValue = modelParam.getRegularValue();
+                        StringBuffer buffer = regularValue.get(belongRegular);
+                        //对当前字符进行总结
+                        int i = modelParam.getCurInt();
+                        if(buffer==null){
+                            if(modelParam.addRegularNum(belongRegular, i)){
+                                StringBuffer buffer1=new StringBuffer();
+                                buffer1.append(modelParam.getChars()[i]);
+                                regularValue.put(belongRegular,buffer1);
+                            }
+                        }else if(!modelParam.getLockRegularName().contains(belongRegular)){
+                            if(modelParam.addRegularNum(belongRegular, i)){
+                                buffer.append(modelParam.getChars()[i]);
+                                regularValue.put(belongRegular,buffer);
+                            }
 
+                        }
                     }
                 }
             }
         }
+
     }
 
     public static int check(char[] chars,int curIntL,StateResult result, DfaContext context)throws Exception{

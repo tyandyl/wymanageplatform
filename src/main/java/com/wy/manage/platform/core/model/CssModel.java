@@ -1,7 +1,10 @@
 package com.wy.manage.platform.core.model;
 
 import com.wy.manage.platform.core.action.cssAction.*;
+import com.wy.manage.platform.core.action.cssAction.bg.BackgroundLineAction;
+import com.wy.manage.platform.core.action.cssAction.dimension.DimensionAction;
 import com.wy.manage.platform.core.action.cssAction.font.FontGroupLineAction;
+import com.wy.manage.platform.core.action.cssAction.layout.LayoutLineAction;
 
 /**
  * Created by tianye
@@ -16,7 +19,7 @@ public class CssModel<T> extends BasicModel<T>{
         super.defineAction();
         defineAction(new AttributeFirstLineAction());
         defineAction(new PositionLineAction());
-        defineAction(new DisplayLineAction());
+        defineAction(new LayoutLineAction());
         defineAction(new PxLineAction());
         defineAction(new BackgroundLineAction());
         defineAction(new BorderStyleLineAction());
@@ -26,6 +29,7 @@ public class CssModel<T> extends BasicModel<T>{
         defineAction(new FontGroupLineAction());
         defineAction(new BorderLineAction());
         defineAction(new CssStopAction());
+        defineAction(new DimensionAction());
     }
 
 
