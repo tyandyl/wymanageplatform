@@ -1,15 +1,15 @@
-package com.wy.manage.platform.core.action.cssAction;
+package com.wy.manage.platform.core.action.cssAction.userinterface;
 
 import com.wy.manage.platform.core.action.CssBasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
+import com.wy.manage.platform.core.utils.TempTools;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by tianye
  */
-public class OverflowLineAction extends CssBasicAction {
+public class UserInterfaceLineAction extends CssBasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         super.action(modelParam);
@@ -17,15 +17,20 @@ public class OverflowLineAction extends CssBasicAction {
 
     @Override
     public String getName() {
-        return "overflowLine";
+        return "userInterfaceLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list=new ArrayList<String>();
-        list.add("overflowValue");
+        List<String> list = TempTools.createList("-moz-box-sizing",
+                "-webkit-box-sizing",
+                "-o-box-sizing",
+                "-ms-box-sizing",
+                "outline",
+                "box-sizing");
         return list;
     }
+
 
 
     @Override
@@ -33,3 +38,5 @@ public class OverflowLineAction extends CssBasicAction {
         return 1;
     }
 }
+
+

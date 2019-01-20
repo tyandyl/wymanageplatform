@@ -1,4 +1,4 @@
-package com.wy.manage.platform.core.action.cssAction.layout;
+package com.wy.manage.platform.core.action.cssAction.position;
 
 import com.wy.manage.platform.core.action.CssBasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
@@ -10,21 +10,22 @@ import java.util.List;
 /**
  * Created by tianye
  */
-public class LayoutLineAction extends CssBasicAction {
-    @Override
+public class PositionLineAction extends CssBasicAction {
     public void action(ModelParam modelParam)throws Exception {
         super.action(modelParam);
     }
 
-    @Override
     public String getName() {
-        return "layoutLine";
+        return "positionLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list = TempTools.createList("display",
-                "overflow");
+        List<String> list = TempTools.createList("position",
+                "top",
+                "left",
+                "right",
+                "bottom");
         return list;
     }
 
@@ -34,4 +35,6 @@ public class LayoutLineAction extends CssBasicAction {
     public int getPriority() {
         return 1;
     }
+
+
 }

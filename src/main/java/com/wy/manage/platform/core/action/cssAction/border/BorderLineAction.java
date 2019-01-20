@@ -1,30 +1,33 @@
-package com.wy.manage.platform.core.action.cssAction.layout;
+package com.wy.manage.platform.core.action.cssAction.border;
 
+import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.action.CssBasicAction;
+import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.utils.TempTools;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tianye
  */
-public class LayoutLineAction extends CssBasicAction {
-    @Override
+public class BorderLineAction extends CssBasicAction {
     public void action(ModelParam modelParam)throws Exception {
         super.action(modelParam);
     }
 
-    @Override
     public String getName() {
-        return "layoutLine";
+        return "borderLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list = TempTools.createList("display",
-                "overflow");
+        List<String> list = TempTools.createList("border",
+                "border-bottom",
+                "border-radius",
+                "border-width");
         return list;
     }
 
@@ -34,4 +37,6 @@ public class LayoutLineAction extends CssBasicAction {
     public int getPriority() {
         return 1;
     }
+
+
 }
