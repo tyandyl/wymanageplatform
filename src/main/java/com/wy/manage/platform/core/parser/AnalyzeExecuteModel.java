@@ -30,8 +30,16 @@ public class AnalyzeExecuteModel {
         Set<String> startNodes =context.getMapEmpty().get(context.getStartNodeStateNum());
 
         while (modelParam.getCurInt()<modelParam.getChars().length){
-            if(modelParam.getChars()[modelParam.getCurInt()]=='A'){
+            if(modelParam.getChars()[modelParam.getCurInt()]=='u'){
                 System.out.print("");
+            }
+            if(modelParam.getCurInt()==43){
+                System.out.print("");
+                for(String tt:startNodes){
+                    NfaStateNode nfaStateNode = context.getMapState().get(tt);
+//                    System.out.println(nfaStateNode.getBelongRegular());
+                }
+
             }
 
             new AnalyzeStateMoveHandle().analyze(startNodes,result,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]), context);

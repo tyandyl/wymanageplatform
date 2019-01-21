@@ -23,7 +23,8 @@ public class TextLineAction extends CssBasicAction {
     @Override
     public List<String> getIntraGroupNames() {
         List<String> list = TempTools.createList("vertical-align",
-                "line-height");
+                "line-height",
+                "text-transform");
         return list;
     }
 

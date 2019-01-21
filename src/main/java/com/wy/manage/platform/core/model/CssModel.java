@@ -7,6 +7,7 @@ import com.wy.manage.platform.core.action.cssAction.dimension.DimensionAction;
 import com.wy.manage.platform.core.action.cssAction.font.FontGroupLineAction;
 import com.wy.manage.platform.core.action.cssAction.layout.LayoutLineAction;
 import com.wy.manage.platform.core.action.cssAction.position.PositionLineAction;
+import com.wy.manage.platform.core.action.cssAction.table.TableLineAction;
 import com.wy.manage.platform.core.action.cssAction.text.TextLineAction;
 import com.wy.manage.platform.core.action.cssAction.userinterface.UserInterfaceLineAction;
 
@@ -34,6 +35,7 @@ public class CssModel<T> extends BasicModel<T>{
         defineAction(new DimensionAction());
         defineAction(new TextLineAction());
         defineAction(new UserInterfaceLineAction());
+        defineAction(new TableLineAction());
     }
 
 

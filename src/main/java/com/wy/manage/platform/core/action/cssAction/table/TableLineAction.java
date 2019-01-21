@@ -1,19 +1,12 @@
-package com.wy.manage.platform.core.action.cssAction;
+package com.wy.manage.platform.core.action.cssAction.table;
 
-import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.action.CssBasicAction;
-import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.utils.TempTools;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-/**
- * Created by tianye
- */
-public class ColorLineAction extends CssBasicAction {
+public class TableLineAction extends CssBasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         super.action(modelParam);
@@ -21,17 +14,22 @@ public class ColorLineAction extends CssBasicAction {
 
     @Override
     public String getName() {
-        return "colorLine";
+        return "tableLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list = TempTools.createList("color");
+        List<String> list = TempTools.createList("border-collapse",
+                "border-spacing");
         return list;
     }
+
+
 
     @Override
     public int getPriority() {
         return 1;
     }
 }
+
+
