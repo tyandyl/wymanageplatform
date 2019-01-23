@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class PositionLineAction extends CssBasicAction {
     public void action(ModelParam modelParam)throws Exception {
+        //当前动作,如果后边跟着ignore又遇到该动作，不执行
         super.action(modelParam);
     }
 

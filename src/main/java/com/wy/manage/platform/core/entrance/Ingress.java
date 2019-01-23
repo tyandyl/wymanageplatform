@@ -6,9 +6,6 @@ import com.wy.manage.platform.core.utils.FileTools;
 import com.wy.manage.platform.core.widget.*;
 
 import java.io.*;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tianye
@@ -28,12 +25,12 @@ public class Ingress {
             String htmlName=null;
             HtmlModel<Page> htmlModel=null;
             if(widget.equalsIgnoreCase("window")){
-                baseAddress="template/simple/";
+                baseAddress= "template/";
                 htmlAddress=baseAddress+"window/";
                 htmlName="window.html";
                 htmlModel=new HtmlModel<Page>();
             }else if(widget.equalsIgnoreCase("button")){
-                baseAddress="template/simple/";
+                baseAddress= "template/";
                 htmlAddress=baseAddress+"button/";
                 htmlName="button.html";
                 htmlModel=new HtmlModel<Page>(){
@@ -42,7 +39,7 @@ public class Ingress {
                     }
                 };
             }else if(widget.equalsIgnoreCase("dog")){
-                baseAddress="template/simple/";
+                baseAddress= "template/";
                 htmlAddress=baseAddress+"cartoon/";
                 htmlName="dog.html";
                 htmlModel=new HtmlModel<Page>(){

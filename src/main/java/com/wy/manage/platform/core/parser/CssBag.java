@@ -14,8 +14,6 @@ public class CssBag {
     private SelectorType selectorType;
     private String name;
     private Map<String,List<String>> map=new HashMap<String, List<String>>();
-    //存放属性值,过滤用
-    private List<String> values=new ArrayList<String>();
 
     public String getName() {
         return name;
@@ -41,11 +39,4 @@ public class CssBag {
         this.selectorType = selectorType;
     }
 
-    public List<String> getValues() {
-        return values;
-    }
-
-    public void setValues(List<String> values) {
-        this.values = values;
-    }
 }

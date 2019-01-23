@@ -1,0 +1,70 @@
+.win-screen{
+	position:absolute;
+	display:table;
+	overflow:hidden;
+	border-collapse:collapse;
+
+}
+.win-top{
+	display:table-row;
+	overflow:hidden;
+}
+.win-top-left{
+	display:table-cell;
+	width:3px;
+	height:3px;
+	overflow:hidden;
+	background-repeat:no-repeat;
+	background-color:transparent;
+	background-image:url(./winpic/window-n-lt.gif);
+}
+.win-top-middle{
+	display:table-cell;
+	background-color:#FFFFFF !important;
+	overflow:hidden;
+	width:900px;
+	height:3px;
+	background-repeat:repeat-x;
+	background-color:transparent;
+	background-image:url(./winpic/window-n-t.gif);
+}
+.win-top-right{
+	display:table-cell;
+	overflow:hidden;
+	width:3px;
+	height:3px;
+	background-repeat:no-repeat;
+	background-color:transparent;
+	background-image:url(./winpic/window-n-rt.gif);
+}
+.win-header{
+	display:table-row;
+	overflow:hidden;
+}
+.win-header-left{
+	display:table-cell;
+	background-repeat:repeat-y;
+	background-color:transparent;
+	background-image:url(./winpic/window-n-l.gif);
+	width:3px;
+	height:25px;
+}
+.win-header-middle{
+	display:table-cell;
+	width:900px;
+	background-repeat:repeat-x;
+	background-color:transparent;
+	background-image:url(./winpic/window-n-bg.gif);
+	overflow:hidden;
+	height:25px;
+}
+.win-header-right{
+	display:table-cell;
+	background-position:right 0;
+	background-repeat:repeat-y;
+	background-color:transparent;
+	background-image:url(./winpic/window-n-r.gif);
+	width:3px;
+	height:25px;
+}
+/**/
