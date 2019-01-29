@@ -27,7 +27,11 @@ public class BackgroundLineAction extends CssBasicAction {
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list = TempTools.createList("background-color","background");
+        List<String> list = TempTools.createList("background-color",
+                "background",
+                "background-repeat",
+                "background-image",
+                "background-position");
         return list;
     }
 

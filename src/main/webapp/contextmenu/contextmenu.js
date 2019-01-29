@@ -6,10 +6,10 @@ $(document).ready(
 		var options = {items:[
 			{header: '右键功能菜单'},
 			{divider: true},
-			{text: '生成窗口', href: '/wy-manage-web/Window'},
+			{text: '生成后台窗口', href: '/wy-manage-web/Window'},
+			{text: '生成弹出窗口',onclick: function() {createWindow()}},
 			{text: '生成按钮', onclick: function() {createButton()}},
-			{text: '生成小狗动画', onclick: function() {createDog()}},
-			{text: '揍杨蕾', onclick: function() {alert("你揍了杨蕾，好牛逼啊")}},
+			{text: '生成输入面板', onclick: function() {createTablePanel()}},
 			{divider: true},
 			{text: '更多...', href: '#'}
 		]};
@@ -18,14 +18,19 @@ $(document).ready(
 
 );
 
+function createWindow(){
+	var param={"id":wd,"left":relativeLeft,"top":relativeTop,"win":2};
+	openURL(param,"Window");
+}
+
 function createButton(){
 	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
 	openURL(param,"Button");
 }
 
-function createDog(){
+function createTablePanel(){
 	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
-	openURL(param,"Dog");
+	openURL(param,"TablePanel");
 }
 // 在页面任意位置点击而触发此事件
 $(document).click(function(e) {
@@ -88,7 +93,8 @@ function openURL(param,url){
 				var head=document.getElementsByTagName('head').item(0);
 				head.appendChild(style);
 			}
-			div.innerHTML=result.str;
+			var bef=div.innerHTML
+			div.innerHTML=bef+result.str;
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log("error")

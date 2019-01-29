@@ -36,7 +36,7 @@ public enum SelectorType {
 
     public static SelectorType getSelectorType(String str){
         for (SelectorType c : SelectorType.values()) {
-            if (str.equalsIgnoreCase(c.getName())) {
+            if (c.getName().equalsIgnoreCase(str)) {
                 return c;
             }
         }

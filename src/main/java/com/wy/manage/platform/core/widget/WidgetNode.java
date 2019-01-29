@@ -25,6 +25,8 @@ public class WidgetNode implements Serializable{
 
     private boolean isClosed=false;
 
+    private boolean isFirstClosed=false;
+
     private List<WidgetNode> childNodes=new ArrayList<WidgetNode>();
 
     public Widget getData() {
@@ -73,5 +75,13 @@ public class WidgetNode implements Serializable{
 
     public void setChildNodes(List<WidgetNode> childNodes) {
         this.childNodes = childNodes;
+    }
+
+    public boolean isFirstClosed() {
+        return isFirstClosed;
+    }
+
+    public void setFirstClosed(boolean firstClosed) {
+        isFirstClosed = firstClosed;
     }
 }

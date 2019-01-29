@@ -38,4 +38,14 @@
         <url-pattern>/Dog</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TablePanel</servlet-name>
+        <servlet-class>TablePanel</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TablePanel</servlet-name>
+        <url-pattern>/TablePanel</url-pattern>
+    </servlet-mapping>
+
 </web-app>

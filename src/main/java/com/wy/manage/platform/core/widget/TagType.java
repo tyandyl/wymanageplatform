@@ -6,7 +6,11 @@ package com.wy.manage.platform.core.widget;
 public enum TagType {
 
     DIV(1,"div"),
-    BUTTON(2,"button");
+    BUTTON(2,"button"),
+    TABLE(3,"table"),
+    TR(4,"tr"),
+    TD(5,"td"),
+    INPUT(6,"input");
     private int code;
     private String name;
 

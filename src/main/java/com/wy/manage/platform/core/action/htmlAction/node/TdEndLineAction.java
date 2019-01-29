@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by tianye13 on 2019/1/14.
+ * Created by tianye
  */
-public class DivEndLineAction extends BasicAction {
+public class TdEndLineAction extends BasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
@@ -21,13 +21,21 @@ public class DivEndLineAction extends BasicAction {
             WidgetNodeTree widgetNodeTree = page.getWidgetNodeTree();
             //闭环校验，校验一些div名称之类的，目前先不校验
             widgetNodeTree.getNewestNoClosed().pop();
-            page.getStr().append("</div>");
+            //3的时候没人用，这里使用一下
+            if(page.getFirstIsCame()==3){
+                String gbk = new String("订单编号".getBytes("utf-8"));
+                page.getStr().append(gbk+"</td>");
+                page.setFirstIsCame(4);
+            }else {
+                page.getStr().append("</td>");
+            }
+
         }
     }
 
     @Override
     public String getName() {
-        return "divEndLine";
+        return "tdEndLine";
     }
 
     @Override
@@ -39,7 +47,7 @@ public class DivEndLineAction extends BasicAction {
     public int getPriority() {
         return 1;
     }
-
 }
+
 
 

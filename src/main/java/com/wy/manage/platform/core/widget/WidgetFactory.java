@@ -29,61 +29,44 @@ public class WidgetFactory {
     }
 
     public static void buildInStyle(Page page,String selectorType,String selectorValue,StringBuffer str,Widget widget)throws Exception{
-        if("4".equalsIgnoreCase(page.getStyleType())){
-            if(!page.isFirstIsCame()){
-                createWd( str, widget);
-                String[] tops = page.getParamMap().get("top");
-                String[] lefts = page.getParamMap().get("left");
-                str.append(" style=\"position:absolute;" +
-                        "top:" +tops[0]+"px;"+
-                        "left:" +lefts[0]+"px;"+
-                        "width:350px;" +
-                        "height:400px;" +
-                        "background: #f9836b;\"");
-                page.setFirstIsCame(true);
-            }
-
-        }else {
-            createWd( str, widget);
-            buildInStyleAnalyze( page, selectorType, selectorValue, str, widget);
-        }
+        createWd( str, widget);
+        buildInStyleAnalyze( page, selectorType, selectorValue, str, widget);
 
     }
 
     public static void buildInStyleAnalyze(Page page,String selectorType,String selectorValue,StringBuffer str,Widget widget)throws Exception{
         Map<String, CssBag> cssMaps = page.getCssMaps();
         CssBag cssBag = cssMaps.get(selectorValue);
-        if(cssBag!=null){
-            SelectorType value = SelectorType.getSelectorType(selectorType);
-            if(cssBag.getSelectorType().getCode()==value.getCode()){
-                Map<String, List<String>> map = cssBag.getMap();
-                if(map!=null && map.size()>0){
-                    str.append(" style=\"");
-                    for(String strM:AttributeNameType.getNameList()){
-                        List<String> list = map.get(strM);
-                        if("top".equalsIgnoreCase(strM) || "left".equalsIgnoreCase(strM)){
-                            String[] tops = page.getParamMap().get(strM);
-                            if(tops!=null && tops.length>0){
-                                list= Arrays.asList(tops);
-                            }
-                        }
-                        if(list!=null && list.size()>0){
-                            AttributeNameType attributeNameType = AttributeNameType.getAttributeNameType(strM);
-                            if(attributeNameType!=null){
-                                widget.setProperty(attributeNameType,list,value,selectorValue);
-                                for(String m:list){
-                                    str.append(attributeNameType.getName());
-                                    str.append(":");
-                                    str.append(m);
-                                    str.append(";");
-                                }
-                            }
+        SelectorType value = SelectorType.getSelectorType(selectorType);
+        //如果value不为空，则必须类型相等；或者value为空，表示无选择器
+        if((cssBag !=null && value!=null && cssBag.getSelectorType().getCode()==value.getCode())
+                || cssBag==null){
+            Map<String, List<String>> map = cssBag!=null?cssBag.getMap():null;
+            str.append(" style=\"");
+            for(String strM:AttributeNameType.getNameList()){
+                List<String> list = map!=null?map.get(strM):null;
+                if("top".equalsIgnoreCase(strM) || "left".equalsIgnoreCase(strM)){
+                    String[] tops = page.getParamMap().get(strM);
+                    if(tops!=null && tops.length>0 && page.getFirstIsCame()>0 && page.getFirstIsCame()<3){
+                        list= Arrays.asList(tops);
+                        int firstIsCame = page.getFirstIsCame();
+                        page.setFirstIsCame(++firstIsCame);
+                    }
+                }
+                if(list!=null && list.size()>0){
+                    AttributeNameType attributeNameType = AttributeNameType.getAttributeNameType(strM);
+                    if(attributeNameType!=null){
+                        widget.setProperty(attributeNameType,list,value,selectorValue);
+                        for(String m:list){
+                            str.append(attributeNameType.getName());
+                            str.append(":");
+                            str.append(m);
+                            str.append(";");
                         }
                     }
-                    str.append("\"");
                 }
             }
-
+            str.append("\"");
         }
     }
 
@@ -113,20 +96,44 @@ public class WidgetFactory {
             widgetNode.setFullCode(widgetNode.getCode());
             widgetNode.setParentNode(null);
             widgetNodeTree.getNewestNoClosed().push(widgetNode);
+            widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
             return ;
         }
-        //如果是闭环
-        if(widgetNode.isClosed()){
-            //闭环校验，校验一些div名称之类的，目前先不校验
-            widgetNodeTree.getNewestNoClosed().pop();
+        //解决控件插入
+        WidgetNode widgetNodeInsert=null;
+        String[] ids = page.getParamMap().get("id");
+        if(ids!=null && ids.length>0){
+            for(String id:ids){
+                if(StringUtils.isNotBlank(id)){
+                    WidgetNode widgetNode1 = widgetNodeTree.getNodeMap().get(id);
+                    if(widgetNode1!=null){
+                        widgetNodeInsert=widgetNode1;
+                        break;
+                    }
+                }
+            }
+        }
+        if(widgetNodeInsert!=null){
+            widgetNode.setFullCode(widgetNodeInsert.getFullCode()+widgetNode.getCode());
+            widgetNode.setParentNode(widgetNodeInsert);
+            widgetNodeInsert.getChildNodes().add(widgetNode);
+            widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
+            Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();
+            newestNoClosed.push(widgetNode);
         }else {
+            //这里都是开口的
             Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();
             WidgetNode peek = newestNoClosed.peek();
             widgetNode.setFullCode(peek.getFullCode()+widgetNode.getCode());
             widgetNode.setParentNode(peek);
-            newestNoClosed.push(widgetNode);
+            //判断是不是首个标签闭合如<input />
+            if(!widgetNode.isFirstClosed()){
+                newestNoClosed.push(widgetNode);
+            }
             peek.getChildNodes().add(widgetNode);
+            widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
         }
+
 
     }
 
@@ -135,6 +142,15 @@ public class WidgetFactory {
         widgetNode.setData(data);
         widgetNode.setCode(data.getCode());
         widgetNode.setClosed(isClosed);
+        return widgetNode;
+    }
+
+    public static WidgetNode getWidgetNode(Widget data,boolean isClosed,boolean isFirstClosed)throws Exception {
+        WidgetNode widgetNode=new WidgetNode();
+        widgetNode.setData(data);
+        widgetNode.setCode(data.getCode());
+        widgetNode.setClosed(isClosed);
+        widgetNode.setFirstClosed(isFirstClosed);
         return widgetNode;
     }
 

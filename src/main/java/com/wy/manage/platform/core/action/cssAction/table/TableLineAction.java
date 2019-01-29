@@ -1,33 +1,31 @@
-package com.wy.manage.platform.core.action.cssAction.position;
+package com.wy.manage.platform.core.action.cssAction.table;
 
 import com.wy.manage.platform.core.action.CssBasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.utils.TempTools;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by tianye
  */
-public class PositionLineAction extends CssBasicAction {
+public class TableLineAction extends CssBasicAction {
     public void action(ModelParam modelParam)throws Exception {
-        //当前动作,如果后边跟着ignore又遇到该动作，不执行
         super.action(modelParam);
     }
 
     public String getName() {
-        return "positionLine";
+        return "tableLine";
     }
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list = TempTools.createList("position",
-                "top",
-                "left",
-                "right",
-                "bottom",
-                "z-index");
+        List<String> list = TempTools.createList("border-spacing",
+                "border-collapse",
+                "table-layout",
+                "padding-right",
+                "padding-top",
+                "margin");
         return list;
     }
 
@@ -40,3 +38,4 @@ public class PositionLineAction extends CssBasicAction {
 
 
 }
+

@@ -18,6 +18,9 @@ public class ButtonEndLineAction extends BasicAction {
         Object t = modelParam.getT();
         if(t instanceof Page) {
             Page page = (Page) t;
+            WidgetNodeTree widgetNodeTree = page.getWidgetNodeTree();
+            //闭环校验，校验一些div名称之类的，目前先不校验
+            widgetNodeTree.getNewestNoClosed().pop();
             String gbk = new String("查询".getBytes("utf-8"));
             page.getStr().append(gbk+"</button>");
         }

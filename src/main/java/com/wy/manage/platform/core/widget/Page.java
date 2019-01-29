@@ -42,13 +42,13 @@ public class Page implements Serializable {
 
     private String styleType;
 
-    private boolean firstIsCame=false;
+    private int firstIsCame=0;
 
-    public boolean isFirstIsCame() {
+    public int getFirstIsCame() {
         return firstIsCame;
     }
 
-    public void setFirstIsCame(boolean firstIsCame) {
+    public void setFirstIsCame(int firstIsCame) {
         this.firstIsCame = firstIsCame;
     }
 

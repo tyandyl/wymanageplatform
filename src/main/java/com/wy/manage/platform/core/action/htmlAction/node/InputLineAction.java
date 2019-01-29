@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by tianye
  */
-public class ButtonStartLineAction extends BasicAction {
+public class InputLineAction extends BasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
@@ -24,13 +24,13 @@ public class ButtonStartLineAction extends BasicAction {
                 String value = IgnoreTools.ignore(regularValue.get("selectorValue").toString());
                 if(regularValue!=null && regularValue.get("selectorType")!=null){
                     String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
-                    Widget widget = WidgetFactory.getWidget(page, s, value, TagType.BUTTON);
-                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
+                    Widget widget = WidgetFactory.getWidget(page, s, value, TagType.INPUT);
+                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false,true);
                     WidgetFactory.addWidgetNode(page,widgetNode);
                 }
             }else {
-                Widget widget = WidgetFactory.getWidget(page, null, null, TagType.BUTTON);
-                WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
+                Widget widget = WidgetFactory.getWidget(page, null, null, TagType.INPUT);
+                WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false,true);
                 WidgetFactory.addWidgetNode(page,widgetNode);
             }
         }
@@ -38,7 +38,7 @@ public class ButtonStartLineAction extends BasicAction {
 
     @Override
     public String getName() {
-        return "buttonStartLine";
+        return "inputLine";
     }
 
     @Override
@@ -54,5 +54,6 @@ public class ButtonStartLineAction extends BasicAction {
         return 1;
     }
 }
+
 
 
