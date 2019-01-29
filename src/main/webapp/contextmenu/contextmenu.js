@@ -14,6 +14,21 @@ $(document).ready(
 			{text: '更多...', href: '#'}
 		]};
 		$('div').contextify(options);
+
+		// 在页面任意位置点击而触发此事件
+		$(document).click(function(e) {
+			var temp=$(e.target).attr("wd");     // e.target表示被点击的目标
+			if(typeof(temp) =="undefined"){
+				return;
+			}
+			wd=temp;
+			var parDiv=getElementByAttr('div','wd',wd);
+			var top=getOffsetTop(parDiv);
+			var left=getOffsetLeft(parDiv);
+			relativeLeft=e.clientX-left;
+			relativeTop=e.clientY-top;
+		});
+
 	}
 
 );
@@ -32,19 +47,7 @@ function createTablePanel(){
 	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
 	openURL(param,"TablePanel");
 }
-// 在页面任意位置点击而触发此事件
-$(document).click(function(e) {
-	var temp=$(e.target).attr("wd");     // e.target表示被点击的目标
-	if(typeof(temp) =="undefined"){
-		return;
-	}
-	wd=temp;
-	var parDiv=getElementByAttr('div','wd',wd);
-	var top=getOffsetTop(parDiv);
-	var left=getOffsetLeft(parDiv);
-	relativeLeft=e.clientX-left;
-	relativeTop=e.clientY-top;
-});
+
 
 function getElementByAttr(tag,attr,value)
 {
