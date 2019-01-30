@@ -1,6 +1,7 @@
 var wd=null;
 var relativeTop=null;
 var relativeLeft=null;
+var page=null;
 $(document).ready(
 	function(){
 		var options = {items:[
@@ -29,23 +30,91 @@ $(document).ready(
 			relativeTop=e.clientY-top;
 		});
 
+
+		$(document).dblclick(function(e){
+			var temp=$(e.target).attr("wd");     // e.target表示被点击的目标
+			if(typeof(temp) =="undefined"){
+				return;
+			}
+			wd=temp;
+			var parDiv=getElementByAttr(e.target.localName,'wd',wd);
+			if(parDiv.localName=="td"){
+			}
+
+			var relaX=null;
+			var relaY =null;
+			parDiv.onmousedown = function(ev) {
+				var ev = ev || window.event;
+
+				relaX = ev.clientX - this.offsetLeft;
+				relaY = ev.clientY - this.offsetTop;
+				parDiv.onmousemove = function(ev) {
+					var ev = ev || window.event;
+					parDiv.style.left = ev.clientX - relaX + 'px';
+					parDiv.style.top = ev.clientY - relaY + 'px';
+				};
+			};
+
+			parDiv.onmouseup = function(ev) {
+				var ev = ev || window.event;
+				parDiv.onmousemove = null;
+				parDiv.onmouseup = null;
+				parDiv.onmousedown=null;
+			};
+		});
+
+
 	}
 
 );
 
+function createDblClick(wd){
+	var param={"id":wd};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/DblClick";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+
+	});
+}
 function createWindow(){
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop,"win":2};
-	openURL(param,"Window");
+	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/Window";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		var div=getElementByAttr('div','wd',wd);
+		var bef=div.innerHTML
+		div.innerHTML=bef+data.str;
+	});
+
+	//openURL(param,"Window");
 }
 
 function createButton(){
 	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
-	openURL(param,"Button");
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/Button";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		var div=getElementByAttr('div','wd',wd);
+		var bef=div.innerHTML
+		div.innerHTML=bef+data.str;
+	});
+	//openURL(param,"Button");
 }
 
 function createTablePanel(){
 	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
-	openURL(param,"TablePanel");
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/TablePanel";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		var div=getElementByAttr('div','wd',wd);
+		var bef=div.innerHTML
+		div.innerHTML=bef+data.str;
+	});
+	//openURL(param,"TablePanel");
 }
 
 
@@ -101,6 +170,24 @@ function openURL(param,url){
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log("error")
+		}
+	});
+}
+
+function sendAjaxNews(isAsync,type,url,data,call){
+	jQuery.ajax({
+		async: isAsync,
+		type: type,
+		url: url,
+		data: data,
+		contenttype: "application/json; charset=utf-8",
+		success: function (data) {
+			var result = eval("(" + data + ")");
+			page=JSON.parse(data);
+			call(result);
+		},
+		error: function () {
+			alert("ajax error");
 		}
 	});
 }

@@ -19,7 +19,7 @@ public class WidgetFactory {
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
         StringBuffer str=new StringBuffer();
-        createTagType( str, tagType);
+        createTagType( str, tagType,widget);
         createId( str, selectorType,selectorValue);
         buildInStyle( page, selectorType, selectorValue, str, widget);
         widget.setTitle(selectorValue);
@@ -71,20 +71,22 @@ public class WidgetFactory {
     }
 
 
-    public static void createTagType(StringBuffer str,TagType tagType){
+    public static void createTagType(StringBuffer str,TagType tagType,Widget widget){
         str.append("<"+tagType.getName());
+        widget.setTagType(tagType);
     }
 
     public static void createId(StringBuffer str,String selectorType,String selectorValue){
-        if(StringUtils.isNotBlank(selectorType)){
-            str.append(" "+selectorType+"='");
-            str.append(selectorValue+"' ");
-        }
+//        if(StringUtils.isNotBlank(selectorType)){
+//            str.append(" "+selectorType+"='");
+//            str.append(selectorValue+"' ");
+//        }
     }
     public static void createWd(StringBuffer str,Widget widget){
         str.append(" wd='");
         str.append(widget.getCode());
         str.append("'");
+
     }
 
 
@@ -123,6 +125,9 @@ public class WidgetFactory {
         }else {
             //这里都是开口的
             Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();
+            if(newestNoClosed.empty()){
+                ExceptionTools.ThrowException("开口元素为空");
+            }
             WidgetNode peek = newestNoClosed.peek();
             widgetNode.setFullCode(peek.getFullCode()+widgetNode.getCode());
             widgetNode.setParentNode(peek);
@@ -137,19 +142,17 @@ public class WidgetFactory {
 
     }
 
-    public static WidgetNode getWidgetNode(Widget data,boolean isClosed)throws Exception {
+    public static WidgetNode getWidgetNode(Widget data)throws Exception {
         WidgetNode widgetNode=new WidgetNode();
         widgetNode.setData(data);
         widgetNode.setCode(data.getCode());
-        widgetNode.setClosed(isClosed);
         return widgetNode;
     }
 
-    public static WidgetNode getWidgetNode(Widget data,boolean isClosed,boolean isFirstClosed)throws Exception {
+    public static WidgetNode getWidgetNode(Widget data,boolean isFirstClosed)throws Exception {
         WidgetNode widgetNode=new WidgetNode();
         widgetNode.setData(data);
         widgetNode.setCode(data.getCode());
-        widgetNode.setClosed(isClosed);
         widgetNode.setFirstClosed(isFirstClosed);
         return widgetNode;
     }

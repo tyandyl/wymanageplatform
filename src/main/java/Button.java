@@ -1,3 +1,4 @@
+import com.wy.manage.platform.core.entrance.ButtonIngress;
 import com.wy.manage.platform.core.entrance.Ingress;
 
 import java.io.IOException;
@@ -12,13 +13,13 @@ public class Button extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         System.out.println("uuuuuuuuuuuuuuuuuuuuu");
-        Ingress ingress=new Ingress("Button");
+        Ingress ingress=new ButtonIngress();
         ingress.handle(request,response);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
-        Ingress ingress=new Ingress("Button");
+        Ingress ingress=new ButtonIngress();
         ingress.handle(request,response);
     }
 }

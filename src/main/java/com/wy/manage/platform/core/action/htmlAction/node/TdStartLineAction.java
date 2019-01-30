@@ -25,12 +25,12 @@ public class TdStartLineAction extends BasicAction {
                 if(regularValue!=null && regularValue.get("selectorType")!=null){
                     String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
                     Widget widget = WidgetFactory.getWidget(page, s, value, TagType.TD);
-                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
+                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget);
                     WidgetFactory.addWidgetNode(page,widgetNode);
                 }
             }else {
                 Widget widget = WidgetFactory.getWidget(page, null, null, TagType.TD);
-                WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
+                WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget);
                 WidgetFactory.addWidgetNode(page,widgetNode);
             }
         }

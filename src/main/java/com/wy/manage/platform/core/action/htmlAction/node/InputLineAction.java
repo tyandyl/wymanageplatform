@@ -25,12 +25,12 @@ public class InputLineAction extends BasicAction {
                 if(regularValue!=null && regularValue.get("selectorType")!=null){
                     String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
                     Widget widget = WidgetFactory.getWidget(page, s, value, TagType.INPUT);
-                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false,true);
+                    WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,true);
                     WidgetFactory.addWidgetNode(page,widgetNode);
                 }
             }else {
                 Widget widget = WidgetFactory.getWidget(page, null, null, TagType.INPUT);
-                WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false,true);
+                WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,true);
                 WidgetFactory.addWidgetNode(page,widgetNode);
             }
         }

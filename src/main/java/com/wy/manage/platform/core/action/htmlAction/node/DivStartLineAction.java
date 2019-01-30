@@ -30,7 +30,7 @@ public class DivStartLineAction extends BasicAction {
                 s = IgnoreTools.ignore(selectorType.toString());
             }
             Widget widget = WidgetFactory.getWidget(page, s, value, TagType.DIV);
-            WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
+            WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget);
             WidgetFactory.addWidgetNode(page,widgetNode);
         }
     }
