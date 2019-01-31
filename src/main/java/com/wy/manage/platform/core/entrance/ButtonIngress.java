@@ -15,7 +15,7 @@ import java.io.OutputStream;
  */
 public class ButtonIngress extends Ingress{
 
-    public void handleEx(Page page, HttpServletRequest request) throws javax.servlet.ServletException, IOException {
+    public void handleEx(HttpServletRequest request) throws javax.servlet.ServletException, IOException {
         page.setFirstIsCame(1);
         htmlAddress=baseAddress+"button/";
         htmlName="button.html";
@@ -27,7 +27,7 @@ public class ButtonIngress extends Ingress{
     }
 
     @Override
-    public void afterHandle(Page page, javax.servlet.http.HttpServletResponse response) throws Exception {
+    public void afterHandle( javax.servlet.http.HttpServletResponse response) throws Exception {
         OutputStream out = response.getOutputStream();
         String strPage = JSONObject.toJSONString(page);
         out.write(strPage.getBytes());

@@ -22,4 +22,12 @@ public class Context {
     public static void clear(){
         map.clear();
     }
+
+    public static Map<String, Page> getMap() {
+        return map;
+    }
+
+    public static void setMap(Map<String, Page> map) {
+        Context.map = map;
+    }
 }

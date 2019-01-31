@@ -14,7 +14,7 @@ import java.io.OutputStream;
  */
 public class TablePanelIngress extends Ingress{
 
-    public void handleEx(Page page, HttpServletRequest request) throws Exception {
+    public void handleEx(HttpServletRequest request) throws Exception {
         page.setFirstIsCame(1);
         htmlAddress=baseAddress+"tablepanel/";
         htmlName="tablepanel.html";
@@ -26,7 +26,7 @@ public class TablePanelIngress extends Ingress{
     }
 
     @Override
-    public void afterHandle(Page page, javax.servlet.http.HttpServletResponse response) throws Exception {
+    public void afterHandle(javax.servlet.http.HttpServletResponse response) throws Exception {
         OutputStream out = response.getOutputStream();
         String strPage = JSONObject.toJSONString(page);
         out.write(strPage.getBytes());

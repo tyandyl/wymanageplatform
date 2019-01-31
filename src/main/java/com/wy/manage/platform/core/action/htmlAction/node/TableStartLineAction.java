@@ -6,6 +6,7 @@ import com.wy.manage.platform.core.utils.IgnoreTools;
 import com.wy.manage.platform.core.widget.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ public class TableStartLineAction extends BasicAction {
                 WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget);
                 WidgetFactory.addWidgetNode(page,widgetNode);
             }
+
         }
     }
 

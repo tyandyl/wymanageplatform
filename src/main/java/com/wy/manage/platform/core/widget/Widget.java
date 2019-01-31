@@ -31,6 +31,8 @@ public class Widget implements IWidget, Serializable {
     private TagType tagType;
 
     private String code;
+    //是否可移动
+    private boolean isRemovable=true;
 
     /**
      * 获取宽度
@@ -168,5 +170,13 @@ public class Widget implements IWidget, Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public boolean isRemovable() {
+        return isRemovable;
+    }
+
+    public void setRemovable(boolean removable) {
+        isRemovable = removable;
     }
 }

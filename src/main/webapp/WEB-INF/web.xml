@@ -48,4 +48,24 @@
         <url-pattern>/TablePanel</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DblClick</servlet-name>
+        <servlet-class>DblClick</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DblClick</servlet-name>
+        <url-pattern>/DblClick</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OpenWindow</servlet-name>
+        <servlet-class>OpenWindow</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OpenWindow</servlet-name>
+        <url-pattern>/OpenWindow</url-pattern>
+    </servlet-mapping>
+
 </web-app>

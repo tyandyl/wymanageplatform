@@ -10,6 +10,8 @@ import org.apache.commons.lang.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tianye
@@ -29,6 +31,8 @@ public abstract class Ingress {
 
         Page page1 = Context.get(session.getId());
         if(page1!=null){
+            //需要置空，后续有添加，且getFirstIsCame==3，代表最外层的执行完毕，需要关闭
+            page1.setParamMap(new HashMap<String, String[]>());
             page=page1;
         }
     }
@@ -37,7 +41,7 @@ public abstract class Ingress {
         try {
             beforeHandle(request);
 
-            handleEx( page,  request);
+            handleEx(request);
 
             page.setStr(new StringBuffer());
 
@@ -45,7 +49,8 @@ public abstract class Ingress {
 
 
             htmlModel.defineAction();
-            page.setParamMap( request.getParameterMap());
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            page.setParamMap(parameterMap);
             page.setBaseAddress(baseAddress);
             page.setHtmlAddress(htmlAddress);
             page.setHtmlName(htmlName);
@@ -54,7 +59,7 @@ public abstract class Ingress {
 
             response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
 
-            afterHandle(page, response);
+            afterHandle(response);
 
 
         }catch (Exception e){
@@ -62,7 +67,7 @@ public abstract class Ingress {
         }
 
     }
-    public abstract void afterHandle( Page page,javax.servlet.http.HttpServletResponse response)throws Exception;
+    public abstract void afterHandle(javax.servlet.http.HttpServletResponse response)throws Exception;
 
-    public abstract void handleEx(Page page, HttpServletRequest request) throws Exception;
+    public abstract void handleEx(HttpServletRequest request) throws Exception;
 }

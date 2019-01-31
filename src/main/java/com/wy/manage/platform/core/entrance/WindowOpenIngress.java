@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.entrance;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wy.manage.platform.core.model.HtmlModel;
 import com.wy.manage.platform.core.widget.Page;
 
@@ -14,7 +15,7 @@ import java.io.OutputStream;
  */
 public class WindowOpenIngress extends Ingress{
 
-    public void handleEx(Page page, HttpServletRequest request) throws javax.servlet.ServletException, IOException {
+    public void handleEx(HttpServletRequest request) throws javax.servlet.ServletException, IOException {
         page.setFirstIsCame(1);
         htmlAddress=baseAddress+"window2/";
         htmlName="window.html";
@@ -26,9 +27,10 @@ public class WindowOpenIngress extends Ingress{
     }
 
     @Override
-    public void afterHandle(Page page, HttpServletResponse response) throws Exception {
+    public void afterHandle(HttpServletResponse response) throws Exception {
         OutputStream out = response.getOutputStream();
-        out.write(page.getStr().toString().getBytes());
+        String strPage = JSONObject.toJSONString(page);
+        out.write(strPage.getBytes());
     }
 
 }

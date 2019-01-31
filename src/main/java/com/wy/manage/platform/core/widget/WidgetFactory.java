@@ -21,15 +21,27 @@ public class WidgetFactory {
         StringBuffer str=new StringBuffer();
         createTagType( str, tagType,widget);
         createId( str, selectorType,selectorValue);
+        //解决控件插入
+        if(page.getFirstIsCame()==3){
+            page.setParamMap(new HashMap<String, String[]>());
+        }
+        //最外边的控件可以移动
+        if(page.getFirstIsCame()==1){
+            widget.setRemovable(false);
+        }
         buildInStyle( page, selectorType, selectorValue, str, widget);
         widget.setTitle(selectorValue);
         str.append(">");
         page.getStr().append(str);
+        //非外层的不可以移动
+        if(page.getFirstIsCame()>0){
+            widget.setRemovable(false);
+        }
         return widget;
     }
 
     public static void buildInStyle(Page page,String selectorType,String selectorValue,StringBuffer str,Widget widget)throws Exception{
-        createWd( str, widget);
+        createWd( str, widget,page);
         buildInStyleAnalyze( page, selectorType, selectorValue, str, widget);
 
     }
@@ -82,7 +94,7 @@ public class WidgetFactory {
 //            str.append(selectorValue+"' ");
 //        }
     }
-    public static void createWd(StringBuffer str,Widget widget){
+    public static void createWd(StringBuffer str,Widget widget,Page page){
         str.append(" wd='");
         str.append(widget.getCode());
         str.append("'");
@@ -115,6 +127,7 @@ public class WidgetFactory {
                 }
             }
         }
+
         if(widgetNodeInsert!=null){
             widgetNode.setFullCode(widgetNodeInsert.getFullCode()+widgetNode.getCode());
             widgetNode.setParentNode(widgetNodeInsert);

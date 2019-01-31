@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * Created by tianye
  */
 public class WindowIngress extends Ingress{
 
-    public void handleEx(Page page, HttpServletRequest request) throws javax.servlet.ServletException, IOException {
+    public void handleEx( HttpServletRequest request) throws javax.servlet.ServletException, IOException {
         htmlAddress=baseAddress+"window/";
         htmlName="window.html";
         htmlModel=new HtmlModel<Page>();
@@ -27,7 +28,8 @@ public class WindowIngress extends Ingress{
     }
 
     @Override
-    public void afterHandle(Page page, javax.servlet.http.HttpServletResponse response) throws Exception {
+    public void afterHandle(javax.servlet.http.HttpServletResponse response) throws Exception {
+        Map<String, Page> map = Context.getMap();
         OutputStream out = response.getOutputStream();
         out.write(page.getStr().toString().getBytes());
     }
