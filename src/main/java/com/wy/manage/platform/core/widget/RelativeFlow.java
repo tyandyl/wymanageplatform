@@ -3,7 +3,7 @@ package com.wy.manage.platform.core.widget;
 import java.io.Serializable;
 
 /**
- * Created by tianye13 on 2018/9/20.
+ * Created by tianye
  */
 public class RelativeFlow implements IFlow, Serializable {
     private static final long serialVersionUID = -4621715633334121527L;

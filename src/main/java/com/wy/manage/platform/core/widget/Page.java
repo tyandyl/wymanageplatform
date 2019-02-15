@@ -44,6 +44,18 @@ public class Page implements Serializable {
 
     private int firstIsCame=0;
 
+    private String moveWd;
+
+    private String moveWdName;
+
+    private String clickWd;
+
+    private String clickWdName;
+
+    private String recordWd;
+
+    private String recordWdName;
+
     public int getFirstIsCame() {
         return firstIsCame;
     }
@@ -165,5 +177,53 @@ public class Page implements Serializable {
 
     public void setStrStyle(StringBuffer strStyle) {
         this.strStyle = strStyle;
+    }
+
+    public String getMoveWd() {
+        return moveWd;
+    }
+
+    public void setMoveWd(String moveWd) {
+        this.moveWd = moveWd;
+    }
+
+    public String getMoveWdName() {
+        return moveWdName;
+    }
+
+    public void setMoveWdName(String moveWdName) {
+        this.moveWdName = moveWdName;
+    }
+
+    public String getClickWd() {
+        return clickWd;
+    }
+
+    public void setClickWd(String clickWd) {
+        this.clickWd = clickWd;
+    }
+
+    public String getClickWdName() {
+        return clickWdName;
+    }
+
+    public void setClickWdName(String clickWdName) {
+        this.clickWdName = clickWdName;
+    }
+
+    public String getRecordWd() {
+        return recordWd;
+    }
+
+    public void setRecordWd(String recordWd) {
+        this.recordWd = recordWd;
+    }
+
+    public String getRecordWdName() {
+        return recordWdName;
+    }
+
+    public void setRecordWdName(String recordWdName) {
+        this.recordWdName = recordWdName;
     }
 }

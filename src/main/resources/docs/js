@@ -10,3 +10,78 @@ $.fn.pluginName 表示创建一个 jQuery 的属性，通俗的说是写一个 j
 pluginName 才是函数名
 
 https://blog.csdn.net/zitong_ccnu/article/details/53139090
+
+这里就要说到JQuery的一大特性，链式调用
+这个原理就超简单了,如下代码：
+
+aQuery().init().name()
+
+分解：
+
+a = aQuery();
+a.init()
+a.name()
+
+把代码分解一下，很明显实现链式的基本条件就是要实例对象先创建好，调用自己的方法。
+
+aQuery.prototype = {
+    init: function() {
+        return this;
+    },
+    name: function() {
+        return this
+    }
+}
+
+ 所以我们如果需要链式的处理，只需要在方法内部方法当前的这个实例对象this就可以了，
+ 因为返回当前实例的this，从而又可以访问自己的原型了，这样的就节省代码量，提高代码的效率，代码看起来更优雅.
+
+ return this.each(function() {
+     $(this).append(' - ' + $(this).data('x'));
+ });
+
+ 等价于
+ var objs = this;
+      for (var i=0; i<objs.length; i++) {
+         var obj = objs[i];
+         $(obj).append(' - ' + $(obj).data('x'));
+ };
+ return this;
+
+
+ 在函数内部，this值依赖于函数如何调用。
+ function f2(){
+     return this;//this值肯定总会是默认为全局对象，该函数默认定义在window上。
+ }
+
+ var o={
+     prop:37;
+     f:function(){
+         return this.prop;
+     }
+ };
+ console.log(o.f());// 37,当函数作为对象方法调用时，该函数的this值设为调用该方法的对象。
+
+
+
+var o ={prop:37};
+function independent{
+    return this.prop;
+}
+o.f=independent;
+console.log(o.f());//37,this的这种特性不受其函数如何定义或函数的定义位置的影响，只在乎他被谁调用。
+
+我们来看看新出现的一种语法--自调用匿名函数:
+(function{
+    //code
+})();
+
+实际作用是创建了一个匿名函数，并在创建后立即执行一次。作用等价于下面的代码，唯一的区别就是下面的函数不是匿名的。
+//创建
+var func = function(){
+    //code
+}
+//调用
+func();
+
+

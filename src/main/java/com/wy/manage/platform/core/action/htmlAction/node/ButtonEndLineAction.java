@@ -22,7 +22,7 @@ public class ButtonEndLineAction extends BasicAction {
             //闭环校验，校验一些div名称之类的，目前先不校验
             widgetNodeTree.getNewestNoClosed().pop();
             String gbk = new String("查询".getBytes("utf-8"));
-            page.getStr().append(gbk+"</button>");
+            page.getStr().append("</button>");
         }
     }
 

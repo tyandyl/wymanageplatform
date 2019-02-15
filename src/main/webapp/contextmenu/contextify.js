@@ -50,6 +50,12 @@
                 if(typeof(options.before) === 'function') {
                     options.before(this, options);
                 }
+                var temp=$(e.target).attr("wd");
+                var wdName=e.target.localName;
+                options.wd=temp;
+                options.wdName=wdName;
+                options.clickX=e.clientX;
+                options.clickY=e.clientY;
 
                 var menu = $('<ul class="' + options.menuClass + '" role="menu" id="' + options.menuId + '" data-contextify-id="' + options.id + '"/>');
 

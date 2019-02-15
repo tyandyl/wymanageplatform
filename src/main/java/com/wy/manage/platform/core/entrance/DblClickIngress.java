@@ -39,10 +39,15 @@ public class DblClickIngress extends Ingress{
                     widgetNode=widgetNode1;
                     widgetNode1=widgetNode1.getParentNode();
                 }
+                if(widgetNode!=null){
+                    dblClickResult.setCode(ResultType.SUCCESS.getCode());
+                    dblClickResult.setTagName(widgetNode.getData().getTagType().getName());
+                    dblClickResult.setWd(widgetNode.getCode());
+                }else {
+                    dblClickResult.setCode(ResultType.FAILED.getCode());
+                    dblClickResult.setMessage("没有获取当前控件");
+                }
 
-                dblClickResult.setCode(ResultType.SUCCESS.getCode());
-                dblClickResult.setTagName(widgetNode.getData().getTagType().getName());
-                dblClickResult.setWd(widgetNode.getCode());
 
             }else {
                 dblClickResult.setCode(ResultType.FAILED.getCode());

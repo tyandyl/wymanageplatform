@@ -23,8 +23,8 @@ public class TdEndLineAction extends BasicAction {
             widgetNodeTree.getNewestNoClosed().pop();
             //3的时候没人用，这里使用一下
             if(page.getFirstIsCame()==3){
-                String gbk = new String("订单编号".getBytes("utf-8"));
-                page.getStr().append(gbk+"</td>");
+//                String gbk = new String("订单编号".getBytes("utf-8"));
+//                page.getStr().append(gbk+"</td>");
                 page.setFirstIsCame(4);
             }else {
                 page.getStr().append("</td>");

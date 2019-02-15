@@ -40,6 +40,8 @@ public abstract class Ingress {
     public void handle(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         try {
             beforeHandle(request);
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            page.setParamMap(new HashMap<String, String[]>(parameterMap));
 
             handleEx(request);
 
@@ -49,8 +51,7 @@ public abstract class Ingress {
 
 
             htmlModel.defineAction();
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            page.setParamMap(parameterMap);
+
             page.setBaseAddress(baseAddress);
             page.setHtmlAddress(htmlAddress);
             page.setHtmlName(htmlName);

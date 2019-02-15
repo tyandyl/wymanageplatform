@@ -15,19 +15,26 @@ import java.util.*;
  */
 public class WidgetFactory {
 
+    private static HashMap<String, String> eventMap = new HashMap<String, String>() {
+        private static final long serialVersionUID = -7130991970747133460L;
+        {
+            put("search_button", "move,click");
+            put("window2-combo-list-div", "move");
+            put("window2-combo-list-cell-after", "click");
+            put("window2-combo-list-cell", "record");
+            put("window2-table-input","move");
+        }
+    };
+
     public static Widget getWidget(Page page,String selectorType,String selectorValue,TagType tagType)throws Exception{
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
         StringBuffer str=new StringBuffer();
         createTagType( str, tagType,widget);
-        createId( str, selectorType,selectorValue);
+        processId( str, selectorType,selectorValue,page,widget);
         //解决控件插入
         if(page.getFirstIsCame()==3){
             page.setParamMap(new HashMap<String, String[]>());
-        }
-        //最外边的控件可以移动
-        if(page.getFirstIsCame()==1){
-            widget.setRemovable(false);
         }
         buildInStyle( page, selectorType, selectorValue, str, widget);
         widget.setTitle(selectorValue);
@@ -65,6 +72,19 @@ public class WidgetFactory {
                         page.setFirstIsCame(++firstIsCame);
                     }
                 }
+                Map<String, String[]> paramMap = page.getParamMap();
+                String[] blocktypes = paramMap != null ? paramMap.get("blocktype") : null;
+
+                if(list==null
+                        && "position".equalsIgnoreCase(strM)
+                        && blocktypes!=null
+                        && blocktypes.length==1
+                        && "4".equalsIgnoreCase(blocktypes[0])){
+                    list=new ArrayList<String>();
+                    list.add("absolute");
+                    paramMap.remove("blocktype");
+                    page.setParamMap(paramMap);
+                }
                 if(list!=null && list.size()>0){
                     AttributeNameType attributeNameType = AttributeNameType.getAttributeNameType(strM);
                     if(attributeNameType!=null){
@@ -88,11 +108,31 @@ public class WidgetFactory {
         widget.setTagType(tagType);
     }
 
-    public static void createId(StringBuffer str,String selectorType,String selectorValue){
+    public static void processId(StringBuffer str,String selectorType,String selectorValue,Page page,Widget widget){
 //        if(StringUtils.isNotBlank(selectorType)){
 //            str.append(" "+selectorType+"='");
 //            str.append(selectorValue+"' ");
 //        }
+        if(selectorValue!=null){
+            String event = eventMap.get(selectorValue.trim());
+            if(event!=null){
+                String[] split = event.split(",");
+                if(split!=null && split.length>0){
+                    for(int i=0;i<split.length;i++){
+                        if("move".equalsIgnoreCase(split[i])){
+                            page.setMoveWd(widget.getCode());
+                            page.setMoveWdName(widget.getTagType().getName());
+                        }else if("click".equalsIgnoreCase(split[i])){
+                            page.setClickWd(widget.getCode());
+                            page.setClickWdName(widget.getTagType().getName());
+                        }else if("record".equalsIgnoreCase(split[i])){
+                            page.setRecordWd(widget.getCode());
+                            page.setRecordWdName(widget.getTagType().getName());
+                        }
+                    }
+                }
+            }
+        }
     }
     public static void createWd(StringBuffer str,Widget widget,Page page){
         str.append(" wd='");
@@ -135,6 +175,7 @@ public class WidgetFactory {
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
             Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();
             newestNoClosed.push(widgetNode);
+
         }else {
             //这里都是开口的
             Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();

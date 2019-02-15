@@ -68,4 +68,14 @@
         <url-pattern>/OpenWindow</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ComboList</servlet-name>
+        <servlet-class>ComboList</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ComboList</servlet-name>
+        <url-pattern>/ComboList</url-pattern>
+    </servlet-mapping>
+
 </web-app>
