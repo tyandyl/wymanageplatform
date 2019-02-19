@@ -44,6 +44,8 @@ public class Page implements Serializable {
 
     private int firstIsCame=0;
 
+    private String curWd;
+
     private String moveWd;
 
     private String moveWdName;
@@ -55,6 +57,8 @@ public class Page implements Serializable {
     private String recordWd;
 
     private String recordWdName;
+
+    private List<CurWidget> curWidgets=new ArrayList<CurWidget>();
 
     public int getFirstIsCame() {
         return firstIsCame;
@@ -225,5 +229,21 @@ public class Page implements Serializable {
 
     public void setRecordWdName(String recordWdName) {
         this.recordWdName = recordWdName;
+    }
+
+    public List<CurWidget> getCurWidgets() {
+        return curWidgets;
+    }
+
+    public void setCurWidgets(List<CurWidget> curWidgets) {
+        this.curWidgets = curWidgets;
+    }
+
+    public String getCurWd() {
+        return curWd;
+    }
+
+    public void setCurWd(String curWd) {
+        this.curWd = curWd;
     }
 }

@@ -31,7 +31,7 @@ public class WidgetFactory {
         widget.setCode(GUIDTools.randomUUID());
         StringBuffer str=new StringBuffer();
         createTagType( str, tagType,widget);
-        processId( str, selectorType,selectorValue,page,widget);
+        processEvent(selectorValue,page,widget);
         //解决控件插入
         if(page.getFirstIsCame()==3){
             page.setParamMap(new HashMap<String, String[]>());
@@ -102,17 +102,20 @@ public class WidgetFactory {
         }
     }
 
+    public static CurWidget getCurWidget(Widget widget){
+        CurWidget curWidget=new CurWidget();
+        curWidget.setCurWd(widget.getCode());
+        curWidget.setTagName(widget.getTagType().getName());
+        return curWidget;
+    }
+
 
     public static void createTagType(StringBuffer str,TagType tagType,Widget widget){
         str.append("<"+tagType.getName());
         widget.setTagType(tagType);
     }
 
-    public static void processId(StringBuffer str,String selectorType,String selectorValue,Page page,Widget widget){
-//        if(StringUtils.isNotBlank(selectorType)){
-//            str.append(" "+selectorType+"='");
-//            str.append(selectorValue+"' ");
-//        }
+    public static void processEvent(String selectorValue,Page page,Widget widget){
         if(selectorValue!=null){
             String event = eventMap.get(selectorValue.trim());
             if(event!=null){
@@ -122,6 +125,10 @@ public class WidgetFactory {
                         if("move".equalsIgnoreCase(split[i])){
                             page.setMoveWd(widget.getCode());
                             page.setMoveWdName(widget.getTagType().getName());
+                            if(StringUtils.isBlank(page.getCurWd())){
+                                page.setCurWd(widget.getCode());
+                            }
+                            //str.append(" onclick='moveWidget()' ");
                         }else if("click".equalsIgnoreCase(split[i])){
                             page.setClickWd(widget.getCode());
                             page.setClickWdName(widget.getTagType().getName());
@@ -134,6 +141,8 @@ public class WidgetFactory {
             }
         }
     }
+
+
     public static void createWd(StringBuffer str,Widget widget,Page page){
         str.append(" wd='");
         str.append(widget.getCode());

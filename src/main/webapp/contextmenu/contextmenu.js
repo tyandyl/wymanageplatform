@@ -91,19 +91,31 @@ function createButton(e){
 	var url="/wy-manage-web/Button";
 	sendAjaxNews(isAsync,type,url,param,function(data){
 		var div=getElementByAttr('div','wd',wd);
+		var cWd=data.curWd;
+		var tree=data.widgetNodeTree;
+		var widgetTree=tree.nodeMap;
+		var value = widgetTree[cWd];
+		var littleTree = eval("(" + value + ")");
+		alert(littleTree);
+
+
 		var bef=div.innerHTML;
 		div.innerHTML=bef+data.str;
+		var curQ=getElementByAttr(data.moveWdName,'wd',data.moveWd);
+		$(curQ).text( '查询');
 		var options = {
-			//items:[
-			//	{text: '查询'}
-			//]
 		};
-		var cur=getElementByAttr(data.moveWdName,'wd',data.moveWd);
-		$(cur).text( '查询');
-		$(cur).moveWidgetButton(options);
+		if(curQ!=null){
+			document.body.appendChild(curQ);
+			var dragM=moveWidget(curQ);
+			dragM();
+		}
 	});
 	//openURL(param,"Button");
 }
+
+
+
 
 function createTablePanel(e){
 	var temp= e.data.wd;     // e.target表示被点击的目标
@@ -134,7 +146,6 @@ function createTablePanel(e){
 	});
 	//openURL(param,"TablePanel");
 }
-
 function createComboList(e){
 	var temp= e.data.wd;     // e.target表示被点击的目标
 	if(typeof(temp) =="undefined"){
@@ -161,10 +172,17 @@ function createComboList(e){
 			{text: '下拉列表(列表数量小于20)'},
 
 			{text: '弹出列表(列表数量大于20)'}
-		]};
+			]
+		};
 		if(data.moveWd!=null){
-			var cur=getElementByAttr(data.moveWdName,'wd',data.moveWd);
-			$(cur).moveWidgetComboList(options);
+			var cur6=getElementByAttr(data.moveWdName,'wd',data.moveWd);
+			if(cur6!=null){
+				document.body.appendChild(cur6);
+				var drag=moveWidget(cur6);
+				drag();
+			}
+
+
 		}
 		if(data.clickWd!=null){
 			var cur=getElementByAttr(data.clickWdName,'wd',data.clickWd);

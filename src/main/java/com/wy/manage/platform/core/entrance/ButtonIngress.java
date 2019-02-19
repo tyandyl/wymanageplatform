@@ -1,8 +1,12 @@
 package com.wy.manage.platform.core.entrance;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wy.manage.platform.core.model.HtmlModel;
 import com.wy.manage.platform.core.widget.Page;
+import com.wy.manage.platform.core.widget.WidgetNode;
+import com.wy.manage.platform.core.widget.WidgetNodeTree;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +38,14 @@ public class ButtonIngress extends Ingress{
         OutputStream out = response.getOutputStream();
         String strPage = JSONObject.toJSONString(page);
         out.write(strPage.getBytes());
+    }
+
+    public void proPage(){
+        String curWd = page.getCurWd();
+        WidgetNodeTree widgetNodeTree = page.getWidgetNodeTree();
+        Map<String, WidgetNode> nodeMap = widgetNodeTree.getNodeMap();
+        WidgetNode widgetNode = nodeMap.get(curWd);
+
     }
 
 
