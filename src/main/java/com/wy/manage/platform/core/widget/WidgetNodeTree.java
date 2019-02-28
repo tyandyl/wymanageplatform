@@ -16,7 +16,7 @@ public class WidgetNodeTree implements Serializable{
 
     private Map<String,WidgetNode> nodeMap=new HashMap<String, WidgetNode>();
 
-    private Stack<WidgetNode> newestNoClosed=new Stack<WidgetNode>();
+    private Stack<WidgetNode> newestNoClosed=null;
 
     public WidgetNode getRoot() {
         return root;

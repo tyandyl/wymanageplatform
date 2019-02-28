@@ -16,22 +16,22 @@ public class InputLineAction extends BasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
-        if(t instanceof Page) {
-            Page page = (Page) t;
+        if(t instanceof WidgetModel) {
+            WidgetModel model = (WidgetModel) t;
             Map regularValue = modelParam.getRegularValue();
 
             if(regularValue!=null && regularValue.get("selectorValue")!=null){
                 String value = IgnoreTools.ignore(regularValue.get("selectorValue").toString());
                 if(regularValue!=null && regularValue.get("selectorType")!=null){
                     String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
-                    Widget widget = WidgetFactory.getWidget(page, s, value, TagType.INPUT);
+                    Widget widget = WidgetFactory.getWidget(model, s, value, TagType.INPUT);
                     WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,true);
-                    WidgetFactory.addWidgetNode(page,widgetNode);
+                    WidgetFactory.addWidgetNode(model,widgetNode);
                 }
             }else {
-                Widget widget = WidgetFactory.getWidget(page, null, null, TagType.INPUT);
+                Widget widget = WidgetFactory.getWidget(model, null, null, TagType.INPUT);
                 WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,true);
-                WidgetFactory.addWidgetNode(page,widgetNode);
+                WidgetFactory.addWidgetNode(model,widgetNode);
             }
         }
     }

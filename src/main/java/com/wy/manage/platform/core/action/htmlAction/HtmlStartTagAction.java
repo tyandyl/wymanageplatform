@@ -14,12 +14,6 @@ import java.util.Map;
 public class HtmlStartTagAction extends BasicAction{
     @Override
     public void action(ModelParam modelParam) {
-        Object t = modelParam.getT();
-        if(t instanceof Page) {
-            Page page = (Page) t;
-            String regularValue1 = getRegularValue(modelParam);
-            page.getStr().append(regularValue1);
-        }
 
     }
 

@@ -90,28 +90,113 @@ function createButton(e){
 	var isAsync=false;
 	var url="/wy-manage-web/Button";
 	sendAjaxNews(isAsync,type,url,param,function(data){
-		var div=getElementByAttr('div','wd',wd);
-		var cWd=data.curWd;
-		var tree=data.widgetNodeTree;
-		var widgetTree=tree.nodeMap;
-		var value = widgetTree[cWd];
-		var littleTree = eval("(" + value + ")");
-		alert(littleTree);
+		//var div=getElementByAttr('div','wd',wd);
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
 
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
 
-		var bef=div.innerHTML;
-		div.innerHTML=bef+data.str;
-		var curQ=getElementByAttr(data.moveWdName,'wd',data.moveWd);
-		$(curQ).text( '查询');
-		var options = {
-		};
-		if(curQ!=null){
-			document.body.appendChild(curQ);
-			var dragM=moveWidget(curQ);
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			el.attr('wd',curWd);
+			el.text( '查询');
+			parentTagDiv.appendChild(curDiv);
+			var dragM=moveWidget(curDiv);
 			dragM();
 		}
 	});
 	//openURL(param,"Button");
+}
+
+function createComboList(e){
+	var temp= e.data.wd;     // e.target表示被点击的目标
+	if(typeof(temp) =="undefined"){
+		return;
+	}
+	wd=temp;
+	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
+	var top=getOffsetTop(parDivM);
+	var left=getOffsetLeft(parDivM);
+	relativeLeft=e.data.clickX-left;
+	relativeTop=e.data.clickY-top;
+
+	var param={"id":wd,"left":relativeLeft,"top":relativeTop,"blocktype":4};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/ComboList";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		var lit=data.curWidgets;
+		for(var i=0;i<lit.length;i++){
+			var parentWd = lit[i].parentWd;
+			var parentTagName = lit[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = lit[i].curWd;
+			var curTagName = lit[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+
+			var curPros=lit[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			el.attr('wd',curWd);
+			parentTagDiv.appendChild(curDiv);
+
+		}
+
+		//var div=getElementByAttr('div','wd',wd);
+		//var bef=div.innerHTML;
+		//div.innerHTML=bef+data.str;
+
+		var options = {items:[
+			{text: '输入框'},
+			{text: '下拉列表(列表数量小于20)'},
+
+			{text: '弹出列表(列表数量大于20)'}
+		]
+		};
+		if(data.moveWd!=null){
+			var cur6=getElementByAttr(data.moveWdName,'wd',data.moveWd);
+			if(cur6!=null){
+				var dragM=moveWidget(cur6);
+				dragM();
+			}
+
+
+		}
+		if(data.clickWd!=null){
+			var cur=getElementByAttr(data.clickWdName,'wd',data.clickWd);
+			if(data.recordWd!=null){
+				var rec=getElementByAttr(data.recordWdName,'wd',data.recordWd);
+				options.record=rec;
+			}
+			$(cur).combolist(options);
+		}
+	});
 }
 
 
@@ -146,54 +231,7 @@ function createTablePanel(e){
 	});
 	//openURL(param,"TablePanel");
 }
-function createComboList(e){
-	var temp= e.data.wd;     // e.target表示被点击的目标
-	if(typeof(temp) =="undefined"){
-		return;
-	}
-	wd=temp;
-	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
-	var top=getOffsetTop(parDivM);
-	var left=getOffsetLeft(parDivM);
-	relativeLeft=e.data.clickX-left;
-	relativeTop=e.data.clickY-top;
 
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop,"blocktype":4};
-	var type="post";
-	var isAsync=false;
-	var url="/wy-manage-web/ComboList";
-	sendAjaxNews(isAsync,type,url,param,function(data){
-		var div=getElementByAttr('div','wd',wd);
-		var bef=div.innerHTML;
-		div.innerHTML=bef+data.str;
-
-		var options = {items:[
-			{text: '输入框'},
-			{text: '下拉列表(列表数量小于20)'},
-
-			{text: '弹出列表(列表数量大于20)'}
-			]
-		};
-		if(data.moveWd!=null){
-			var cur6=getElementByAttr(data.moveWdName,'wd',data.moveWd);
-			if(cur6!=null){
-				document.body.appendChild(cur6);
-				var drag=moveWidget(cur6);
-				drag();
-			}
-
-
-		}
-		if(data.clickWd!=null){
-			var cur=getElementByAttr(data.clickWdName,'wd',data.clickWd);
-			if(data.recordWd!=null){
-				var rec=getElementByAttr(data.recordWdName,'wd',data.recordWd);
-				options.record=rec;
-			}
-			$(cur).combolist(options);
-		}
-	});
-}
 
 
 function getElementByAttr(tag,attr,value)

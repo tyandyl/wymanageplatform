@@ -3,6 +3,7 @@ package com.wy.manage.platform.core.action.htmlAction.node;
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.widget.Page;
+import com.wy.manage.platform.core.widget.WidgetModel;
 import com.wy.manage.platform.core.widget.WidgetNode;
 import com.wy.manage.platform.core.widget.WidgetNodeTree;
 
@@ -16,12 +17,11 @@ public class TrEndLineAction extends BasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
-        if(t instanceof Page) {
-            Page page = (Page) t;
-            WidgetNodeTree widgetNodeTree = page.getWidgetNodeTree();
+        if(t instanceof WidgetModel) {
+            WidgetModel model = (WidgetModel) t;
+            WidgetNodeTree widgetNodeTree = model.getPage().getWidgetNodeTree();
             //闭环校验，校验一些div名称之类的，目前先不校验
             widgetNodeTree.getNewestNoClosed().pop();
-            page.getStr().append("</tr>");
         }
     }
 

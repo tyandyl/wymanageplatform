@@ -31,8 +31,14 @@ public class Widget implements IWidget, Serializable {
     private TagType tagType;
 
     private String code;
-    //是否可移动
-    private boolean isRemovable=true;
+
+    private boolean isMoved=false;
+
+    private boolean isClick=false;
+
+    private boolean isRecord=false;
+
+    private String curPros;
 
     /**
      * 获取宽度
@@ -172,11 +178,35 @@ public class Widget implements IWidget, Serializable {
         this.code = code;
     }
 
-    public boolean isRemovable() {
-        return isRemovable;
+    public boolean isMoved() {
+        return isMoved;
     }
 
-    public void setRemovable(boolean removable) {
-        isRemovable = removable;
+    public void setMoved(boolean moved) {
+        isMoved = moved;
+    }
+
+    public boolean isClick() {
+        return isClick;
+    }
+
+    public void setClick(boolean click) {
+        isClick = click;
+    }
+
+    public boolean isRecord() {
+        return isRecord;
+    }
+
+    public void setRecord(boolean record) {
+        isRecord = record;
+    }
+
+    public String getCurPros() {
+        return curPros;
+    }
+
+    public void setCurPros(String curPros) {
+        this.curPros = curPros;
     }
 }

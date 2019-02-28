@@ -40,24 +40,4 @@ public class FileTools {
         }
         return stringBuffer;
     }
-
-    public static String getFileValue(String scriptSrcValue,Page page,boolean isOut)throws Exception{
-        StringBuffer content=null;
-        if(scriptSrcValue.toString().startsWith("......")){
-            String substring = scriptSrcValue.substring(7, scriptSrcValue.length());
-            content = getContent(substring,isOut);
-        }else if(scriptSrcValue.toString().startsWith("....")){
-            String substring = scriptSrcValue.substring(5, scriptSrcValue.length());
-            String[] split = page.getHtmlAddress().split("/");
-            if(split!=null && split.length>=2){
-                String s = split[0] + "/" + substring;
-                content = getContent(s,isOut);
-            }
-        }else {
-            content = getContent(page.getHtmlAddress()+scriptSrcValue.toString(),isOut);
-        }
-
-        return content.toString();
-
-    }
 }

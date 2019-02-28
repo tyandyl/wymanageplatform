@@ -8,7 +8,8 @@ import com.wy.manage.platform.core.parser.NfaStateMachine;
  * 解析css模型
  */
 public interface Model<T> {
-    String getAddress();
+    String getRegularAddress();
+    String getContentAddress();
     //解释模型
     NfaStateMachine parserExplain()throws Exception;
     //编译模型

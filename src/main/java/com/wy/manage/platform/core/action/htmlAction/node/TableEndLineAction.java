@@ -17,12 +17,11 @@ public class TableEndLineAction extends BasicAction {
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
-        if(t instanceof Page) {
-            Page page = (Page) t;
-            WidgetNodeTree widgetNodeTree = page.getWidgetNodeTree();
+        if(t instanceof WidgetModel) {
+            WidgetModel model = (WidgetModel) t;
+            WidgetNodeTree widgetNodeTree = model.getPage().getWidgetNodeTree();
             //闭环校验，校验一些div名称之类的，目前先不校验
             widgetNodeTree.getNewestNoClosed().pop();
-            page.getStr().append("</table>");
         }
     }
 

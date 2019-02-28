@@ -17,7 +17,10 @@ public abstract class BasicModel<T> implements Model<T>{
     private Map<String,String> nValue=new HashMap<String, String>();
     private String regular;
 
-    public abstract String getAddress();
+    public abstract String getRegularAddress();
+
+    //如果是css的话,存放的是基地址，因为还需要在代码中判断
+    public abstract String getContentAddress();
 
     public void defineAction() {
     }
@@ -66,8 +69,7 @@ public abstract class BasicModel<T> implements Model<T>{
             y++;
         }
         check( peek);
-//        CssBag cssBag=new CssBag();
-//        Page page=new Page();
+
         char[] chars = str.toCharArray();
         ModelParam<T> modelParam = new ModelParam<T>(t,chars);
 
@@ -80,7 +82,7 @@ public abstract class BasicModel<T> implements Model<T>{
     }
 
     public String parserCompile() {
-        String address = getAddress();
+        String address = getRegularAddress();
         PropertiesTools cssProperties = PropertiesTools.loadProperties(address);
         //重写，保证读取顺序
         Set<String> strings = cssProperties.stringPropertyNames();

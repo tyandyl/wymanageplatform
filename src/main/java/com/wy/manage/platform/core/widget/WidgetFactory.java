@@ -26,65 +26,38 @@ public class WidgetFactory {
         }
     };
 
-    public static Widget getWidget(Page page,String selectorType,String selectorValue,TagType tagType)throws Exception{
+    public static Widget getWidget(WidgetModel model,String selectorType,String selectorValue,TagType tagType)throws Exception{
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
-        StringBuffer str=new StringBuffer();
-        createTagType( str, tagType,widget);
-        processEvent(selectorValue,page,widget);
-        //解决控件插入
-        if(page.getFirstIsCame()==3){
-            page.setParamMap(new HashMap<String, String[]>());
-        }
-        buildInStyle( page, selectorType, selectorValue, str, widget);
+        widget.setTagType(tagType);
+
+        processEvent(selectorValue,widget);
+
+        buildInStyleAnalyze( model, selectorType, selectorValue, widget);
         widget.setTitle(selectorValue);
-        str.append(">");
-        page.getStr().append(str);
-        //非外层的不可以移动
-        if(page.getFirstIsCame()>0){
-            widget.setRemovable(false);
-        }
         return widget;
     }
 
-    public static void buildInStyle(Page page,String selectorType,String selectorValue,StringBuffer str,Widget widget)throws Exception{
-        createWd( str, widget,page);
-        buildInStyleAnalyze( page, selectorType, selectorValue, str, widget);
 
-    }
-
-    public static void buildInStyleAnalyze(Page page,String selectorType,String selectorValue,StringBuffer str,Widget widget)throws Exception{
-        Map<String, CssBag> cssMaps = page.getCssMaps();
+    public static void buildInStyleAnalyze(WidgetModel model,String selectorType,String selectorValue,Widget widget)throws Exception{
+        Map<String, CssBag> cssMaps = model.getPage().getCssMaps();
         CssBag cssBag = cssMaps.get(selectorValue);
         SelectorType value = SelectorType.getSelectorType(selectorType);
+        StringBuffer str=new StringBuffer();
         //如果value不为空，则必须类型相等；或者value为空，表示无选择器
         if((cssBag !=null && value!=null && cssBag.getSelectorType().getCode()==value.getCode())
                 || cssBag==null){
             Map<String, List<String>> map = cssBag!=null?cssBag.getMap():null;
-            str.append(" style=\"");
             for(String strM:AttributeNameType.getNameList()){
                 List<String> list = map!=null?map.get(strM):null;
-                if("top".equalsIgnoreCase(strM) || "left".equalsIgnoreCase(strM)){
-                    String[] tops = page.getParamMap().get(strM);
-                    if(tops!=null && tops.length>0 && page.getFirstIsCame()>0 && page.getFirstIsCame()<3){
-                        list= Arrays.asList(tops);
-                        int firstIsCame = page.getFirstIsCame();
-                        page.setFirstIsCame(++firstIsCame);
-                    }
+                //jValue可为top,left,position,id--插入时使用
+                String jValue = model.getParamResult().getParam().get(strM);
+                if(StringUtils.isNotBlank(jValue)){
+                    list= new ArrayList<String>();
+                    list.add(jValue);
+                    model.getParamResult().getParam().remove(strM);
                 }
-                Map<String, String[]> paramMap = page.getParamMap();
-                String[] blocktypes = paramMap != null ? paramMap.get("blocktype") : null;
 
-                if(list==null
-                        && "position".equalsIgnoreCase(strM)
-                        && blocktypes!=null
-                        && blocktypes.length==1
-                        && "4".equalsIgnoreCase(blocktypes[0])){
-                    list=new ArrayList<String>();
-                    list.add("absolute");
-                    paramMap.remove("blocktype");
-                    page.setParamMap(paramMap);
-                }
                 if(list!=null && list.size()>0){
                     AttributeNameType attributeNameType = AttributeNameType.getAttributeNameType(strM);
                     if(attributeNameType!=null){
@@ -98,24 +71,12 @@ public class WidgetFactory {
                     }
                 }
             }
-            str.append("\"");
         }
+        widget.setCurPros(str.toString());
+
     }
 
-    public static CurWidget getCurWidget(Widget widget){
-        CurWidget curWidget=new CurWidget();
-        curWidget.setCurWd(widget.getCode());
-        curWidget.setTagName(widget.getTagType().getName());
-        return curWidget;
-    }
-
-
-    public static void createTagType(StringBuffer str,TagType tagType,Widget widget){
-        str.append("<"+tagType.getName());
-        widget.setTagType(tagType);
-    }
-
-    public static void processEvent(String selectorValue,Page page,Widget widget){
+    public static void processEvent(String selectorValue,Widget widget){
         if(selectorValue!=null){
             String event = eventMap.get(selectorValue.trim());
             if(event!=null){
@@ -123,18 +84,11 @@ public class WidgetFactory {
                 if(split!=null && split.length>0){
                     for(int i=0;i<split.length;i++){
                         if("move".equalsIgnoreCase(split[i])){
-                            page.setMoveWd(widget.getCode());
-                            page.setMoveWdName(widget.getTagType().getName());
-                            if(StringUtils.isBlank(page.getCurWd())){
-                                page.setCurWd(widget.getCode());
-                            }
-                            //str.append(" onclick='moveWidget()' ");
+                            widget.setMoved(true);
                         }else if("click".equalsIgnoreCase(split[i])){
-                            page.setClickWd(widget.getCode());
-                            page.setClickWdName(widget.getTagType().getName());
+                            widget.setClick(true);
                         }else if("record".equalsIgnoreCase(split[i])){
-                            page.setRecordWd(widget.getCode());
-                            page.setRecordWdName(widget.getTagType().getName());
+                            widget.setRecord(true);
                         }
                     }
                 }
@@ -143,37 +97,35 @@ public class WidgetFactory {
     }
 
 
-    public static void createWd(StringBuffer str,Widget widget,Page page){
-        str.append(" wd='");
-        str.append(widget.getCode());
-        str.append("'");
 
-    }
-
-
-    public static void addWidgetNode(Page page,WidgetNode widgetNode)throws Exception {
-        WidgetNodeTree widgetNodeTree = page.getWidgetNodeTree();
+    public static void addWidgetNode(WidgetModel model,WidgetNode widgetNode)throws Exception {
+        WidgetNodeTree widgetNodeTree = model.getPage().getWidgetNodeTree();
         WidgetNode root = widgetNodeTree.getRoot();
         if(root==null){
             widgetNodeTree.setRoot(widgetNode);
             widgetNode.setFullCode(widgetNode.getCode());
             widgetNode.setParentNode(null);
+            widgetNodeTree.setNewestNoClosed(new Stack<WidgetNode>());
             widgetNodeTree.getNewestNoClosed().push(widgetNode);
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
             return ;
         }
         //解决控件插入
         WidgetNode widgetNodeInsert=null;
-        String[] ids = page.getParamMap().get("id");
-        if(ids!=null && ids.length>0){
-            for(String id:ids){
-                if(StringUtils.isNotBlank(id)){
-                    WidgetNode widgetNode1 = widgetNodeTree.getNodeMap().get(id);
-                    if(widgetNode1!=null){
-                        widgetNodeInsert=widgetNode1;
-                        break;
-                    }
+        AddType addType = model.getParamResult().getAddType();
+        if(addType==AddType.WIDGET){
+            String jValue = model.getParamResult().getParam().get("id");
+            if(StringUtils.isNotBlank(jValue)){
+                WidgetNode widgetNode1 = widgetNodeTree.getNodeMap().get(jValue);
+                if(widgetNode1!=null){
+                    widgetNodeInsert=widgetNode1;
+                    model.getParamResult().getParam().remove("id");
+                }else {
+                    ExceptionTools.ThrowException("定位参数没找到node");
                 }
+
+            }else {
+                ExceptionTools.ThrowException("定位参数没找到node");
             }
         }
 
@@ -202,15 +154,8 @@ public class WidgetFactory {
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
         }
 
-
     }
 
-    public static WidgetNode getWidgetNode(Widget data)throws Exception {
-        WidgetNode widgetNode=new WidgetNode();
-        widgetNode.setData(data);
-        widgetNode.setCode(data.getCode());
-        return widgetNode;
-    }
 
     public static WidgetNode getWidgetNode(Widget data,boolean isFirstClosed)throws Exception {
         WidgetNode widgetNode=new WidgetNode();
