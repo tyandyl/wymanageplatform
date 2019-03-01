@@ -30,11 +30,11 @@ $(document).ready(
 
 );
 
-function createClick(wd){
+function createMoveClick(wd){
 	var param={"id":wd};
 	var type="post";
 	var isAsync=false;
-	var url="/wy-manage-web/DblClick";
+	var url="/wy-manage-web/MoveClick";
 	sendAjaxNews(isAsync,type,url,param,function(data){
 		parDiv=getElementByAttr(data.tagName,'wd',data.wd);
 
@@ -85,12 +85,12 @@ function createButton(e){
 	var left=getOffsetLeft(parDivM);
 	relativeLeft=e.data.clickX-left;
 	relativeTop=e.data.clickY-top;
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop,"blocktype":5};
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
 	var url="/wy-manage-web/Button";
 	sendAjaxNews(isAsync,type,url,param,function(data){
-		//var div=getElementByAttr('div','wd',wd);
+
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -113,11 +113,10 @@ function createButton(e){
 					}
 				}
 			}
-			el.attr('wd',curWd);
 			el.text( '查询');
+			el.attr('wd',curWd);
 			parentTagDiv.appendChild(curDiv);
-			var dragM=moveWidget(curDiv);
-			dragM();
+			$(curDiv).moveDrag(curDiv);
 		}
 	});
 	//openURL(param,"Button");
@@ -135,24 +134,23 @@ function createComboList(e){
 	relativeLeft=e.data.clickX-left;
 	relativeTop=e.data.clickY-top;
 
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop,"blocktype":4};
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
 	var url="/wy-manage-web/ComboList";
 	sendAjaxNews(isAsync,type,url,param,function(data){
-		var lit=data.curWidgets;
-		for(var i=0;i<lit.length;i++){
-			var parentWd = lit[i].parentWd;
-			var parentTagName = lit[i].parentTagName;
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
 			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
 
-			var curWd = lit[i].curWd;
-			var curTagName = lit[i].curTagName;
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
 
 			var curDiv=document.createElement(curTagName);
 			var el = $(curDiv);
-
-			var curPros=lit[i].curPros;
+			el.attr('wd',curWd);
+			var curPros=data[i].curPros;
 			var sList=curPros.split(";");
 			for(var y=0;y<sList.length;y++){
 				var pros=sList[y];
@@ -163,14 +161,12 @@ function createComboList(e){
 					}
 				}
 			}
-			el.attr('wd',curWd);
 			parentTagDiv.appendChild(curDiv);
+			if(data[i].moved){
+				$(curDiv).moveDrag(curDiv);
+			}
 
 		}
-
-		//var div=getElementByAttr('div','wd',wd);
-		//var bef=div.innerHTML;
-		//div.innerHTML=bef+data.str;
 
 		var options = {items:[
 			{text: '输入框'},
@@ -179,15 +175,6 @@ function createComboList(e){
 			{text: '弹出列表(列表数量大于20)'}
 		]
 		};
-		if(data.moveWd!=null){
-			var cur6=getElementByAttr(data.moveWdName,'wd',data.moveWd);
-			if(cur6!=null){
-				var dragM=moveWidget(cur6);
-				dragM();
-			}
-
-
-		}
 		if(data.clickWd!=null){
 			var cur=getElementByAttr(data.clickWdName,'wd',data.clickWd);
 			if(data.recordWd!=null){
@@ -214,22 +201,37 @@ function createTablePanel(e){
 	relativeLeft=e.data.clickX-left;
 	relativeTop=e.data.clickY-top;
 
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
 	var url="/wy-manage-web/TablePanel";
 	sendAjaxNews(isAsync,type,url,param,function(data){
-		var div=getElementByAttr('div','wd',wd);
-		var bef=div.innerHTML;
-		div.innerHTML=bef+data.str;
-		if(data.moveWd!=null){
-			var options = {
-			};
-			var cur=getElementByAttr(data.moveWdName,'wd',data.moveWd);
-			$(cur).moveWidget(options);
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+			el.attr('wd',curWd);
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			parentTagDiv.appendChild(curDiv);
+			$(curDiv).moveDrag(curDiv);
 		}
 	});
-	//openURL(param,"TablePanel");
 }
 
 

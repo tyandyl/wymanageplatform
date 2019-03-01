@@ -49,13 +49,13 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>DblClick</servlet-name>
-        <servlet-class>DblClick</servlet-class>
+        <servlet-name>MoveClick</servlet-name>
+        <servlet-class>MoveClick</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>DblClick</servlet-name>
-        <url-pattern>/DblClick</url-pattern>
+        <servlet-name>MoveClick</servlet-name>
+        <url-pattern>/MoveClick</url-pattern>
     </servlet-mapping>
 
     <servlet>

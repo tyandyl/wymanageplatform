@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.widget;
 
 import com.wy.manage.platform.core.bean.Result;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,12 @@ public class WidgetModelParamResult extends Result implements Serializable {
     private List<CurWidget> curWidgets=new ArrayList<CurWidget>();
 
 
+    private HttpServletRequest request;
+
+    public WidgetModelParamResult(JParam param,HttpServletRequest request){
+        this.JParam=param;
+        this.request=request;
+    }
 
     public JParam getJParam() {
         return JParam;
@@ -54,5 +61,13 @@ public class WidgetModelParamResult extends Result implements Serializable {
 
     public void setParam(Map<String, String> param) {
         this.param = param;
+    }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }

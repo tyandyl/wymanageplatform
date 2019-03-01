@@ -10,16 +10,19 @@ import java.util.Map;
 public class JParam implements Serializable {
     private static final long serialVersionUID = -3670349063954746718L;
 
-    private String parentWd;
 
+    Map<String, String[]> parameterMap=null;
 
-
-    public String getParentWd() {
-        return parentWd;
+    public JParam(Map<String, String[]> param){
+        this.parameterMap= new HashMap<String, String[]>(param);
     }
 
-    public void setParentWd(String parentWd) {
-        this.parentWd = parentWd;
+    public Map<String, String[]> getParameterMap() {
+        return parameterMap;
+    }
+
+    public String[] get(String param){
+        return parameterMap.get(param);
     }
 
 }

@@ -1,38 +1,79 @@
-function moveWidget(el) {
+/* jQuery Contextify | (c) 2014-2016 Adam Bouqdib | abemedia.co.uk/license */
 
-	var elemDrag=el;
-	var buttonNumId=0;
-	var wdDrag=null;
-	function drag(){
-		$(elemDrag)
-				.on('click', function (ev) {
-					ev.preventDefault();
-					var e = ev || window.event;
-					clearTimeout(timer);
-					timer = setTimeout(function() {
-						var temp=$(ev.target).attr("wd");     // e.target表示被点击的目标
-						if(typeof(temp) =="undefined"){
-							return;
-						}
+/*global define */
 
-						wdDrag=temp;
-						if(buttonNumId==0){
-							var parDivM=getElementByAttr(e.target.localName,'wd',wdDrag);
-							var top=getOffsetTop(parDivM);
-							var left=getOffsetLeft(parDivM);
-							relativeLeft=e.clientX-left;
-							relativeTop=e.clientY-top;
-							createClick(wdDrag);
-							buttonNumId++;
-						}else {
-							buttonNumId=0;
-						}
-					}, 300);
+;(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
 
-				})
-		;
+		// AMD. Register as an anonymous module.
+		define([ "jquery" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery, window );
+	}
+}(function ( $, window ) {
+
+	var pluginName = "moveDrag";
+
+	function Drag( element ) {
+		this.elementNode = element;
+		this.elementNode.me=this;//保存自身的引用
+		this.init();
 	}
 
-	return drag;
+	function getCoords(el){
+		var box = el.getBoundingClientRect(),
+				doc = el.ownerDocument,
+				body = doc.body,
+				html = doc.documentElement,
+				clientTop = html.clientTop || body.clientTop || 0,
+				clientLeft = html.clientLeft || body.clientLeft || 0,
+				top  = box.top  + (self.pageYOffset || html.scrollTop  ||  body.scrollTop ) - clientTop,
+				left = box.left + (self.pageXOffset || html.scrollLeft ||  body.scrollLeft) - clientLeft;
+		return { 'top': top, 'left': left };
+	}
 
-}
+	Drag.z = 999;
+
+	Drag.prototype.init = function () {
+
+		this.elementNode.onmousedown=function(e){
+			e = e || window.event;
+			var self=this.me;//获得拖动对象
+			var node = self.elementNode;//获得拖动元素
+			node.offset_x = e.clientX - node.offsetLeft;
+			node.offset_y = e.clientY - node.offsetTop;
+			document.wyMoveDrag=self;
+			//非点击元素node注册，是每个元素注册document
+			document.onmouseup = function(e){
+				node=document.wyMoveDrag.elementNode;
+				alert(node.style.left+","+node.style.top);
+				document.onmouseup = null;
+				document.onmousemove = null;
+				document.wyMoveDrag=null;
+			};
+
+			document.onmousemove = function(e){
+				node=document.wyMoveDrag.elementNode;
+				e = e || window.event;
+				node.style.cursor = "pointer";
+				!+"\v1"? document.selection.empty() : window.getSelection().removeAllRanges();
+				var _left = e.clientX - node.offset_x,
+						_top = e.clientY - node.offset_y;
+
+				node.style.left = _left  + "px";
+				node.style.top = _top  + "px";
+
+			};
+			node.style.zIndex = ++Drag.z;
+			return false;
+		}
+
+	};
+
+	$.fn[pluginName] = function ( element) {
+		return new Drag(element);
+	};
+
+}));

@@ -1,10 +1,15 @@
 package com.wy.manage.platform.core.widget;
 
+import com.wy.manage.platform.core.entrance.Context;
 import com.wy.manage.platform.core.model.BasicModel;
 import com.wy.manage.platform.core.utils.FileTools;
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tianye
@@ -16,22 +21,73 @@ public abstract class WidgetModel {
 
     private BasicModel htmlModel=null;
 
-    public final boolean add(AddType addType,JParam jParam)throws Exception{
-        if(!this.beforeAdd(addType,jParam)){
-            return false;
+    public WidgetModel init(HttpServletRequest request)throws Exception{
+        paramResult=new WidgetModelParamResult(new JParam(request.getParameterMap()),request);
+        handleType(paramResult);
+        handleParamMap( paramResult);
+        if(paramResult.getAddType()!=null){
+            return this;
         }
-        initParamResult(jParam,addType);
-        addExecute(addType);
-        return true;
+        return null;
+
     }
 
-    public boolean addExecute(AddType addType)throws Exception{
-        switch (addType){
+    public void handleType(WidgetModelParamResult paramResult){
+        String[] handleTypes = paramResult.getJParam().get("handleType");
+        if(handleTypes!=null){
+            AddType addType = AddType.getAddType(Integer.valueOf(handleTypes[0]));
+            if(addType!=null){
+                paramResult.setAddType(addType);
+            }else {
+                System.out.println("创建类型不匹配");
+            }
+        }else {
+            System.out.println("创建类型不存在");
+        }
+    }
+
+    public void handleParamMap(WidgetModelParamResult paramResult){
+        String[] ids = paramResult.getJParam().get("id");
+        if(ids!=null){
+            paramResult.getParam().put("id",ids[0]);
+        }
+
+        String[] tops = paramResult.getJParam().get("top");
+        if(tops!=null){
+            paramResult.getParam().put("top",tops[0]);
+        }
+
+        String[] lefts = paramResult.getJParam().get("left");
+        if(lefts!=null){
+            paramResult.getParam().put("left",lefts[0]);
+        }
+
+        String[] positions = paramResult.getJParam().get("position");
+        if(positions!=null){
+            paramResult.getParam().put("position",positions[0]);
+        }
+    }
+
+    public final boolean add()throws Exception{
+        if(!this.beforeAdd(paramResult)){
+            return false;
+        }
+        if(addExecute(paramResult)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addExecute(WidgetModelParamResult paramResult)throws Exception{
+        switch (this.getParamResult().getAddType()){
             case PAGE:
+                HttpSession session = paramResult.getRequest().getSession(true);
+                session.setMaxInactiveInterval(30*60);
                 page=new Page();
+                Context.put(session.getId(),page);
                 break;
             case WIDGET:
-                loadPage(getParamResult());
+                page=loadPage(getParamResult());
                 break;
             default:
         }
@@ -43,108 +99,17 @@ public abstract class WidgetModel {
         return true;
     }
 
-    public String toView(){
-        StringBuffer view =new StringBuffer();
-        DocType docType = this.getPage().getDocType();
-        switch (docType){
-            case HTML5:
-                view.append("<!DOCTYPE html>");
-            break;
-            case TRANSITIONAL:
-                view.append("<!DOCTYPE html>");
-                break;
-        }
-        view.append("<html>");
-        view.append("<head>");
-        List<Meta> metas = this.getPage().getMetas();
-        if(metas!=null && metas.size()>0){
-            StringBuffer metaStr=new StringBuffer();
-            for(Meta meta:metas){
-                metaStr.append("<meta ");
-                metaStr.append("http-equiv=\"");
-                metaStr.append(meta.getHttp_equiv()+"\" ");
-                metaStr.append("content=\"");
-                metaStr.append(meta.getContent()+"\">");
-            }
-            view.append(metaStr);
-        }
-        List<Script> scripts = this.getPage().getScripts();
-        if(scripts!=null && scripts.size()>0) {
-            StringBuffer scriptStr=new StringBuffer();
-            for (Script script : scripts) {
-                scriptStr.append("<script type=\"");
-                scriptStr.append(script.getType());
-                scriptStr.append("\" src=\"");
-                scriptStr.append(script.getSrc());
-                scriptStr.append("\">");
-                scriptStr.append("</script>");
-            }
-            view.append(scriptStr);
-        }
-        List<Link> links = this.getPage().getLinks();
-        if(links!=null && links.size()>0) {
-            StringBuffer linkStr=new StringBuffer();
-            for (Link link : links) {
-                StringBuffer str=new StringBuffer();
-                str.append("<link rel=\"stylesheet\" style=\"text/css\" href=\"");
-                str.append(link.getHref());
-                str.append("\" />");
-            }
-            view.append(linkStr);
-        }
-        view.append("</head>");
-        view.append("<body>");
 
-        WidgetNodeTree widgetNodeTree = this.getPage().getWidgetNodeTree();
-        WidgetNode root = widgetNodeTree.getRoot();
-        fillNode( root, view);
-        view.append("</body>");
-        view.append("</html>");
-        return view.toString();
-    }
-
-    public void fillNode(WidgetNode node,StringBuffer view){
-        Widget data = node.getData();
-        TagType tagType = data.getTagType();
-        view.append("<"+tagType.getName());
-        String curPros = data.getCurPros();
-        if(StringUtils.isNotBlank(curPros)){
-            view.append(" style=\"");
-            view.append(curPros);
-            if(node.isFirstClosed()){
-                view.append("\" />");
-            }else {
-                view.append("\" >");
-            }
-        }
-        List<WidgetNode> childNodes = node.getChildNodes();
-        if(childNodes!=null && childNodes.size()>0){
-            for(WidgetNode node1:childNodes){
-                fillNode( node1, view);
-            }
-        }
-        if(!node.isFirstClosed()){
-            view.append("</"+tagType.getName()+">");
-        }
-
-
-    }
 
 
 
     public abstract BasicModel initLoadHtmlModel();
 
 
-    public abstract void loadPage(WidgetModelParamResult widgetModelParamResult);
+    public abstract Page loadPage(WidgetModelParamResult widgetModelParamResult);
 
-    public boolean beforeAdd(AddType addType,JParam param){
+    public boolean beforeAdd(WidgetModelParamResult paramResult){
         return true;
-    }
-
-    public void initParamResult(JParam jParam,AddType addType){
-        paramResult=new WidgetModelParamResult();
-        paramResult.setJParam(jParam);
-        paramResult.setAddType(addType);
     }
 
     public Page getPage() {

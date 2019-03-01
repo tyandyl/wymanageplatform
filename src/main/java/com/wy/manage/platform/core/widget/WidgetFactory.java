@@ -124,8 +124,6 @@ public class WidgetFactory {
                     ExceptionTools.ThrowException("定位参数没找到node");
                 }
 
-            }else {
-                ExceptionTools.ThrowException("定位参数没找到node");
             }
         }
 
@@ -136,7 +134,7 @@ public class WidgetFactory {
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
             Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();
             newestNoClosed.push(widgetNode);
-
+            setHandleCurWidget( model, widgetNode,widgetNodeInsert.getCode(),widgetNodeInsert.getData().getTagType().getName());
         }else {
             //这里都是开口的
             Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();
@@ -152,8 +150,24 @@ public class WidgetFactory {
             }
             peek.getChildNodes().add(widgetNode);
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
+            if(addType==AddType.WIDGET){
+                setHandleCurWidget( model, widgetNode,peek.getCode(),peek.getData().getTagType().getName());
+            }
         }
 
+    }
+
+    public static void setHandleCurWidget(WidgetModel model,WidgetNode widgetNode,String parentWd,String parentTagName){
+        CurWidget curWidget=new CurWidget();
+        curWidget.setCurWd(widgetNode.getCode());
+        curWidget.setCurTagName(widgetNode.getData().getTagType().getName());
+        curWidget.setParentWd(parentWd);
+        curWidget.setParentTagName(parentTagName);
+        curWidget.setMoved(widgetNode.getData().isMoved());
+        curWidget.setClick(widgetNode.getData().isClick());
+        curWidget.setRecord(widgetNode.getData().isRecord());
+        curWidget.setCurPros(widgetNode.getData().getCurPros());
+        model.getParamResult().getCurWidgets().add(curWidget);
     }
 
 
