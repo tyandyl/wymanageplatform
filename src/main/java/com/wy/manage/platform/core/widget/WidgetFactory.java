@@ -22,6 +22,7 @@ public class WidgetFactory {
             put("window2-combo-list-div", "move");
             put("window2-combo-list-cell-after", "click");
             put("window2-combo-list-cell", "record");
+            put("window2-combo-list-cell_real", "record2");
             put("window2-table-input","move");
         }
     };
@@ -89,6 +90,8 @@ public class WidgetFactory {
                             widget.setClick(true);
                         }else if("record".equalsIgnoreCase(split[i])){
                             widget.setRecord(true);
+                        }else if("record2".equalsIgnoreCase(split[i])){
+                            widget.setRecord2(true);
                         }
                     }
                 }
@@ -164,8 +167,9 @@ public class WidgetFactory {
         curWidget.setParentWd(parentWd);
         curWidget.setParentTagName(parentTagName);
         curWidget.setMoved(widgetNode.getData().isMoved());
-        curWidget.setClick(widgetNode.getData().isClick());
-        curWidget.setRecord(widgetNode.getData().isRecord());
+        curWidget.setClicked(widgetNode.getData().isClick());
+        curWidget.setRecorded(widgetNode.getData().isRecord());
+        curWidget.setRecorded2(widgetNode.getData().isRecord2());
         curWidget.setCurPros(widgetNode.getData().getCurPros());
         model.getParamResult().getCurWidgets().add(curWidget);
     }

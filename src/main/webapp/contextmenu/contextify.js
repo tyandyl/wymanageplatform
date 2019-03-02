@@ -22,16 +22,45 @@
             menuClass: "dropdown-menu",
             headerClass: "dropdown-header",
             dividerClass: "divider",
-            before: false
+            before: function(element,options) {beforeCheck(element,options)}
         },
         contextifyId = 0;
+
+    function beforeCheck(element,options){
+        var val = element;
+        var moved=null;
+        while(val != null){
+            var el=$(val);
+            var isMoved=el.data("widgetNodeA");
+            if(isMoved==1){
+                moved=val;
+                break;
+            }
+            val = val.offsetParent;
+        }
+        if(moved!=null){
+            options.widgetNodeA=moved;
+            options.items=[{header: '右键功能菜单'},
+                {divider: true},
+                {text: '移动', onclick: function(e) {moveDragA(e)}},
+                {text: '设置', onclick: function(e) {createWindow(e)}},
+                {divider: true},
+                {text: '更多...', href: '#'}];
+        }
+    }
+
+    function moveDragA(e){
+        $(e.data.widgetNodeA).moveDrag(e.data.widgetNodeA);
+    }
 
     function Plugin( element, options ) {
         this.element = element;
 
         this.options = $.extend( {}, defaults, options) ;
 
-        this._defaults = defaults;
+        this.element.me=this;
+
+        this._defaults = options.items;
         this._name = pluginName;
 
         this.init();
@@ -45,11 +74,14 @@
             .attr('data-contextify-id', options.id)
             .on('contextmenu', function (e) {
                 e.preventDefault();
-
+                var self=this.me;//获得拖动对象
+                var _defaults = self._defaults;
+                options.items=_defaults;
                 // run before
                 if(typeof(options.before) === 'function') {
-                    options.before(this, options);
+                    options.before(e.target, options);
                 }
+                //每个元素注册上点击的父界面,创建控件时使用
                 var temp=$(e.target).attr("wd");
                 var wdName=e.target.localName;
                 options.wd=temp;
@@ -87,11 +119,11 @@
                             a.css('cursor', 'pointer');
                         }
                         if (item.data) {
-                        for (var data in item.data) {
-                            menu.attr('data-' + data, item.data[data]);
-                        }
-                            a.data(item.data);
-                        }
+                            for (var data in item.data) {
+                                menu.attr('data-' + data, item.data[data]);
+                            }
+                                a.data(item.data);
+                            }
                         a.html(item.text);
                     }
 

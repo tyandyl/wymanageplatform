@@ -38,6 +38,8 @@ public class Widget implements IWidget, Serializable {
 
     private boolean isRecord=false;
 
+    private boolean isRecord2=false;
+
     private String curPros;
 
     /**
@@ -208,5 +210,13 @@ public class Widget implements IWidget, Serializable {
 
     public void setCurPros(String curPros) {
         this.curPros = curPros;
+    }
+
+    public boolean isRecord2() {
+        return isRecord2;
+    }
+
+    public void setRecord2(boolean record2) {
+        isRecord2 = record2;
     }
 }

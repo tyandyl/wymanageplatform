@@ -12,9 +12,11 @@ public class CurWidget {
 
     private boolean isMoved=false;
 
-    private boolean isClick=false;
+    private boolean isClicked=false;
 
-    private boolean isRecord=false;
+    private boolean isRecorded=false;
+
+    private boolean isRecorded2=false;
 
     public String getCurWd() {
         return curWd;
@@ -64,19 +66,27 @@ public class CurWidget {
         isMoved = moved;
     }
 
-    public boolean isClick() {
-        return isClick;
+    public boolean isClicked() {
+        return isClicked;
     }
 
-    public void setClick(boolean click) {
-        isClick = click;
+    public void setClicked(boolean clicked) {
+        isClicked = clicked;
     }
 
-    public boolean isRecord() {
-        return isRecord;
+    public boolean isRecorded() {
+        return isRecorded;
     }
 
-    public void setRecord(boolean record) {
-        isRecord = record;
+    public void setRecorded(boolean recorded) {
+        isRecorded = recorded;
+    }
+
+    public boolean isRecorded2() {
+        return isRecorded2;
+    }
+
+    public void setRecorded2(boolean recorded2) {
+        isRecorded2 = recorded2;
     }
 }

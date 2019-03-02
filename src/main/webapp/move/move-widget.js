@@ -22,18 +22,6 @@
 		this.init();
 	}
 
-	function getCoords(el){
-		var box = el.getBoundingClientRect(),
-				doc = el.ownerDocument,
-				body = doc.body,
-				html = doc.documentElement,
-				clientTop = html.clientTop || body.clientTop || 0,
-				clientLeft = html.clientLeft || body.clientLeft || 0,
-				top  = box.top  + (self.pageYOffset || html.scrollTop  ||  body.scrollTop ) - clientTop,
-				left = box.left + (self.pageXOffset || html.scrollLeft ||  body.scrollLeft) - clientLeft;
-		return { 'top': top, 'left': left };
-	}
-
 	Drag.z = 999;
 
 	Drag.prototype.init = function () {
@@ -48,10 +36,12 @@
 			//非点击元素node注册，是每个元素注册document
 			document.onmouseup = function(e){
 				node=document.wyMoveDrag.elementNode;
-				alert(node.style.left+","+node.style.top);
+				//alert(node.style.left+","+node.style.top);
 				document.onmouseup = null;
 				document.onmousemove = null;
+				document.onmousedown = null;
 				document.wyMoveDrag=null;
+				node.onmousedown = null;
 			};
 
 			document.onmousemove = function(e){

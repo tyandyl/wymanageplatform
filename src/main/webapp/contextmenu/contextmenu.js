@@ -19,63 +19,60 @@ $(document).ready(
 			]};
 			$('div').contextify(options);
 
-
-			//$(document).dblclick(function(){
-			//	clearTimeout(timer);
-			//});
-
-
-
 		}
 
 );
 
-function createMoveClick(wd){
-	var param={"id":wd};
-	var type="post";
-	var isAsync=false;
-	var url="/wy-manage-web/MoveClick";
-	sendAjaxNews(isAsync,type,url,param,function(data){
-		parDiv=getElementByAttr(data.tagName,'wd',data.wd);
-
-		var relaX=null;
-		var relaY =null;
-		parDiv.onmousedown = function(ev) {
-			var ev = ev || window.event;
-
-			relaX = ev.clientX - this.offsetLeft;
-			relaY = ev.clientY - this.offsetTop;
-			parDiv.onmousemove = function(ev) {
-				var ev = ev || window.event;
-				parDiv.style.left = ev.clientX - relaX + 'px';
-				parDiv.style.top = ev.clientY - relaY + 'px';
-			};
-		};
-
-		parDiv.onmouseup = function(ev) {
-			var ev = ev || window.event;
-			parDiv.onmousemove = null;
-			parDiv.onmouseup = null;
-			parDiv.onmousedown=null;
-		};
-	});
-}
-function createWindow(){
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
+function createWindow(e){
+	var temp= e.data.wd;     // e.target表示被点击的目标，这里是弹出框上的a元素
+	if(typeof(temp) =="undefined"){
+		return;
+	}
+	wd=temp;
+	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
+	var top=getOffsetTop(parDivM);
+	var left=getOffsetLeft(parDivM);
+	relativeLeft=e.data.clickX-left;
+	relativeTop=e.data.clickY-top;
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
 	var url="/wy-manage-web/OpenWindow";
 	sendAjaxNews(isAsync,type,url,param,function(data){
-		var div=getElementByAttr('div','wd',wd);
-		var bef=div.innerHTML;
-		div.innerHTML=bef+data.str;
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+			el.attr('wd',curWd);
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			parentTagDiv.appendChild(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
+		}
 	});
 
 	//openURL(param,"Window");
 }
 
 function createButton(e){
-	var temp= e.data.wd;     // e.target表示被点击的目标
+	var temp= e.data.wd;     // e.target表示被点击的目标，这里是弹出框上的a元素
 	if(typeof(temp) =="undefined"){
 		return;
 	}
@@ -90,7 +87,6 @@ function createButton(e){
 	var isAsync=false;
 	var url="/wy-manage-web/Button";
 	sendAjaxNews(isAsync,type,url,param,function(data){
-
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -116,10 +112,11 @@ function createButton(e){
 			el.text( '查询');
 			el.attr('wd',curWd);
 			parentTagDiv.appendChild(curDiv);
-			$(curDiv).moveDrag(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
 		}
 	});
-	//openURL(param,"Button");
 }
 
 function createComboList(e){
@@ -139,6 +136,14 @@ function createComboList(e){
 	var isAsync=false;
 	var url="/wy-manage-web/ComboList";
 	sendAjaxNews(isAsync,type,url,param,function(data){
+		var options = {items:[
+			{text: '输入框'},
+			{text: '下拉列表(列表数量小于20)'},
+
+			{text: '弹出列表(列表数量大于20)'}
+		]
+		};
+
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -162,26 +167,19 @@ function createComboList(e){
 				}
 			}
 			parentTagDiv.appendChild(curDiv);
-			if(data[i].moved){
-				$(curDiv).moveDrag(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
+			if(data[i].recorded){
+				options.record=curDiv;
+			}
+			if(data[i].recorded2){
+				options.record2=curDiv;
+			}
+			if(data[i].clicked){
+				$(curDiv).unbind().combolist(options);
 			}
 
-		}
-
-		var options = {items:[
-			{text: '输入框'},
-			{text: '下拉列表(列表数量小于20)'},
-
-			{text: '弹出列表(列表数量大于20)'}
-		]
-		};
-		if(data.clickWd!=null){
-			var cur=getElementByAttr(data.clickWdName,'wd',data.clickWd);
-			if(data.recordWd!=null){
-				var rec=getElementByAttr(data.recordWdName,'wd',data.recordWd);
-				options.record=rec;
-			}
-			$(cur).combolist(options);
 		}
 	});
 }
@@ -229,7 +227,9 @@ function createTablePanel(e){
 				}
 			}
 			parentTagDiv.appendChild(curDiv);
-			$(curDiv).moveDrag(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
 		}
 	});
 }
