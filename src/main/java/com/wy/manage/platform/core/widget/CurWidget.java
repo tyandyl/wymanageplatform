@@ -9,6 +9,7 @@ public class CurWidget {
     private String curWd;
     private String curTagName;
     private String curPros;
+    private String outContentValue;
 
     private boolean isMoved=false;
 
@@ -88,5 +89,14 @@ public class CurWidget {
 
     public void setRecorded2(boolean recorded2) {
         isRecorded2 = recorded2;
+    }
+
+
+    public String getOutContentValue() {
+        return outContentValue;
+    }
+
+    public void setOutContentValue(String outContentValue) {
+        this.outContentValue = outContentValue;
     }
 }

@@ -35,7 +35,7 @@ public class WindowOpenIngress extends Ingress{
                         }
                         @Override
                         public String getContentAddress() {
-                            return "template/window2/window.html";
+                            return "template/window3/window.html";
                         }
                     };
                 }
@@ -49,8 +49,10 @@ public class WindowOpenIngress extends Ingress{
             model.add();
             List<CurWidget> curWidgets = model.getParamResult().getCurWidgets();
             String strPage = JSONObject.toJSONString(curWidgets);
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
             OutputStream out = response.getOutputStream();
-            out.write(strPage.getBytes());
+            out.write(strPage.getBytes("UTF-8"));
         }catch (Exception e){
             System.out.println("创建弹出窗口报错");
         }

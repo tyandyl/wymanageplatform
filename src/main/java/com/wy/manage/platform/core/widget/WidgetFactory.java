@@ -15,24 +15,14 @@ import java.util.*;
  */
 public class WidgetFactory {
 
-    private static HashMap<String, String> eventMap = new HashMap<String, String>() {
-        private static final long serialVersionUID = -7130991970747133460L;
-        {
-            put("search_button", "move,click");
-            put("window2-combo-list-div", "move");
-            put("window2-combo-list-cell-after", "click");
-            put("window2-combo-list-cell", "record");
-            put("window2-combo-list-cell_real", "record2");
-            put("window2-table-input","move");
-        }
-    };
+
 
     public static Widget getWidget(WidgetModel model,String selectorType,String selectorValue,TagType tagType)throws Exception{
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
         widget.setTagType(tagType);
 
-        processEvent(selectorValue,widget);
+        processEvent(selectorValue,widget,model);
 
         buildInStyleAnalyze( model, selectorType, selectorValue, widget);
         widget.setTitle(selectorValue);
@@ -77,28 +67,28 @@ public class WidgetFactory {
 
     }
 
-    public static void processEvent(String selectorValue,Widget widget){
+    public static void processEvent(String selectorValue,Widget widget,WidgetModel model)throws Exception{
         if(selectorValue!=null){
-            String event = eventMap.get(selectorValue.trim());
-            if(event!=null){
-                String[] split = event.split(",");
-                if(split!=null && split.length>0){
-                    for(int i=0;i<split.length;i++){
-                        if("move".equalsIgnoreCase(split[i])){
-                            widget.setMoved(true);
-                        }else if("click".equalsIgnoreCase(split[i])){
-                            widget.setClick(true);
-                        }else if("record".equalsIgnoreCase(split[i])){
-                            widget.setRecord(true);
-                        }else if("record2".equalsIgnoreCase(split[i])){
-                            widget.setRecord2(true);
-                        }
-                    }
+            RegisterEventManage manage = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
+            if(manage!=null){
+                manage.setWidget(widget);
+            }else {
+                RegisterEventData registerEventData = model.getParamResult().getRegisterEvent().handle().getMaps().get(selectorValue.trim());
+                if(registerEventData!=null){
+                    RegisterEventManage manage1 = model.getParamResult().getRegisterEvent().handle().getMapManage().get(registerEventData.getSelectorValue());
+                    manage1.getArr()[registerEventData.getI()]=widget.getCode();
                 }
             }
         }
     }
 
+    public void checkArray(RegisterEventManage manage){
+        int paramNum = manage.getParamNum();
+        if(manage.getArr()[paramNum-1]!=null){
+
+
+        }
+    }
 
 
     public static void addWidgetNode(WidgetModel model,WidgetNode widgetNode)throws Exception {
@@ -161,16 +151,19 @@ public class WidgetFactory {
     }
 
     public static void setHandleCurWidget(WidgetModel model,WidgetNode widgetNode,String parentWd,String parentTagName){
+        Widget data = widgetNode.getData();
+
         CurWidget curWidget=new CurWidget();
         curWidget.setCurWd(widgetNode.getCode());
-        curWidget.setCurTagName(widgetNode.getData().getTagType().getName());
+        curWidget.setCurTagName(data.getTagType().getName());
         curWidget.setParentWd(parentWd);
         curWidget.setParentTagName(parentTagName);
-        curWidget.setMoved(widgetNode.getData().isMoved());
-        curWidget.setClicked(widgetNode.getData().isClick());
-        curWidget.setRecorded(widgetNode.getData().isRecord());
-        curWidget.setRecorded2(widgetNode.getData().isRecord2());
-        curWidget.setCurPros(widgetNode.getData().getCurPros());
+        curWidget.setMoved(data.isMoved());
+        curWidget.setClicked(data.isClick());
+        curWidget.setRecorded(data.isRecord());
+        curWidget.setRecorded2(data.isRecord2());
+        curWidget.setCurPros(data.getCurPros());
+        curWidget.setOutContentValue(data.getOutValue());
         model.getParamResult().getCurWidgets().add(curWidget);
     }
 

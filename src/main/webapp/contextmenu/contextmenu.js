@@ -24,17 +24,16 @@ $(document).ready(
 );
 
 function createWindow(e){
-	var temp= e.data.wd;     // e.target表示被点击的目标，这里是弹出框上的a元素
+	var divM=$("body").children("div").get(0);
+	var temp=$(divM).attr('wd');
 	if(typeof(temp) =="undefined"){
+		alert("没有获取定位的div");
 		return;
 	}
-	wd=temp;
-	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
-	var top=getOffsetTop(parDivM);
-	var left=getOffsetLeft(parDivM);
-	relativeLeft=e.data.clickX-left;
-	relativeTop=e.data.clickY-top;
-	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
+
+	relativeLeft=e.data.clickX;
+	relativeTop=e.data.clickY;
+	var param={"id":temp,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
 	var url="/wy-manage-web/OpenWindow";
@@ -48,7 +47,13 @@ function createWindow(e){
 			var curTagName = data[i].curTagName;
 
 			var curDiv=document.createElement(curTagName);
+
 			var el = $(curDiv);
+			if(data[i].outContentValue!=null){
+				//var t=document.createTextNode(data[i].outValue);
+				//curDiv.appendChild(t);
+				curDiv.innerHTML=data[i].outContentValue;
+			}
 			el.attr('wd',curWd);
 			var curPros=data[i].curPros;
 			var sList=curPros.split(";");

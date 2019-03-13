@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class Test3 {
     public static void main(String[] agrs) throws Exception {
+
     }
 
     public static NfaStateNode analyze(NfaStateNode nfaStateNode, char sy, int ny){

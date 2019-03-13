@@ -51,7 +51,7 @@
 							var el = $(div);
 							el
 								.css('position','relative')
-								.css('z-index','99999')
+								.css('z-index','999')
 								.css('margin','0px')
 								.css('padding','0px')
 								.css('top','2px')

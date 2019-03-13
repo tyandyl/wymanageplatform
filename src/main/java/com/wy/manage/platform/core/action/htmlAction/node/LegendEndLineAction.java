@@ -2,24 +2,24 @@ package com.wy.manage.platform.core.action.htmlAction.node;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
-import com.wy.manage.platform.core.parser.test.Encoding;
 import com.wy.manage.platform.core.utils.ChinaFontTools;
 import com.wy.manage.platform.core.utils.TempTools;
-import com.wy.manage.platform.core.widget.*;
+import com.wy.manage.platform.core.widget.CurWidget;
+import com.wy.manage.platform.core.widget.WidgetModel;
+import com.wy.manage.platform.core.widget.WidgetNode;
+import com.wy.manage.platform.core.widget.WidgetNodeTree;
 
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 /**
- * Created by tianye
+ * Created by tianye13 on 2019/3/4.
  */
-public class TdEndLineAction extends BasicAction {
+public class LegendEndLineAction extends BasicAction {
     private static final String CHINESE_FONTS="ChineseFonts";
+
     @Override
-    public void action(ModelParam modelParam)throws Exception {
+    public void action(ModelParam modelParam) throws Exception {
         Object t = modelParam.getT();
         if(t instanceof WidgetModel) {
             WidgetModel model = (WidgetModel) t;
@@ -27,28 +27,22 @@ public class TdEndLineAction extends BasicAction {
             //闭环校验，校验一些div名称之类的，目前先不校验
             widgetNodeTree.getNewestNoClosed().pop();
             Map regularValue = modelParam.getRegularValue();
-            //不确定的正则表达式放开头不放结尾
             Object chineseFonts = regularValue.get(CHINESE_FONTS);
             if(chineseFonts!=null){
                 List<CurWidget> curWidgets = model.getParamResult().getCurWidgets();
                 CurWidget curWidget = curWidgets.get(curWidgets.size() - 1);
-                String s = ChinaFontTools.decodeUnicode(String.valueOf(chineseFonts));
+                String s = ChinaFontTools.decodeUnicode(String.valueOf(chineseFonts))+"";
                 //很奇怪，一个汉字：宋就乱码，两个汉字就不乱码
-                System.out.println(Encoding.getEncoding(s));
-                //获取系统默认编码
-                System.out.println("系统默认编码：" + System.getProperty("file.encoding")); //查询结果GBK
-                //系统默认字符编码
-                System.out.println("系统默认字符编码：" + Charset.defaultCharset()); //查询结果GBK
-                //操作系统用户使用的语言
-                System.out.println("系统默认语言：" + System.getProperty("user.language")); //查询结果zh
                 curWidget.setOutContentValue(s);
             }
+
+
         }
     }
 
     @Override
     public String getName() {
-        return "tdEndLine";
+        return "legendEndLine";
     }
 
     @Override
@@ -62,6 +56,3 @@ public class TdEndLineAction extends BasicAction {
         return 1;
     }
 }
-
-
-

@@ -51,6 +51,7 @@ public class ButtonIngress extends Ingress{
             List<CurWidget> curWidgets = model.getParamResult().getCurWidgets();
             String strPage = JSONObject.toJSONString(curWidgets);
             OutputStream out = response.getOutputStream();
+            response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
             out.write(strPage.getBytes());
         }catch (Exception e){
             System.out.println("创建按钮报错");

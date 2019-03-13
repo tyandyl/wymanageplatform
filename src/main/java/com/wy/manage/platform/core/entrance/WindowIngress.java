@@ -48,6 +48,8 @@ public class WindowIngress extends Ingress{
             model.add();
             String view = model.getPage().toView();
             OutputStream out = response.getOutputStream();
+            response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
+            response.setCharacterEncoding("utf-8");
             out.write(view.getBytes());
         }catch (Exception e){
             System.out.println("创建窗口报错");

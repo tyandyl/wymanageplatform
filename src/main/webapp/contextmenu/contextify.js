@@ -149,6 +149,7 @@
                     .css('top',  e.clientY)
                     .css('left', e.clientX)
                     .css('position', 'fixed')
+                    .css('z-index','99999')
                     .show();
             })
         .parents().on('mouseup', function () {

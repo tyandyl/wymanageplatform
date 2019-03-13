@@ -87,6 +87,9 @@ public abstract class BasicModel<T> implements Model<T>{
         //重写，保证读取顺序
         Set<String> strings = cssProperties.stringPropertyNames();
         for (String name:strings) {
+            if(name.equalsIgnoreCase("legendEndLine")){
+                System.out.println(name);
+            }
             //解决css中人为做出来的空格
             StringBuffer line=new StringBuffer();
             String value = cssProperties.getProperty(name);

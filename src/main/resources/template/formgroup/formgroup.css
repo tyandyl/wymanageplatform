@@ -18,3 +18,9 @@
 	border:1px solid #5aace0;
 	font: 13px/1.7 verdana,'\5b8b\4f53',arial,georgia,helvetica,sans-serif;
 }
+
+#window2-form-group-fieldset-legend{
+	border: 0;
+	width: auto;
+	font: 13px/1.7 verdana,'\5b8b\4f53',arial,georgia,helvetica,sans-serif;
+}

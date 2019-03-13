@@ -92,4 +92,12 @@ https://www.cnblogs.com/rubylouvre/archive/2009/09/09/1563342.html
 https://baijiahao.baidu.com/s?id=1578485599133552894&wfr=spider&for=pc
 
 
+为什么匿名函数要用括号()给括起来呢？
+
+因为匿名函数的声明格式是：function(){}
+
+其中{}是封装代码块的，如果不把匿名函数括起来，function()和{}会被看成是两部分，就不是匿名函数了。此时运行浏览器会报错。只有把匿名函数括起来(function(){})，function()和{}才会被看成一个整体，才是一个真正的匿名函数。
+
+
+
 

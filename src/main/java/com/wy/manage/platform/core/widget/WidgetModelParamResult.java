@@ -21,6 +21,8 @@ public class WidgetModelParamResult extends Result implements Serializable {
 
     private Map<String,String> param=new HashMap<String, String>();
 
+    private RegisterEvent registerEvent;
+
     private List<CurWidget> curWidgets=new ArrayList<CurWidget>();
 
 
@@ -69,5 +71,14 @@ public class WidgetModelParamResult extends Result implements Serializable {
 
     public void setRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+
+    public RegisterEvent getRegisterEvent() {
+        return registerEvent;
+    }
+
+    public void setRegisterEvent(RegisterEvent registerEvent) {
+        this.registerEvent = registerEvent;
     }
 }

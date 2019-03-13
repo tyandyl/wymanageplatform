@@ -10,7 +10,11 @@ public enum TagType {
     TABLE(3,"table"),
     TR(4,"tr"),
     TD(5,"td"),
-    INPUT(6,"input");
+    INPUT(6,"input"),
+    LEGEND(7,"legend"),
+    FORM(8,"form"),
+    FIELD_SET(9,"fieldset")
+    ;
     private int code;
     private String name;
 
