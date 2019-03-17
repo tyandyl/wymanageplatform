@@ -27,6 +27,7 @@ public class WidgetNode implements Serializable{
 
     private List<WidgetNode> childNodes=new ArrayList<WidgetNode>();
 
+
     public Widget getData() {
         return data;
     }

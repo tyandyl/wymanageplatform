@@ -17,11 +17,11 @@ public class WidgetModelParamResult extends Result implements Serializable {
 
     private JParam JParam;
 
-    private AddType addType;
+    private HandleType handleType;
 
     private Map<String,String> param=new HashMap<String, String>();
 
-    private RegisterEvent registerEvent;
+    private RegisterEvent registerEvent=new RegisterEvent();
 
     private List<CurWidget> curWidgets=new ArrayList<CurWidget>();
 
@@ -49,12 +49,12 @@ public class WidgetModelParamResult extends Result implements Serializable {
         this.curWidgets = curWidgets;
     }
 
-    public AddType getAddType() {
-        return addType;
+    public HandleType getHandleType() {
+        return handleType;
     }
 
-    public void setAddType(AddType addType) {
-        this.addType = addType;
+    public void setHandleType(HandleType handleType) {
+        this.handleType = handleType;
     }
 
     public Map<String, String> getParam() {

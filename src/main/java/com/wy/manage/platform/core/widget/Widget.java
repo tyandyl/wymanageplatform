@@ -36,6 +36,10 @@ public class Widget implements IWidget, Serializable {
 
     private String outValue;
 
+    private RegisterParam registerParam=new RegisterParam();
+    //是起始控件标识
+    private boolean flag=false;
+
     /**
      * 获取宽度
      * @return
@@ -190,4 +194,20 @@ public class Widget implements IWidget, Serializable {
         this.outValue = outValue;
     }
 
+    public RegisterParam getRegisterParam() {
+        return registerParam;
+    }
+
+    public void setRegisterParam(RegisterParam registerParam) {
+        this.registerParam = registerParam;
+    }
+
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
 }

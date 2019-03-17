@@ -40,8 +40,8 @@
 				})
 				.on('click', function (e) {
 					e.preventDefault();
-					var menu_div=$("<div id='window2-combo-list-cell-content'></div>");
 					if(combolistNumId==0){
+						var menu_div=$("<div id='window2-combo-list-cell-content'></div>");
 						var l = options.items.length;
 						var i;
 						var menu = $(options.record);
@@ -86,7 +86,7 @@
 						menu.append(menu_div);
 						$(menu_div).show();
 					}else{
-						$("#window2-combo-list-cell-content").show();
+						$("#window2-combo-list-cell-content").toggle();
 					}
 					
 					combolistNumId++;

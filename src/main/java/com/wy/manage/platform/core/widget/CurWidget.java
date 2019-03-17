@@ -10,14 +10,8 @@ public class CurWidget {
     private String curTagName;
     private String curPros;
     private String outContentValue;
+    private RegisterParam registerParam=new RegisterParam();
 
-    private boolean isMoved=false;
-
-    private boolean isClicked=false;
-
-    private boolean isRecorded=false;
-
-    private boolean isRecorded2=false;
 
     public String getCurWd() {
         return curWd;
@@ -59,37 +53,6 @@ public class CurWidget {
         this.parentTagName = parentTagName;
     }
 
-    public boolean isMoved() {
-        return isMoved;
-    }
-
-    public void setMoved(boolean moved) {
-        isMoved = moved;
-    }
-
-    public boolean isClicked() {
-        return isClicked;
-    }
-
-    public void setClicked(boolean clicked) {
-        isClicked = clicked;
-    }
-
-    public boolean isRecorded() {
-        return isRecorded;
-    }
-
-    public void setRecorded(boolean recorded) {
-        isRecorded = recorded;
-    }
-
-    public boolean isRecorded2() {
-        return isRecorded2;
-    }
-
-    public void setRecorded2(boolean recorded2) {
-        isRecorded2 = recorded2;
-    }
 
 
     public String getOutContentValue() {
@@ -98,5 +61,13 @@ public class CurWidget {
 
     public void setOutContentValue(String outContentValue) {
         this.outContentValue = outContentValue;
+    }
+
+    public RegisterParam getRegisterParam() {
+        return registerParam;
+    }
+
+    public void setRegisterParam(RegisterParam registerParam) {
+        this.registerParam = registerParam;
     }
 }

@@ -12,25 +12,23 @@ public class RegisterParam implements Serializable{
     private static final long serialVersionUID = -8612722374388061764L;
 
     //请求参数
-    private List<String> requestParam=new ArrayList<String>();
+    private Set<String> requestParam=new HashSet<String>();
     //注册事件,VALUE=事件,辅助wd,辅助wd
-    private List<String> register=new ArrayList<String>();
+    private Set<String> register=new HashSet<String>();
 
-    private RegisterEventManage registerEventManage;
-
-    public List<String> getRequestParam() {
+    public Set<String> getRequestParam() {
         return requestParam;
     }
 
-    public void setRequestParam(List<String> requestParam) {
+    public void setRequestParam(Set<String> requestParam) {
         this.requestParam = requestParam;
     }
 
-    public List<String> getRegister() {
+    public Set<String> getRegister() {
         return register;
     }
 
-    public void setRegister(List<String> register) {
+    public void setRegister(Set<String> register) {
         this.register = register;
     }
 }

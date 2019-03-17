@@ -44,8 +44,7 @@ public class TablePanelIngress extends Ingress{
                     HttpSession session = paramResult.getRequest().getSession(true);
                     return Context.get(session.getId());
                 }
-            }.init(request);
-            model.add();
+            }.init(request).execute();
             List<CurWidget> curWidgets = model.getParamResult().getCurWidgets();
             String strPage = JSONObject.toJSONString(curWidgets);
             OutputStream out = response.getOutputStream();

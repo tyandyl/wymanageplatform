@@ -1,8 +1,6 @@
 package com.wy.manage.platform.core.widget;
 
 import com.wy.manage.platform.core.attribute.AttributeNameType;
-import com.wy.manage.platform.core.attribute.IAttributeValue;
-import com.wy.manage.platform.core.attribute.Properties;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.GUIDTools;
@@ -69,24 +67,64 @@ public class WidgetFactory {
 
     public static void processEvent(String selectorValue,Widget widget,WidgetModel model)throws Exception{
         if(selectorValue!=null){
-            RegisterEventManage manage = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
-            if(manage!=null){
-                manage.setWidget(widget);
+            List<RegisterEventManage> manages = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
+            if(manages!=null && manages.size()>0){
+                for(RegisterEventManage manage:manages){
+                    manage.setWidget(widget);
+                    checkArray( manage);
+                }
+
             }else {
                 RegisterEventData registerEventData = model.getParamResult().getRegisterEvent().handle().getMaps().get(selectorValue.trim());
                 if(registerEventData!=null){
-                    RegisterEventManage manage1 = model.getParamResult().getRegisterEvent().handle().getMapManage().get(registerEventData.getSelectorValue());
-                    manage1.getArr()[registerEventData.getI()]=widget.getCode();
+                    List<RegisterEventManage> manage1s = model.getParamResult().getRegisterEvent().handle().getMapManage().get(registerEventData.getSelectorValue());
+                    for(RegisterEventManage manage1:manage1s){
+                        manage1.getArr()[registerEventData.getI()]=widget.getCode();
+                        checkArray( manage1);
+                    }
+
                 }
             }
         }
     }
 
-    public void checkArray(RegisterEventManage manage){
+    public static void checkArray(RegisterEventManage manage){
         int paramNum = manage.getParamNum();
-        if(manage.getArr()[paramNum-1]!=null){
+        //不减一的原因是第一个参数是事件
+        if(paramNum>0 && manage.getArr()[paramNum]!=null){
+            Widget widget = manage.getWidget();
+            String[] arr = manage.getArr();
+            StringBuffer str=new StringBuffer();
+            for(int i=0;i<=paramNum;i++){
+                str.append(arr[i]);
+                if(i!=paramNum){
+                    str.append(",");
+                }
+            }
+            if(widget!=null){
+                widget.getRegisterParam().getRegister().add(str.toString());
+                manage.getArr()[1]=null;
+                manage.getArr()[2]=null;
+                manage.getArr()[3]=null;
+            }
 
+        }
+        if(manage.getArr()[0].equalsIgnoreCase("widget")){
+            Widget widget = manage.getWidget();
+            if(widget!=null){
+                widget.setFlag(true);
+                Integer integer = RegisterEvent.getWidgetMap().get(manage.getSelectorValue());
+                if(integer!=null){
+                    widget.setBlockType(BlockType.getBlockType(integer));
+                }
+            }
+        }
 
+        if(manage.getArr()[0].equalsIgnoreCase("click")){
+            Widget widget = manage.getWidget();
+            if(widget!=null){
+
+            }
         }
     }
 
@@ -105,8 +143,8 @@ public class WidgetFactory {
         }
         //解决控件插入
         WidgetNode widgetNodeInsert=null;
-        AddType addType = model.getParamResult().getAddType();
-        if(addType==AddType.WIDGET){
+        HandleType handleType = model.getParamResult().getHandleType();
+        if(handleType == HandleType.NEW_WIDGET){
             String jValue = model.getParamResult().getParam().get("id");
             if(StringUtils.isNotBlank(jValue)){
                 WidgetNode widgetNode1 = widgetNodeTree.getNodeMap().get(jValue);
@@ -143,7 +181,7 @@ public class WidgetFactory {
             }
             peek.getChildNodes().add(widgetNode);
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
-            if(addType==AddType.WIDGET){
+            if(handleType == HandleType.NEW_WIDGET){
                 setHandleCurWidget( model, widgetNode,peek.getCode(),peek.getData().getTagType().getName());
             }
         }
@@ -158,10 +196,7 @@ public class WidgetFactory {
         curWidget.setCurTagName(data.getTagType().getName());
         curWidget.setParentWd(parentWd);
         curWidget.setParentTagName(parentTagName);
-        curWidget.setMoved(data.isMoved());
-        curWidget.setClicked(data.isClick());
-        curWidget.setRecorded(data.isRecord());
-        curWidget.setRecorded2(data.isRecord2());
+        curWidget.setRegisterParam(data.getRegisterParam());
         curWidget.setCurPros(data.getCurPros());
         curWidget.setOutContentValue(data.getOutValue());
         model.getParamResult().getCurWidgets().add(curWidget);

@@ -9,7 +9,6 @@ import com.wy.manage.platform.core.utils.FileTools;
 import com.wy.manage.platform.core.utils.PropertiesTools;
 import com.wy.manage.platform.core.utils.TempTools;
 import com.wy.manage.platform.core.widget.*;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +43,7 @@ public class LinkLineAction extends BasicAction{
     }
 
     public void handleLink(WidgetModel model,Link link)throws Exception{
-        AddType addType = model.getParamResult().getAddType();
+        HandleType addType = model.getParamResult().getHandleType();
         PropertiesTools propertiesTools = PropertiesTools.loadProperties("style.properties");
         String styleType = (String)(propertiesTools.get(link.getHref()));
         if(styleType==null){
@@ -53,7 +52,7 @@ public class LinkLineAction extends BasicAction{
 
         //代表使用外部链接方式
         if("1".equalsIgnoreCase(styleType)){
-            if(addType==AddType.PAGE){
+            if(addType== HandleType.NEW_PAGE){
                 //代表使用外部链接方式
                 if("1".equalsIgnoreCase(styleType)){
                     List<Link> links = model.getPage().getLinks();

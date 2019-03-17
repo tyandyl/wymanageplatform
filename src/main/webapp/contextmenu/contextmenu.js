@@ -54,6 +54,9 @@ function createWindow(e){
 				//curDiv.appendChild(t);
 				curDiv.innerHTML=data[i].outContentValue;
 			}
+			if(curTagName=='button'){
+				el.on('click', function (e) {});
+			}
 			el.attr('wd',curWd);
 			var curPros=data[i].curPros;
 			var sList=curPros.split(";");
@@ -124,6 +127,8 @@ function createButton(e){
 	});
 }
 
+function WyTemp(){};
+
 function createComboList(e){
 	var temp= e.data.wd;     // e.target表示被点击的目标
 	if(typeof(temp) =="undefined"){
@@ -148,7 +153,7 @@ function createComboList(e){
 			{text: '弹出列表(列表数量大于20)'}
 		]
 		};
-
+		var wyTemp = new WyTemp();
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -158,6 +163,7 @@ function createComboList(e){
 			var curTagName = data[i].curTagName;
 
 			var curDiv=document.createElement(curTagName);
+			wyTemp[curWd]=curDiv;
 			var el = $(curDiv);
 			el.attr('wd',curWd);
 			var curPros=data[i].curPros;
@@ -175,15 +181,18 @@ function createComboList(e){
 			if(i==0){
 				el.data("widgetNodeA","1");
 			}
-			if(data[i].recorded){
-				options.record=curDiv;
+			var rd=data[i].registerParam.register;
+			if(rd.length>0){
+				for(var y=0;y<rd.length;y++){
+					var rdList=rd[y].split(",");
+					if(rdList[0]=="dropDown"){
+						options.record=wyTemp[rdList[1]];
+						options.record2=wyTemp[rdList[2]];
+						$(curDiv).unbind().combolist(options);
+					}
+				}
 			}
-			if(data[i].recorded2){
-				options.record2=curDiv;
-			}
-			if(data[i].clicked){
-				$(curDiv).unbind().combolist(options);
-			}
+
 
 		}
 	});
