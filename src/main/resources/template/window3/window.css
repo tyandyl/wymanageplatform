@@ -17,7 +17,7 @@
 	height : 3px;
 	background-repeat:repeat;
 	background-color:transparent;
-	background-image:url(winpic/window-n-lt.gif);
+	background-image:url(winpic/win-lt.gif);
 	z-index:inherit;
 }
 #window2-top{
@@ -30,7 +30,7 @@
 	background-color:#FFFFFF;
 	background-repeat:repeat;
 	background-color:transparent;
-	background-image:url(winpic/window-n-t.gif);
+	background-image:url(winpic/win-t.gif);
 	z-index:inherit;
 }
 #window2-top-right{
@@ -43,7 +43,7 @@
 	height : 3px;
 	background-repeat:repeat;
 	background-color:transparent;
-	background-image:url(winpic/window-n-rt.gif);
+	background-image:url(winpic/win-rt.gif);
 	z-index:inherit;
 }
 
@@ -57,7 +57,7 @@
 	background-color:#FFFFFF;
 	background-repeat:repeat;
 	background-color:transparent;
-	background-image:url(winpic/window-n-l.gif);
+	background-image:url(winpic/win-l.gif);
 	z-index:inherit;
 }
 
@@ -71,7 +71,7 @@
 	background-repeat:repeat;
 	width:3px;
 	background-color:transparent;
-	background-image:url(winpic/window-n-l.gif);
+	background-image:url(winpic/win-l.gif);
 	z-index:inherit;
 }
 #window2-bottom-left{
@@ -83,7 +83,7 @@
 	height : 3px;
 	background-repeat:repeat;
 	background-color:transparent;
-	background-image:url(winpic/window-n-lb.gif);
+	background-image:url(winpic/win-lb.gif);
 	z-index:inherit;
 }
 #window2-bottom{
@@ -96,7 +96,7 @@
 	background-color:#FFFFFF;
 	background-repeat:repeat;
 	background-color:transparent;
-	background-image:url(winpic/window-n-t.gif);
+	background-image:url(winpic/win-t.gif);
 	z-index:inherit;
 }
 #window2-bottom-right{
@@ -108,7 +108,7 @@
 	height : 3px;
 	background-repeat:repeat;
 	background-color:transparent;
-	background-image:url(winpic/window-n-rb.gif);
+	background-image:url(winpic/win-rb.gif);
 	z-index:inherit;
 }
 
@@ -121,7 +121,7 @@
 	background-repeat:repeat;
 	background-color:transparent;
 	height:25px;
-	background-image:url(winpic/window-n-bg.gif);
+	background-image:url(winpic/litter-window-bg.gif);
 	color:#ffffff;
 	z-index:inherit;
 }

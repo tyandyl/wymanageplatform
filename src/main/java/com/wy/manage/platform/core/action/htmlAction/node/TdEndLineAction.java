@@ -36,11 +36,11 @@ public class TdEndLineAction extends BasicAction {
                 //很奇怪，一个汉字：宋就乱码，两个汉字就不乱码
                 System.out.println(Encoding.getEncoding(s));
                 //获取系统默认编码
-                System.out.println("系统默认编码：" + System.getProperty("file.encoding")); //查询结果GBK
+                //System.out.println("系统默认编码：" + System.getProperty("file.encoding")); //查询结果GBK
                 //系统默认字符编码
-                System.out.println("系统默认字符编码：" + Charset.defaultCharset()); //查询结果GBK
+                //System.out.println("系统默认字符编码：" + Charset.defaultCharset()); //查询结果GBK
                 //操作系统用户使用的语言
-                System.out.println("系统默认语言：" + System.getProperty("user.language")); //查询结果zh
+                //System.out.println("系统默认语言：" + System.getProperty("user.language")); //查询结果zh
                 curWidget.setOutContentValue(s);
             }
         }

@@ -37,7 +37,12 @@ public enum AttributeNameType {
     MARGIN(27,"margin"),
     BACKGROUNDREPEAT(28,"background-repeat"),
     BACKGROUNDIMAGE(29,"background-image"),
-    BACKGROUNDPOSITION(30,"background-position");
+    BACKGROUNDPOSITION(30,"background-position"),
+    BORDERBOTTOM(31,"border-bottom"),
+    BORDERRIGHT(32,"border-right"),
+    BORDERLEFT(33,"border-left"),
+    FLOAT(34,"float")
+    ;
     private int code;
     private String name;
 
@@ -87,8 +92,11 @@ public enum AttributeNameType {
         list.add(BACKGROUNDREPEAT.getName());
         list.add(BACKGROUNDIMAGE.getName());
         list.add(BACKGROUNDPOSITION.getName());
+        list.add(BORDERBOTTOM.getName());
+        list.add(BORDERRIGHT.getName());
+        list.add(BORDERLEFT.getName());
+        list.add(FLOAT.getName());
         return list;
-
     }
 
     public int getCode() {

@@ -117,6 +117,28 @@ public class Page implements Serializable {
 
     }
 
+    public void fillNodeEX(WidgetNode node,List<CurWidget> curWidgets){
+        Widget data = node.getData();
+        TagType tagType = data.getTagType();
+        CurWidget curWidget=new CurWidget();
+        curWidget.setCurWd(data.getCode());
+        curWidget.setCurTagName(tagType.getName());
+        curWidget.setParentWd(node.getParentNode().getCode());
+        curWidget.setParentTagName(node.getParentNode().getData().getTagType().getName());
+        curWidget.setRegisterParam(data.getRegisterParam());
+        curWidget.setCurPros(data.getCurPros());
+        curWidget.setOutContentValue(data.getOutValue());
+        curWidget.setFlag(data.isFlag());
+        curWidgets.add(curWidget);
+        List<WidgetNode> childNodes = node.getChildNodes();
+        if(childNodes!=null && childNodes.size()>0){
+            for(WidgetNode node1:childNodes){
+                fillNodeEX( node1, curWidgets);
+            }
+        }
+
+    }
+
 
     public DocType getDocType() {
         return docType;

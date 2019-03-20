@@ -8,6 +8,8 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tianye
@@ -129,20 +131,28 @@ public abstract class WidgetModel {
         if(widgetNode==null){
             ExceptionTools.ThrowException("编辑状态的目标资源为空");
         }
+        WidgetNode widgetNodeEx=widgetNode;
         BlockType blockType = widgetNode.getData().getBlockType();
+        List<CurWidget> curWidgets=new ArrayList<CurWidget>();
         if(BlockType.TABLE_PANEL==blockType){
             int i=0;
             while (widgetNode.getChildNodes().size()>0){
                 i++;
-                if(widgetNode.getData().getTagType()==TagType.TD){
-                    widgetNode.getData().setOutValue("666");
+                if(widgetNode.getData().getTagType()==TagType.TR){
+                    List<WidgetNode> childNodes = widgetNode.getChildNodes();
+                    if(childNodes.size()>0){
+                        childNodes.get(0).getData().setOutValue("666");
+                        this.getPage().fillNodeEX(widgetNodeEx,curWidgets);
+                    }
                     break;
                 }
                 if(i==5){
                     break;
                 }
+                widgetNode=widgetNode.getChildNodes().get(0);
             }
         }
+        this.getParamResult().setCurWidgets(curWidgets);
         return true;
     }
 

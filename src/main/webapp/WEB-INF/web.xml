@@ -78,4 +78,14 @@
         <url-pattern>/ComboList</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TableList</servlet-name>
+        <servlet-class>TableList</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TableList</servlet-name>
+        <url-pattern>/TableList</url-pattern>
+    </servlet-mapping>
+
 </web-app>

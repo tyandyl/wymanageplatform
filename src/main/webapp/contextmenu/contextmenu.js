@@ -14,6 +14,7 @@ $(document).ready(
 				{text: '生成按钮', onclick: function(e) {createButton(e)}},
 				{text: '生成输入面板', onclick: function(e) {createTablePanel(e)}},
 				{text: '生成下拉列表', onclick: function(e) {createComboList(e)}},
+				{text: '生成表格列表', onclick: function(e) {createTableList(e)}},
 				{divider: true},
 				{text: '更多...', href: '#'}
 			]};
@@ -30,6 +31,16 @@ function createWindow(e){
 		alert("没有获取定位的div");
 		return;
 	}
+	var wdMain=null;
+	var kWidgetNode=e.data.kWidgetNode;
+	var kMain=null;
+	if(kWidgetNode!=null){
+		kMain=kWidgetNode.kWidget;
+		if(kMain!=null){
+			wdMain=$(kMain).attr('wd')
+		}
+
+	}
 
 	relativeLeft=e.data.clickX;
 	relativeTop=e.data.clickY;
@@ -38,6 +49,7 @@ function createWindow(e){
 	var isAsync=false;
 	var url="/wy-manage-web/OpenWindow";
 	sendAjaxNews(isAsync,type,url,param,function(data){
+		var kNodeA=null;
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -55,7 +67,55 @@ function createWindow(e){
 				curDiv.innerHTML=data[i].outContentValue;
 			}
 			if(curTagName=='button'){
-				el.on('click', function (e) {});
+				el.on('click', function (e) {
+					var param={"handleType":3,"targetId":wdMain};
+					$(kMain).empty();
+					kMain.parentNode.removeChild(kMain);
+					sendAjaxNews(false,"post","/wy-manage-web/TablePanel",param,function(data){
+						var kNodeA=null;
+						for(var i=0;i<data.length;i++){
+							var parentWd = data[i].parentWd;
+							var parentTagName = data[i].parentTagName;
+							var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+							var curWd = data[i].curWd;
+							var curTagName = data[i].curTagName;
+
+							var curDiv=document.createElement(curTagName);
+							var el = $(curDiv);
+							el.attr('wd',curWd);
+							var curPros=data[i].curPros;
+							var sList=curPros.split(";");
+							if(data[i].outContentValue!=null){
+								//var t=document.createTextNode(data[i].outValue);
+								//curDiv.appendChild(t);
+								curDiv.innerHTML=data[i].outContentValue;
+							}
+							for(var y=0;y<sList.length;y++){
+								var pros=sList[y];
+								if(pros!=null){
+									var pro=pros.split(":");
+									if(pro!=null){
+										el.css(pro[0],pro[1]);
+									}
+								}
+							}
+							parentTagDiv.appendChild(curDiv);
+							//if(i==0){
+							//	el.data("widgetNodeA","1");
+							//}
+							if(data[i].flag){
+								kNodeA={};
+								kNodeA.kWidget=curDiv;
+								el.data("kWidgetNode",kNodeA);
+							}else{
+								if(kNodeA!=null){
+									el.data("kWidgetNode",kNodeA);
+								}
+							}
+						}
+					});
+				});
 			}
 			el.attr('wd',curWd);
 			var curPros=data[i].curPros;
@@ -70,13 +130,83 @@ function createWindow(e){
 				}
 			}
 			parentTagDiv.appendChild(curDiv);
-			if(i==0){
-				el.data("widgetNodeA","1");
+			//if(i==0){
+			//	el.data("widgetNodeA","1");
+			//}
+			if(data[i].flag){
+				kNodeA={};
+				kNodeA.kWidget=curDiv;
+				el.data("kWidgetNode",kNodeA);
+			}else{
+				if(kNodeA!=null){
+					el.data("kWidgetNode",kNodeA);
+				}
 			}
 		}
 	});
 
 	//openURL(param,"Window");
+}
+
+function createTableList(e){
+	var temp= e.data.wd;     // e.target表示被点击的目标，这里是弹出框上的a元素
+	if(typeof(temp) =="undefined"){
+		return;
+	}
+	wd=temp;
+	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
+	var top=getOffsetTop(parDivM);
+	var left=getOffsetLeft(parDivM);
+	relativeLeft=e.data.clickX-left;
+	relativeTop=e.data.clickY-top;
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/TableList";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		var kNodeA=null;
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+			el.attr('wd',curWd);
+			if(data[i].outContentValue!=null){
+				//var t=document.createTextNode(data[i].outValue);
+				//curDiv.appendChild(t);
+				curDiv.innerHTML=data[i].outContentValue;
+			}
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			parentTagDiv.appendChild(curDiv);
+			//if(i==0){
+			//	el.data("widgetNodeA","1");
+			//}
+			if(data[i].flag){
+				kNodeA={};
+				kNodeA.kWidget=curDiv;
+				el.data("kWidgetNode",kNodeA);
+			}else{
+				if(kNodeA!=null){
+					el.data("kWidgetNode",kNodeA);
+				}
+			}
+		}
+	});
 }
 
 function createButton(e){
@@ -95,6 +225,7 @@ function createButton(e){
 	var isAsync=false;
 	var url="/wy-manage-web/Button";
 	sendAjaxNews(isAsync,type,url,param,function(data){
+		var kNodeA=null;
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -120,8 +251,17 @@ function createButton(e){
 			el.text( '查询');
 			el.attr('wd',curWd);
 			parentTagDiv.appendChild(curDiv);
-			if(i==0){
-				el.data("widgetNodeA","1");
+			//if(i==0){
+			//	el.data("widgetNodeA","1");
+			//}
+			if(data[i].flag){
+				kNodeA={};
+				kNodeA.kWidget=curDiv;
+				el.data("kWidgetNode",kNodeA);
+			}else{
+				if(kNodeA!=null){
+					el.data("kWidgetNode",kNodeA);
+				}
 			}
 		}
 	});
@@ -154,6 +294,7 @@ function createComboList(e){
 		]
 		};
 		var wyTemp = new WyTemp();
+		var kNodeA=null;
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -178,8 +319,17 @@ function createComboList(e){
 				}
 			}
 			parentTagDiv.appendChild(curDiv);
-			if(i==0){
-				el.data("widgetNodeA","1");
+			//if(i==0){
+			//	el.data("widgetNodeA","1");
+			//}
+			if(data[i].flag){
+				kNodeA={};
+				kNodeA.kWidget=curDiv;
+				el.data("kWidgetNode",kNodeA);
+			}else{
+				if(kNodeA!=null){
+					el.data("kWidgetNode",kNodeA);
+				}
 			}
 			var rd=data[i].registerParam.register;
 			if(rd.length>0){
@@ -218,6 +368,7 @@ function createTablePanel(e){
 	var isAsync=false;
 	var url="/wy-manage-web/TablePanel";
 	sendAjaxNews(isAsync,type,url,param,function(data){
+		var kNodeA=null;
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -241,8 +392,17 @@ function createTablePanel(e){
 				}
 			}
 			parentTagDiv.appendChild(curDiv);
-			if(i==0){
-				el.data("widgetNodeA","1");
+			//if(i==0){
+			//	el.data("widgetNodeA","1");
+			//}
+			if(data[i].flag){
+				kNodeA={};
+				kNodeA.kWidget=curDiv;
+				el.data("kWidgetNode",kNodeA);
+			}else{
+				if(kNodeA!=null){
+					el.data("kWidgetNode",kNodeA);
+				}
 			}
 		}
 	});

@@ -123,7 +123,6 @@ public class WidgetFactory {
         if(manage.getArr()[0].equalsIgnoreCase("click")){
             Widget widget = manage.getWidget();
             if(widget!=null){
-
             }
         }
     }
@@ -199,6 +198,7 @@ public class WidgetFactory {
         curWidget.setRegisterParam(data.getRegisterParam());
         curWidget.setCurPros(data.getCurPros());
         curWidget.setOutContentValue(data.getOutValue());
+        curWidget.setFlag(data.isFlag());
         model.getParamResult().getCurWidgets().add(curWidget);
     }
 

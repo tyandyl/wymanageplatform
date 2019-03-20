@@ -15,10 +15,13 @@ public class RegisterEvent {
     private static HashMap<String, String> eventMap = new HashMap<String, String>() {
         private static final long serialVersionUID = -7130991970747133460L;
         {
-            put("search_button", "click");
+            put("search_button", "click;widget");
             put("window2-table-input","widget");
             //value为事件[辅助参数,辅助参数]
             put("window2-combo-list-cell-after", "dropDown:window2-combo-list-cell,window2-combo-list-cell_real");
+            put("Window2","widget");
+            put("window2-combo-list-div","widget");
+            put("divSet","widget");
         }
     };
 
@@ -26,6 +29,7 @@ public class RegisterEvent {
         private static final long serialVersionUID = -7130991970747133460L;
         {
             put("window2-table-input",6);
+            put("search_button",3);
         }
     };
 

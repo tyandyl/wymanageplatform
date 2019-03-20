@@ -11,6 +11,8 @@ public class CurWidget {
     private String curPros;
     private String outContentValue;
     private RegisterParam registerParam=new RegisterParam();
+    //是起始控件标识
+    private boolean flag=false;
 
 
     public String getCurWd() {
@@ -69,5 +71,13 @@ public class CurWidget {
 
     public void setRegisterParam(RegisterParam registerParam) {
         this.registerParam = registerParam;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }
