@@ -3,6 +3,7 @@ package com.wy.manage.platform.core.entrance;
 import com.alibaba.fastjson.JSONObject;
 import com.wy.manage.platform.core.model.BasicModel;
 import com.wy.manage.platform.core.model.HtmlModel;
+import com.wy.manage.platform.core.utils.UserAgentTools;
 import com.wy.manage.platform.core.widget.CurWidget;
 import com.wy.manage.platform.core.widget.Page;
 import com.wy.manage.platform.core.widget.WidgetModel;
@@ -25,6 +26,7 @@ public class WindowOpenIngress extends Ingress{
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            String userAgent = UserAgentTools.getUserAgent(request);
             WidgetModel model=new WidgetModel(){
                 @Override
                 public BasicModel initLoadHtmlModel() {

@@ -41,7 +41,8 @@ public enum AttributeNameType {
     BORDERBOTTOM(31,"border-bottom"),
     BORDERRIGHT(32,"border-right"),
     BORDERLEFT(33,"border-left"),
-    FLOAT(34,"float")
+    FLOAT(34,"float"),
+    MAXHEIGHT(35,"max-height")
     ;
     private int code;
     private String name;
@@ -96,6 +97,7 @@ public enum AttributeNameType {
         list.add(BORDERRIGHT.getName());
         list.add(BORDERLEFT.getName());
         list.add(FLOAT.getName());
+        list.add(MAXHEIGHT.getName());
         return list;
     }
 

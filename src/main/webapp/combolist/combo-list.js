@@ -17,8 +17,7 @@
             combolistClass: "combolist-cell-class"
         };
 
-		var  combolistNumId = 0;
-		
+		var listM={};
 		function Plugin( element, options ) {
 			this.element = element;
 
@@ -32,7 +31,6 @@
 
 		Plugin.prototype.init = function () {
 			var options = $.extend( {}, this.options, $(this.element).data());
-			options.id = combolistNumId;
 
 			$(this.element)
 				.on('mousedown', function (e){
@@ -40,8 +38,9 @@
 				})
 				.on('click', function (e) {
 					e.preventDefault();
-					if(combolistNumId==0){
-						var menu_div=$("<div id='window2-combo-list-cell-content'></div>");
+					var idStr=options.record.getAttribute('wd')+"y";
+					if(listM[idStr]==null){
+						var menu_div=$("<div id="+idStr+" ></div>");
 						var l = options.items.length;
 						var i;
 						var menu = $(options.record);
@@ -85,8 +84,9 @@
 						}
 						menu.append(menu_div);
 						$(menu_div).show();
+						listM[idStr]=1;
 					}else{
-						$("#window2-combo-list-cell-content").toggle();
+						$("#"+idStr).toggle();
 					}
 					
 					combolistNumId++;

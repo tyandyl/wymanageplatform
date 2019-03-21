@@ -261,4 +261,52 @@
 	height:25px;
 }
 
+.divSet{
+	position:absolute;
+	top:160px;
+	left: 5px;
+	width:780px;
+	max-height:100px;
+	font-family: '\5b8b\4f53';
+	font-style: normal;
+	font-weight: normal;
+	font-size: 9pt;
+	cursor: default;
+}
+
+.tableSet{
+	background-color: rgb(255, 255, 255);
+	border-left:1px #c8dffe solid;
+	width:100%;
+	height:100%;
+	table-layout:fixed;
+}
+
+.theadSet{
+	overflow:hidden;
+	background-repeat:repeat;
+	background-color:#5aace0;
+	border-right: 1px #c8dffe solid;
+	border-bottom: 1px #c8dffe solid;
+	height: 10px;
+	color: #FFFFFF;
+}
+
+.tdSet{
+	text-align:center;
+	line-height: 10px;
+	border-right: 1px #c8dffe solid;
+	border-bottom: 1px #c8dffe solid;
+}
+
+.tableUnder{
+	font-family: '\5b8b\4f53';
+	font-style: normal;
+	font-weight: normal;
+	font-size: 9pt;
+	cursor: default;
+	float:right;
+}
+
+
 

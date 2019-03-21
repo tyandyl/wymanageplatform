@@ -135,22 +135,7 @@ public abstract class WidgetModel {
         BlockType blockType = widgetNode.getData().getBlockType();
         List<CurWidget> curWidgets=new ArrayList<CurWidget>();
         if(BlockType.TABLE_PANEL==blockType){
-            int i=0;
-            while (widgetNode.getChildNodes().size()>0){
-                i++;
-                if(widgetNode.getData().getTagType()==TagType.TR){
-                    List<WidgetNode> childNodes = widgetNode.getChildNodes();
-                    if(childNodes.size()>0){
-                        childNodes.get(0).getData().setOutValue("666");
-                        this.getPage().fillNodeEX(widgetNodeEx,curWidgets);
-                    }
-                    break;
-                }
-                if(i==5){
-                    break;
-                }
-                widgetNode=widgetNode.getChildNodes().get(0);
-            }
+            TablePanelFactory.addTableTd(widgetNode,widgetNodeEx,curWidgets,this);
         }
         this.getParamResult().setCurWidgets(curWidgets);
         return true;

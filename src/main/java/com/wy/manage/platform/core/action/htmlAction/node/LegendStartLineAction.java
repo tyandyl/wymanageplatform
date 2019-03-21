@@ -15,6 +15,8 @@ import java.util.Map;
 public class LegendStartLineAction extends BasicAction {
     private static final String SELECTOR_VALUE="selectorValue";
     private static final String SELECTOR_TYPE="selectorType";
+    //谷歌:无
+    //火狐:maigin:1px
     @Override
     public void action(ModelParam modelParam) throws Exception {
         Object t = modelParam.getT();

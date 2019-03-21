@@ -50,6 +50,7 @@ function createWindow(e){
 	var url="/wy-manage-web/OpenWindow";
 	sendAjaxNews(isAsync,type,url,param,function(data){
 		var kNodeA=null;
+		var wyTemp = new WyTemp();
 		for(var i=0;i<data.length;i++){
 			var parentWd = data[i].parentWd;
 			var parentTagName = data[i].parentTagName;
@@ -59,7 +60,7 @@ function createWindow(e){
 			var curTagName = data[i].curTagName;
 
 			var curDiv=document.createElement(curTagName);
-
+			wyTemp[curWd]=curDiv;
 			var el = $(curDiv);
 			if(data[i].outContentValue!=null){
 				//var t=document.createTextNode(data[i].outValue);
@@ -69,9 +70,9 @@ function createWindow(e){
 			if(curTagName=='button'){
 				el.on('click', function (e) {
 					var param={"handleType":3,"targetId":wdMain};
-					$(kMain).empty();
-					kMain.parentNode.removeChild(kMain);
 					sendAjaxNews(false,"post","/wy-manage-web/TablePanel",param,function(data){
+						$(kMain).empty();
+						kMain.parentNode.removeChild(kMain);
 						var kNodeA=null;
 						for(var i=0;i<data.length;i++){
 							var parentWd = data[i].parentWd;
@@ -101,9 +102,9 @@ function createWindow(e){
 								}
 							}
 							parentTagDiv.appendChild(curDiv);
-							//if(i==0){
-							//	el.data("widgetNodeA","1");
-							//}
+							if(i==0){
+								kMain=curDiv;
+							}
 							if(data[i].flag){
 								kNodeA={};
 								kNodeA.kWidget=curDiv;
@@ -130,9 +131,24 @@ function createWindow(e){
 				}
 			}
 			parentTagDiv.appendChild(curDiv);
-			//if(i==0){
-			//	el.data("widgetNodeA","1");
-			//}
+			var rd=data[i].registerParam.register;
+			if(rd!=null && rd.length>0){
+				var options = {items:[
+					{text: '输入框'},
+					{text: '下拉列表(列表数量小于20)'},
+
+					{text: '弹出列表(列表数量大于20)'}
+				]
+				};
+				for(var u=0;u<rd.length;u++){
+					var rdList=rd[u].split(",");
+					if(rdList[0]=="dropDown"){
+						options.record=wyTemp[rdList[1]];
+						options.record2=wyTemp[rdList[2]];
+						$(curDiv).unbind().combolist(options);
+					}
+				}
+			}
 			if(data[i].flag){
 				kNodeA={};
 				kNodeA.kWidget=curDiv;
