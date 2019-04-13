@@ -24,7 +24,8 @@ public class TextLineAction extends CssBasicAction {
     public List<String> getIntraGroupNames() {
         List<String> list = TempTools.createList("vertical-align",
                 "line-height",
-                "text-transform");
+                "text-align",
+                "text-indent");
         return list;
     }
 

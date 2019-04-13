@@ -5,10 +5,7 @@ import com.wy.manage.platform.core.action.htmlAction.link.LinkLineAction;
 import com.wy.manage.platform.core.action.htmlAction.link.LinkLinesAction;
 import com.wy.manage.platform.core.action.htmlAction.meta.MetaLineAction;
 import com.wy.manage.platform.core.action.htmlAction.meta.MetaLinesAction;
-import com.wy.manage.platform.core.action.htmlAction.node.ButtonEndLineAction;
-import com.wy.manage.platform.core.action.htmlAction.node.ButtonStartLineAction;
-import com.wy.manage.platform.core.action.htmlAction.node.DivEndLineAction;
-import com.wy.manage.platform.core.action.htmlAction.node.DivStartLineAction;
+import com.wy.manage.platform.core.action.htmlAction.node.*;
 import com.wy.manage.platform.core.action.htmlAction.script.ScriptLineAction;
 import com.wy.manage.platform.core.action.htmlAction.script.ScriptLinesAction;
 
@@ -16,8 +13,13 @@ import com.wy.manage.platform.core.action.htmlAction.script.ScriptLinesAction;
  * Created by tianye
  */
 public class HtmlModel<T>  extends BasicModel<T>{
-    public String getAddress() {
+    public String getRegularAddress() {
         return "regular/html.properties";
+    }
+
+    @Override
+    public String getContentAddress() {
+        return null;
     }
 
     @Override
@@ -40,5 +42,12 @@ public class HtmlModel<T>  extends BasicModel<T>{
         defineAction(new BodyStartLineAction());
         defineAction(new ButtonStartLineAction());
         defineAction(new ButtonEndLineAction());
+        defineAction(new TableStartLineAction());
+        defineAction(new TableEndLineAction());
+        defineAction(new TrStartLineAction());
+        defineAction(new TrEndLineAction());
+        defineAction(new TdStartLineAction());
+        defineAction(new TdEndLineAction());
+        defineAction(new InputLineAction());
     }
 }

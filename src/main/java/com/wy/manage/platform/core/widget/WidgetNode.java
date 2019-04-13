@@ -23,7 +23,7 @@ public class WidgetNode implements Serializable{
 
     private WidgetNode parentNode;
 
-    private boolean isClosed=false;
+    private boolean isFirstClosed=false;
 
     private List<WidgetNode> childNodes=new ArrayList<WidgetNode>();
 
@@ -43,13 +43,6 @@ public class WidgetNode implements Serializable{
         this.parentNode = parentNode;
     }
 
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
 
     public String getFullCode() {
         return fullCode;
@@ -73,5 +66,13 @@ public class WidgetNode implements Serializable{
 
     public void setChildNodes(List<WidgetNode> childNodes) {
         this.childNodes = childNodes;
+    }
+
+    public boolean isFirstClosed() {
+        return isFirstClosed;
+    }
+
+    public void setFirstClosed(boolean firstClosed) {
+        isFirstClosed = firstClosed;
     }
 }

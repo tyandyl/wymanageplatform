@@ -26,7 +26,18 @@ public enum AttributeNameType {
     CURSOR(16,"cursor"),
     FONT(17,"font"),
     COLOR(18,"color"),
-    BORDER(19,"border");
+    BORDER(19,"border"),
+    TABLELAYOUT(20,"table-layout"),
+    BORDERCOLLAPSE(21,"border-collapse"),
+    FONTSIZE(22,"font-size"),
+    TEXTALIGN(23,"text-align"),
+    PADDINGTOP(24,"padding-top"),
+    PADDINGRIGHT(25,"padding-right"),
+    MARGINTOP(26,"margin-top"),
+    MARGIN(27,"margin"),
+    BACKGROUNDREPEAT(28,"background-repeat"),
+    BACKGROUNDIMAGE(29,"background-image"),
+    BACKGROUNDPOSITION(30,"background-position");
     private int code;
     private String name;
 
@@ -65,6 +76,17 @@ public enum AttributeNameType {
         list.add(FONT.getName());
         list.add(COLOR.getName());
         list.add(BORDER.getName());
+        list.add(TABLELAYOUT.getName());
+        list.add(BORDERCOLLAPSE.getName());
+        list.add(FONTSIZE.getName());
+        list.add(TEXTALIGN.getName());
+        list.add(PADDINGTOP.getName());
+        list.add(PADDINGRIGHT.getName());
+        list.add(MARGINTOP.getName());
+        list.add(MARGIN.getName());
+        list.add(BACKGROUNDREPEAT.getName());
+        list.add(BACKGROUNDIMAGE.getName());
+        list.add(BACKGROUNDPOSITION.getName());
         return list;
 
     }

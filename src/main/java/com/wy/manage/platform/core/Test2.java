@@ -7,15 +7,10 @@ import com.wy.manage.platform.core.widget.*;
  */
 public class Test2 {
 
-    public static void main(String[] args){
-        Page page=new Page();
+    public static void main(String[] args)throws Exception{
+        String gbk = new String("查询".getBytes("utf-8"));
+        System.out.println(gbk);
 
-//        StringBuffer str = page.getStr();
-//        switch (docType){
-//            case HTML5:
-//                str.append("")
-//                break;
-//        }
 
     }
 }

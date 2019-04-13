@@ -13,25 +13,30 @@ import java.util.Map;
  * Created by tianye
  */
 public class DivStartLineAction extends BasicAction {
+
+    private static final String SELECTOR_VALUE="selectorValue";
+
+    private static final String SELECTOR_TYPE="selectorType";
+
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
-        if(t instanceof Page) {
-            Page page = (Page) t;
+        if(t instanceof WidgetModel) {
+            WidgetModel model = (WidgetModel) t;
             Map regularValue = modelParam.getRegularValue();
-            Object selectorValue = regularValue.get("selectorValue");
+            Object selectorValue = regularValue.get(SELECTOR_VALUE);
             String value=null;
             if(selectorValue!=null){
                 value = IgnoreTools.ignore(selectorValue.toString());
             }
-            Object selectorType = regularValue.get("selectorType");
+            Object selectorType = regularValue.get(SELECTOR_TYPE);
             String s=null;
             if(selectorType!=null){
                 s = IgnoreTools.ignore(selectorType.toString());
             }
-            Widget widget = WidgetFactory.getWidget(page, s, value, TagType.DIV);
-            WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget, false);
-            WidgetFactory.addWidgetNode(page,widgetNode);
+            Widget widget = WidgetFactory.getWidget(model, s, value, TagType.DIV);
+            WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
+            WidgetFactory.addWidgetNode(model,widgetNode);
         }
     }
 

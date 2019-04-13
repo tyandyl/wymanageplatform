@@ -27,7 +27,8 @@ public class BorderLineAction extends CssBasicAction {
         List<String> list = TempTools.createList("border",
                 "border-bottom",
                 "border-radius",
-                "border-width");
+                "border-width",
+                "border-color");
         return list;
     }
 

@@ -1,6 +1,9 @@
 package com.wy.manage.platform.core.widget;
 
+import javax.xml.soap.SAAJMetaFactory;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -11,7 +14,9 @@ public class WidgetNodeTree implements Serializable{
     private static final long serialVersionUID = 2041435464751839981L;
     private WidgetNode root;
 
-    private Stack<WidgetNode> newestNoClosed=new Stack<WidgetNode>();
+    private Map<String,WidgetNode> nodeMap=new HashMap<String, WidgetNode>();
+
+    private Stack<WidgetNode> newestNoClosed=null;
 
     public WidgetNode getRoot() {
         return root;
@@ -27,5 +32,13 @@ public class WidgetNodeTree implements Serializable{
 
     public void setNewestNoClosed(Stack<WidgetNode> newestNoClosed) {
         this.newestNoClosed = newestNoClosed;
+    }
+
+    public Map<String, WidgetNode> getNodeMap() {
+        return nodeMap;
+    }
+
+    public void setNodeMap(Map<String, WidgetNode> nodeMap) {
+        this.nodeMap = nodeMap;
     }
 }

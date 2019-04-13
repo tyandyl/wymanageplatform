@@ -16,9 +16,15 @@ import com.wy.manage.platform.core.action.cssAction.userinterface.UserInterfaceL
  */
 public class CssModel<T> extends BasicModel<T>{
     @Override
-    public String getAddress() {
+    public String getRegularAddress() {
         return "regular/css.properties";
     }
+
+    @Override
+    public String getContentAddress() {
+        return null;
+    }
+
     @Override
     public void defineAction() {
         super.defineAction();

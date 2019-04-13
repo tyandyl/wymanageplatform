@@ -16,10 +16,9 @@ import java.util.List;
  */
 public class Test1 {
     public static void main(String[] agrs) throws Exception {
-        StringBuffer fileValue = FileTools.getContent("bootstrap/bootstrap.min.css", true);
-        CssModel<List<CssBag>> cssModel=new CssModel<List<CssBag>>();
-        cssModel.defineAction();
-        List<CssBag> css=new ArrayList<CssBag>();
-        cssModel.execute(fileValue.toString(),css);
+        int num=(12700/1000);
+        int h=12700%1000;
+        System.out.println(num);
+        System.out.println(h);
     }
 }

@@ -1,45 +1,240 @@
 var wd=null;
 var relativeTop=null;
 var relativeLeft=null;
+var page=null;
+var parDiv=null;
+var timer = null;
 $(document).ready(
-	function(){
-		var options = {items:[
-			{header: '右键功能菜单'},
-			{divider: true},
-			{text: '生成窗口', href: '/wy-manage-web/Window'},
-			{text: '生成按钮', onclick: function() {createButton()}},
-			{text: '生成小狗动画', onclick: function() {createDog()}},
-			{text: '揍杨蕾', onclick: function() {alert("你揍了杨蕾，好牛逼啊")}},
-			{divider: true},
-			{text: '更多...', href: '#'}
-		]};
-		$('div').contextify(options);
-	}
+		function(){
+			var options = {items:[
+				{header: '右键功能菜单'},
+				{divider: true},
+				{text: '生成后台窗口', href: '/wy-manage-web/Window'},
+				//{text: '生成弹出窗口',onclick: function() {createWindow()}},
+				{text: '生成按钮', onclick: function(e) {createButton(e)}},
+				{text: '生成输入面板', onclick: function(e) {createTablePanel(e)}},
+				{text: '生成下拉列表', onclick: function(e) {createComboList(e)}},
+				{divider: true},
+				{text: '更多...', href: '#'}
+			]};
+			$('div').contextify(options);
+
+		}
 
 );
 
-function createButton(){
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
-	openURL(param,"Button");
-}
-
-function createDog(){
-	var param={"id":wd,"left":relativeLeft,"top":relativeTop};
-	openURL(param,"Dog");
-}
-// 在页面任意位置点击而触发此事件
-$(document).click(function(e) {
-	var temp=$(e.target).attr("wd");     // e.target表示被点击的目标
+function createWindow(e){
+	var temp= e.data.wd;     // e.target表示被点击的目标，这里是弹出框上的a元素
 	if(typeof(temp) =="undefined"){
 		return;
 	}
 	wd=temp;
-	var parDiv=getElementByAttr('div','wd',wd);
-	var top=getOffsetTop(parDiv);
-	var left=getOffsetLeft(parDiv);
-	relativeLeft=e.clientX-left;
-	relativeTop=e.clientY-top;
-});
+	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
+	var top=getOffsetTop(parDivM);
+	var left=getOffsetLeft(parDivM);
+	relativeLeft=e.data.clickX-left;
+	relativeTop=e.data.clickY-top;
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/OpenWindow";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+			el.attr('wd',curWd);
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			parentTagDiv.appendChild(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
+		}
+	});
+
+	//openURL(param,"Window");
+}
+
+function createButton(e){
+	var temp= e.data.wd;     // e.target表示被点击的目标，这里是弹出框上的a元素
+	if(typeof(temp) =="undefined"){
+		return;
+	}
+	wd=temp;
+	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
+	var top=getOffsetTop(parDivM);
+	var left=getOffsetLeft(parDivM);
+	relativeLeft=e.data.clickX-left;
+	relativeTop=e.data.clickY-top;
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/Button";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			el.text( '查询');
+			el.attr('wd',curWd);
+			parentTagDiv.appendChild(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
+		}
+	});
+}
+
+function createComboList(e){
+	var temp= e.data.wd;     // e.target表示被点击的目标
+	if(typeof(temp) =="undefined"){
+		return;
+	}
+	wd=temp;
+	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
+	var top=getOffsetTop(parDivM);
+	var left=getOffsetLeft(parDivM);
+	relativeLeft=e.data.clickX-left;
+	relativeTop=e.data.clickY-top;
+
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/ComboList";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		var options = {items:[
+			{text: '输入框'},
+			{text: '下拉列表(列表数量小于20)'},
+
+			{text: '弹出列表(列表数量大于20)'}
+		]
+		};
+
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+			el.attr('wd',curWd);
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			parentTagDiv.appendChild(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
+			if(data[i].recorded){
+				options.record=curDiv;
+			}
+			if(data[i].recorded2){
+				options.record2=curDiv;
+			}
+			if(data[i].clicked){
+				$(curDiv).unbind().combolist(options);
+			}
+
+		}
+	});
+}
+
+
+
+
+function createTablePanel(e){
+	var temp= e.data.wd;     // e.target表示被点击的目标
+	if(typeof(temp) =="undefined"){
+		return;
+	}
+	wd=temp;
+	var parDivM=getElementByAttr(e.data.wdName,'wd',wd);
+	var top=getOffsetTop(parDivM);
+	var left=getOffsetLeft(parDivM);
+	relativeLeft=e.data.clickX-left;
+	relativeTop=e.data.clickY-top;
+
+	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
+	var type="post";
+	var isAsync=false;
+	var url="/wy-manage-web/TablePanel";
+	sendAjaxNews(isAsync,type,url,param,function(data){
+		for(var i=0;i<data.length;i++){
+			var parentWd = data[i].parentWd;
+			var parentTagName = data[i].parentTagName;
+			var parentTagDiv=getElementByAttr(parentTagName,'wd',parentWd);
+
+			var curWd = data[i].curWd;
+			var curTagName = data[i].curTagName;
+
+			var curDiv=document.createElement(curTagName);
+			var el = $(curDiv);
+			el.attr('wd',curWd);
+			var curPros=data[i].curPros;
+			var sList=curPros.split(";");
+			for(var y=0;y<sList.length;y++){
+				var pros=sList[y];
+				if(pros!=null){
+					var pro=pros.split(":");
+					if(pro!=null){
+						el.css(pro[0],pro[1]);
+					}
+				}
+			}
+			parentTagDiv.appendChild(curDiv);
+			if(i==0){
+				el.data("widgetNodeA","1");
+			}
+		}
+	});
+}
+
+
 
 function getElementByAttr(tag,attr,value)
 {
@@ -88,10 +283,29 @@ function openURL(param,url){
 				var head=document.getElementsByTagName('head').item(0);
 				head.appendChild(style);
 			}
-			div.innerHTML=result.str;
+			var bef=div.innerHTML
+			div.innerHTML=bef+result.str;
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log("error")
+		}
+	});
+}
+
+function sendAjaxNews(isAsync,type,url,data,call){
+	jQuery.ajax({
+		async: isAsync,
+		type: type,
+		url: url,
+		data: data,
+		contenttype: "application/json; charset=utf-8",
+		success: function (data) {
+			var result = eval("(" + data + ")");
+			//page=JSON.parse(data);
+			call(result);
+		},
+		error: function () {
+			alert("ajax error");
 		}
 	});
 }

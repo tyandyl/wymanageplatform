@@ -32,6 +32,16 @@ public class Widget implements IWidget, Serializable {
 
     private String code;
 
+    private boolean isMoved=false;
+
+    private boolean isClick=false;
+
+    private boolean isRecord=false;
+
+    private boolean isRecord2=false;
+
+    private String curPros;
+
     /**
      * 获取宽度
      * @return
@@ -168,5 +178,45 @@ public class Widget implements IWidget, Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public boolean isMoved() {
+        return isMoved;
+    }
+
+    public void setMoved(boolean moved) {
+        isMoved = moved;
+    }
+
+    public boolean isClick() {
+        return isClick;
+    }
+
+    public void setClick(boolean click) {
+        isClick = click;
+    }
+
+    public boolean isRecord() {
+        return isRecord;
+    }
+
+    public void setRecord(boolean record) {
+        isRecord = record;
+    }
+
+    public String getCurPros() {
+        return curPros;
+    }
+
+    public void setCurPros(String curPros) {
+        this.curPros = curPros;
+    }
+
+    public boolean isRecord2() {
+        return isRecord2;
+    }
+
+    public void setRecord2(boolean record2) {
+        isRecord2 = record2;
     }
 }

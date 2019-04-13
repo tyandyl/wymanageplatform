@@ -5,6 +5,7 @@ import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.utils.FileTools;
 import com.wy.manage.platform.core.widget.Page;
 import com.wy.manage.platform.core.widget.Script;
+import com.wy.manage.platform.core.widget.WidgetModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,8 @@ public class ScriptLineAction extends BasicAction{
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
-        if(t instanceof Page) {
-            Page page = (Page) t;
+        if(t instanceof WidgetModel) {
+            WidgetModel model = (WidgetModel) t;
             Map regularValue = modelParam.getRegularValue();
             if(regularValue!=null && regularValue.get(this.getName())!=null){
                 String s = regularValue.get(this.getName()).toString().trim().replaceAll("\\n", "").replaceAll("\\r", "");
@@ -32,19 +33,8 @@ public class ScriptLineAction extends BasicAction{
                 if(scriptSrcValue!=null){
                     script.setSrc(scriptSrcValue.toString());
                 }
-                page.addScript(script);
-//                page.getStr().append(s);
-//                page.getStr().append("\n");
-                StringBuffer str=new StringBuffer();
-                str.append("<script type=\"");
-                str.append(scriptTypeValue);
-                str.append("\" src=\"");
-                str.append(scriptSrcValue);
-                str.append("\">");
-//                String content=FileTools.getFileValue(scriptSrcValue.toString(), page,false);
-//                str.append(content);
-                str.append("</script>");
-                page.getStr().append(str);
+                model.getPage().addScript(script);
+
             }
         }
 

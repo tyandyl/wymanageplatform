@@ -1,0 +1,142 @@
+#Window2{
+	display:block;
+	position:absolute;
+	top: 50px;
+	left: 50px;
+	width: 800px;
+	height: 330px;
+	z-index: 9004;
+	cursor: default;
+}
+#window2-top-left{
+	display:block;
+	position:absolute;
+	top: 0px;
+	left: 0px;
+	width :3px;
+	height : 3px;
+	background-repeat:repeat;
+	background-color:transparent;
+	background-image:url(winpic/window-n-lt.gif);
+}
+#window2-top{
+	display:block;
+	position:absolute;
+	top: 0px;
+	left: 3px;
+	right:3px;
+	height : 3px;
+	background-color:#FFFFFF;
+	background-repeat:repeat;
+	background-color:transparent;
+	background-image:url(winpic/window-n-t.gif);
+}
+#window2-top-right{
+	display:block;
+	position:absolute;
+	top: 0px;
+	right: 0px;
+	overflow:hidden;
+	width : 3px;
+	height : 3px;
+	background-repeat:repeat;
+	background-color:transparent;
+	background-image:url(winpic/window-n-rt.gif);
+}
+
+#window2-left{
+	display:block;
+	position:absolute;
+	top: 3px;
+	left: 0px;
+	bottom:3px;
+	width:3px;
+	background-color:#FFFFFF;
+	background-repeat:repeat;
+	background-color:transparent;
+	background-image:url(winpic/window-n-l.gif);
+}
+
+#window2-right{
+	display:block;
+	position:absolute;
+	top: 3px;
+	right: 0px;
+	bottom:3px;
+	background-color:#FFFFFF;
+	background-repeat:repeat;
+	width:3px;
+	background-color:transparent;
+	background-image:url(winpic/window-n-l.gif);
+}
+#window2-bottom-left{
+	display:block;
+	position:absolute;
+	left: 0px;
+	bottom: 0px;
+	width : 3px;
+	height : 3px;
+	background-repeat:repeat;
+	background-color:transparent;
+	background-image:url(winpic/window-n-lb.gif);
+}
+#window2-bottom{
+	display:block;
+	position:absolute;
+	left: 3px;
+	right:3px;
+	bottom: 0px;
+	height : 3px;
+	background-color:#FFFFFF;
+	background-repeat:repeat;
+	background-color:transparent;
+	background-image:url(winpic/window-n-t.gif);
+}
+#window2-bottom-right{
+	display:block;
+	position:absolute;
+	right: 0px;
+	bottom: 0px;
+	width : 3px;
+	height : 3px;
+	background-repeat:repeat;
+	background-color:transparent;
+	background-image:url(winpic/window-n-rb.gif);
+}
+
+#window2-title{
+	display:block;
+	position:absolute;
+	top: 3px;
+	left: 3px;
+	right:3px;
+	background-repeat:repeat;
+	background-color:transparent;
+	height:25px;
+	background-image:url(winpic/window-n-bg.gif);
+	color:#ffffff;
+}
+
+#window2-title-content{
+	display:block;
+	position:absolute;
+	top: 3px;
+	left: 3px;
+	vertical-align: middle;
+	text-indent: 3px;
+	font-size:small;
+	height:24px;
+}
+
+#window2-center{
+	display:block;
+	position:absolute;
+	top: 28px;
+	left: 3px;
+	right:3px;
+	bottom:3px;
+	background-color:#FFFFFF;
+	background-repeat:repeat;
+	background-color:transparent;
+}
+

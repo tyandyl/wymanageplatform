@@ -38,4 +38,44 @@
         <url-pattern>/Dog</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TablePanel</servlet-name>
+        <servlet-class>TablePanel</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TablePanel</servlet-name>
+        <url-pattern>/TablePanel</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MoveClick</servlet-name>
+        <servlet-class>MoveClick</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MoveClick</servlet-name>
+        <url-pattern>/MoveClick</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OpenWindow</servlet-name>
+        <servlet-class>OpenWindow</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OpenWindow</servlet-name>
+        <url-pattern>/OpenWindow</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ComboList</servlet-name>
+        <servlet-class>ComboList</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ComboList</servlet-name>
+        <url-pattern>/ComboList</url-pattern>
+    </servlet-mapping>
+
 </web-app>

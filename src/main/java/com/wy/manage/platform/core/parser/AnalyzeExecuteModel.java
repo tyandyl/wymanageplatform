@@ -1,5 +1,6 @@
 package com.wy.manage.platform.core.parser;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wy.manage.platform.core.action.Action;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.widget.Page;
@@ -30,23 +31,26 @@ public class AnalyzeExecuteModel {
         Set<String> startNodes =context.getMapEmpty().get(context.getStartNodeStateNum());
 
         while (modelParam.getCurInt()<modelParam.getChars().length){
-            if(modelParam.getChars()[modelParam.getCurInt()]=='u'){
+            if(modelParam.getChars()[modelParam.getCurInt()]==';'){
                 System.out.print("");
-            }
-            if(modelParam.getCurInt()==43){
-                System.out.print("");
-                for(String tt:startNodes){
-                    NfaStateNode nfaStateNode = context.getMapState().get(tt);
-//                    System.out.println(nfaStateNode.getBelongRegular());
-                }
-
             }
 
             new AnalyzeStateMoveHandle().analyze(startNodes,result,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]), context);
             if(result.getList().size()==0){
                 System.out.println("当前字符不符合规则,当前字符是:"+modelParam.getChars()[modelParam.getCurInt()]
                         +",其积累的字符串是:"+modelParam.getCurModelValue());
+                Set<String> regulars=new HashSet<String>();
+                for(String m:startNodes){
+                    NfaStateNode nfaStateNode = context.getMapState().get(m);
+                    List<String> belongRegular = nfaStateNode.getBelongRegular();
+                    if(belongRegular!=null && belongRegular.size()>0){
+                        for(String u:belongRegular)
+                        regulars.add(u);
+                    }
+
+                }
                 System.out.println("完毕");
+                System.out.println("当前属于的正则是:"+ JSONObject.toJSON(regulars));
                 break;
             }
 
