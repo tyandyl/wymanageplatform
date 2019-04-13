@@ -16,6 +16,7 @@ import java.util.Map;
 public class ButtonStartLineAction extends BasicAction {
     private static final String SELECTOR_VALUE="selectorValue";
     private static final String SELECTOR_TYPE="selectorType";
+    private static final String URL_VALUE="urlValue";
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
@@ -28,11 +29,19 @@ public class ButtonStartLineAction extends BasicAction {
                 if(regularValue!=null && regularValue.get(SELECTOR_TYPE)!=null){
                     String selectorType = IgnoreTools.ignore(regularValue.get(SELECTOR_TYPE).toString());
                     Widget widget = WidgetFactory.getWidget(model, selectorType, selectorValue, TagType.BUTTON);
+                    if(regularValue.get(URL_VALUE)!=null){
+                        widget.setUrl(regularValue.get(URL_VALUE).toString());
+                        widget.setUrlIsDefault(true);
+                    }
                     WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
                     WidgetFactory.addWidgetNode(model,widgetNode);
                 }
             }else {
                 Widget widget = WidgetFactory.getWidget(model, null, null, TagType.BUTTON);
+                if(regularValue.get(URL_VALUE)!=null){
+                    widget.setUrl(regularValue.get(URL_VALUE).toString());
+                    widget.setUrlIsDefault(true);
+                }
                 WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
                 WidgetFactory.addWidgetNode(model,widgetNode);
             }
@@ -49,7 +58,8 @@ public class ButtonStartLineAction extends BasicAction {
         List<String> list = TempTools.createList(
                 SELECTOR_VALUE,
                 SELECTOR_TYPE,
-                this.getName());
+                this.getName(),
+                URL_VALUE);
         return list;
     }
 

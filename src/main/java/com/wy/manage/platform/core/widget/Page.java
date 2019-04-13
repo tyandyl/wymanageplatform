@@ -29,6 +29,8 @@ public class Page implements Serializable {
 
     private WidgetNodeTree widgetNodeTree=new WidgetNodeTree();
 
+    private Map<String,String> urlContents=new HashMap<String, String>();
+
 
     public String toView(){
         StringBuffer view =new StringBuffer();
@@ -117,6 +119,34 @@ public class Page implements Serializable {
 
     }
 
+    public void fillNodeEX(WidgetNode node,List<CurWidget> curWidgets){
+        Widget data = node.getData();
+        TagType tagType = data.getTagType();
+        CurWidget curWidget=new CurWidget();
+        curWidget.setCurWd(data.getCode());
+        curWidget.setCurTagName(tagType.getName());
+        curWidget.setParentWd(node.getParentNode().getCode());
+        curWidget.setParentTagName(node.getParentNode().getData().getTagType().getName());
+        curWidget.setRegisterParam(data.getRegisterParam());
+        curWidget.setCurPros(data.getCurPros());
+        curWidget.setOutContentValue(data.getOutValue());
+        curWidget.setFlag(data.isFlag());
+        curWidget.setWidgetName(data.getBlockType()!=null?data.getBlockType().getName():null);
+        curWidget.setMultiple(data.getMultiple());
+        curWidget.setValue(data.getValue());
+        curWidget.setUrl(data.getUrl());
+        curWidget.setUrlIsDefault(data.isUrlIsDefault());
+        curWidget.setDataFlag(data.getDataFlag());
+        curWidgets.add(curWidget);
+        List<WidgetNode> childNodes = node.getChildNodes();
+        if(childNodes!=null && childNodes.size()>0){
+            for(WidgetNode node1:childNodes){
+                fillNodeEX( node1, curWidgets);
+            }
+        }
+
+    }
+
 
     public DocType getDocType() {
         return docType;
@@ -177,4 +207,11 @@ public class Page implements Serializable {
         this.widgetNodeTree = widgetNodeTree;
     }
 
+    public Map<String, String> getUrlContents() {
+        return urlContents;
+    }
+
+    public void setUrlContents(Map<String, String> urlContents) {
+        this.urlContents = urlContents;
+    }
 }

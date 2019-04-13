@@ -15,9 +15,7 @@ import java.util.Stack;
  */
 public class Test2 {
     public static void main(String[] agrs) throws Exception {
-        String ss="html";
-        String substring = ss.substring(0, ss.length());
-        System.out.println(substring);
+        System.out.println(System.getProperty("user.dir"));
 
     }
 

@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.entrance;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wy.manage.platform.core.bean.Result;
 import com.wy.manage.platform.core.model.BasicModel;
 import com.wy.manage.platform.core.model.HtmlModel;
 import com.wy.manage.platform.core.widget.CurWidget;
@@ -38,18 +39,35 @@ public class TablePanelIngress extends Ingress{
                         }
                     };
                 }
+                @Override
+                public void handleParamMap(WidgetModelParamResult paramResult){
+                    super.handleParamMap(paramResult);
+                    String[] fieldTitle = paramResult.getJParam().get("fieldTitle");
+                    if(fieldTitle!=null){
+                        paramResult.getParam().put("fieldTitle",fieldTitle[0]);
+                    }
+                    String[] fieldName = paramResult.getJParam().get("fieldName");
+                    if(fieldName!=null){
+                        paramResult.getParam().put("fieldName",fieldName[0]);
+                    }
+                    String[] fieldType = paramResult.getJParam().get("fieldType");
+                    if(fieldType!=null){
+                        paramResult.getParam().put("fieldType",fieldType[0]);
+                    }
+                }
 
                 @Override
                 public Page loadPage(WidgetModelParamResult paramResult) {
                     HttpSession session = paramResult.getRequest().getSession(true);
                     return Context.get(session.getId());
                 }
-            }.init(request);
-            model.add();
-            List<CurWidget> curWidgets = model.getParamResult().getCurWidgets();
-            String strPage = JSONObject.toJSONString(curWidgets);
+            }.init(request).execute();
+            Result result = model.getParamResult().getResult();
+            String strPage = JSONObject.toJSONString(result);
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
             OutputStream out = response.getOutputStream();
-            out.write(strPage.getBytes());
+            out.write(strPage.getBytes("UTF-8"));
         }catch (Exception e){
             System.out.println("创建输入面板报错");
         }

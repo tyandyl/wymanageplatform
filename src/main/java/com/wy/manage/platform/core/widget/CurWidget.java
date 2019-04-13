@@ -9,14 +9,32 @@ public class CurWidget {
     private String curWd;
     private String curTagName;
     private String curPros;
+    private String outContentValue;
+    private RegisterParam registerParam=new RegisterParam();
+    //是起始控件标识
+    private boolean flag=false;
 
-    private boolean isMoved=false;
+    private String widgetName;
 
-    private boolean isClicked=false;
+    private String proDataTitle;
 
-    private boolean isRecorded=false;
+    private String multiple;
+    //<option value="32"> 这种的属性值
+    private String value;
+    //button 点击跳转用
+    private String url;
 
-    private boolean isRecorded2=false;
+    private boolean urlIsDefault=false;
+
+    private String dataFlag;
+
+    public String getWidgetName() {
+        return widgetName;
+    }
+
+    public void setWidgetName(String widgetName) {
+        this.widgetName = widgetName;
+    }
 
     public String getCurWd() {
         return curWd;
@@ -58,35 +76,78 @@ public class CurWidget {
         this.parentTagName = parentTagName;
     }
 
-    public boolean isMoved() {
-        return isMoved;
+
+
+    public String getOutContentValue() {
+        return outContentValue;
     }
 
-    public void setMoved(boolean moved) {
-        isMoved = moved;
+    public void setOutContentValue(String outContentValue) {
+        this.outContentValue = outContentValue;
     }
 
-    public boolean isClicked() {
-        return isClicked;
+    public RegisterParam getRegisterParam() {
+        return registerParam;
     }
 
-    public void setClicked(boolean clicked) {
-        isClicked = clicked;
+    public void setRegisterParam(RegisterParam registerParam) {
+        this.registerParam = registerParam;
     }
 
-    public boolean isRecorded() {
-        return isRecorded;
+    public boolean isFlag() {
+        return flag;
     }
 
-    public void setRecorded(boolean recorded) {
-        isRecorded = recorded;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
-    public boolean isRecorded2() {
-        return isRecorded2;
+
+    public String getProDataTitle() {
+        return proDataTitle;
     }
 
-    public void setRecorded2(boolean recorded2) {
-        isRecorded2 = recorded2;
+    public void setProDataTitle(String proDataTitle) {
+        this.proDataTitle = proDataTitle;
+    }
+
+    public String getMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(String multiple) {
+        this.multiple = multiple;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public boolean isUrlIsDefault() {
+        return urlIsDefault;
+    }
+
+    public void setUrlIsDefault(boolean urlIsDefault) {
+        this.urlIsDefault = urlIsDefault;
+    }
+
+    public String getDataFlag() {
+        return dataFlag;
+    }
+
+    public void setDataFlag(String dataFlag) {
+        this.dataFlag = dataFlag;
     }
 }

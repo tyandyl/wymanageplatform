@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.action.htmlAction.node;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
+import com.wy.manage.platform.core.utils.ChinaFontTools;
 import com.wy.manage.platform.core.utils.IgnoreTools;
 import com.wy.manage.platform.core.widget.*;
 
@@ -17,6 +18,8 @@ public class DivStartLineAction extends BasicAction {
     private static final String SELECTOR_VALUE="selectorValue";
 
     private static final String SELECTOR_TYPE="selectorType";
+
+    private static final String CHINESE_FONTS="ChineseFonts";
 
     @Override
     public void action(ModelParam modelParam)throws Exception {
@@ -34,9 +37,21 @@ public class DivStartLineAction extends BasicAction {
             if(selectorType!=null){
                 s = IgnoreTools.ignore(selectorType.toString());
             }
-            Widget widget = WidgetFactory.getWidget(model, s, value, TagType.DIV);
+            if(value!=null && value.equalsIgnoreCase("removeALLWY")){
+                System.out.println("removeALLWY");
+            }
+            Object dataFlagValue = regularValue.get("dataFlagValue");
+            Widget widget = WidgetFactory.getWidgetEx(model, s, value, TagType.DIV,dataFlagValue);
             WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
             WidgetFactory.addWidgetNode(model,widgetNode);
+
+            Object chineseFonts = regularValue.get(CHINESE_FONTS);
+            if(chineseFonts!=null){
+                String s1 = ChinaFontTools.decodeUnicode(String.valueOf(chineseFonts));
+                Map<String, String> urlContents = model.getPage().getUrlContents();
+                urlContents.put(widgetNode.getCode(),s1);
+            }
+
         }
     }
 
@@ -50,6 +65,8 @@ public class DivStartLineAction extends BasicAction {
         List<String> list=new ArrayList<String>();
         list.add("selectorType");
         list.add("selectorValue");
+        list.add(CHINESE_FONTS);
+        list.add("dataFlagValue");
         return list;
     }
 

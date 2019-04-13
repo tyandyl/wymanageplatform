@@ -14,6 +14,8 @@ import java.util.Map;
  * Created by tianye
  */
 public class TableStartLineAction extends BasicAction {
+    //谷歌：如果前一位是legend top:30px;
+    //火狐：如果前一位是legend top:10px;
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();

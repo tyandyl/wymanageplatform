@@ -29,17 +29,23 @@
     function beforeCheck(element,options){
         var val = element;
         var moved=null;
-        while(val != null){
-            var el=$(val);
-            var isMoved=el.data("widgetNodeA");
-            if(isMoved==1){
-                moved=val;
-                break;
-            }
-            val = val.offsetParent;
+        //while(val != null){
+        //    var el=$(val);
+        //    var isMoved=el.data("widgetNodeA");
+        //    if(isMoved==1){
+        //        moved=val;
+        //        break;
+        //    }
+        //    val = val.offsetParent;
+        //}
+        var el=$(val);
+        var kWidgetNode=el.data("kWidgetNode");
+        if(kWidgetNode!=null){
+            moved=kWidgetNode.kWidget;
         }
+
         if(moved!=null){
-            options.widgetNodeA=moved;
+            //options.widgetNodeA=moved;
             options.items=[{header: '右键功能菜单'},
                 {divider: true},
                 {text: '移动', onclick: function(e) {moveDragA(e)}},
@@ -50,7 +56,14 @@
     }
 
     function moveDragA(e){
-        $(e.data.widgetNodeA).moveDrag(e.data.widgetNodeA);
+        var node=e.data.kWidgetNode;
+        if(node!=null){
+            var kMain=node.kWidget;
+            if(kMain!=null){
+                $(kMain).moveDrag(kMain);
+            }
+        }
+
     }
 
     function Plugin( element, options ) {
@@ -88,6 +101,7 @@
                 options.wdName=wdName;
                 options.clickX=e.clientX;
                 options.clickY=e.clientY;
+                options.kWidgetNode=$(e.target).data("kWidgetNode");
 
                 var menu = $('<ul class="' + options.menuClass + '" role="menu" id="' + options.menuId + '" data-contextify-id="' + options.id + '"/>');
 
@@ -115,6 +129,7 @@
                             a.attr('href', item.href);
                         }
                         if (item.onclick) {
+                            //option是事件中的data --重要
                             a.on('click', options, item.onclick);
                             a.css('cursor', 'pointer');
                         }
@@ -149,6 +164,7 @@
                     .css('top',  e.clientY)
                     .css('left', e.clientX)
                     .css('position', 'fixed')
+                    .css('z-index','99999')
                     .show();
             })
         .parents().on('mouseup', function () {
@@ -175,10 +191,7 @@
 
     $.fn[pluginName] = function ( options ) {
         return this.each(function () {
-            if( $.data(this, 'plugin_' + pluginName) && Object.prototype.toString.call(options) === '[object String]' ) {
-                $.data(this, 'plugin_' + pluginName)[options]();
-            }
-            else if (!$.data(this, 'plugin_' + pluginName)) {
+            if (!$.data(this, 'plugin_' + pluginName)) {
                 $.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
             }
         });

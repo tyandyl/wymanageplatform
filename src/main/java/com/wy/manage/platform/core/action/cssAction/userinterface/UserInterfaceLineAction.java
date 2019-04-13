@@ -27,8 +27,7 @@ public class UserInterfaceLineAction extends CssBasicAction {
                 "-o-box-sizing",
                 "-ms-box-sizing",
                 "outline",
-                "box-sizing",
-                "-webkit-appearance");
+                "box-sizing");
         return list;
     }
 

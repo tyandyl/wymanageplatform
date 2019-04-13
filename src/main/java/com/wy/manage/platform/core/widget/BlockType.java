@@ -10,6 +10,8 @@ public enum BlockType {
     INPUT_BUTTON(3,"input_button"),
     NORMAL_DIV(4,"normal_div"),//一般的块
     NORMAL_BUTTON(5,"normal_button"),//一般的按钮
+    TABLE_PANEL(6,"table_panel"),//输入面板
+    TABLE_LIST(7,"table_list"),//表格列表
     ;
 
     private int code;

@@ -32,15 +32,27 @@ public class Widget implements IWidget, Serializable {
 
     private String code;
 
-    private boolean isMoved=false;
-
-    private boolean isClick=false;
-
-    private boolean isRecord=false;
-
-    private boolean isRecord2=false;
-
     private String curPros;
+
+    private String outValue;
+
+    private RegisterParam registerParam=new RegisterParam();
+    //是起始控件标识
+    private boolean flag=false;
+
+    private String proDataTitle;
+
+    private String multiple;
+    //如<option value>这种
+    private String value;
+    //从全页面查询data-title 的填充
+    private String selectShowByPage;
+    //button url 没有的才可以弹出框
+    private String url;
+
+    private boolean urlIsDefault=false;
+
+    private String dataFlag;
 
     /**
      * 获取宽度
@@ -180,30 +192,6 @@ public class Widget implements IWidget, Serializable {
         this.code = code;
     }
 
-    public boolean isMoved() {
-        return isMoved;
-    }
-
-    public void setMoved(boolean moved) {
-        isMoved = moved;
-    }
-
-    public boolean isClick() {
-        return isClick;
-    }
-
-    public void setClick(boolean click) {
-        isClick = click;
-    }
-
-    public boolean isRecord() {
-        return isRecord;
-    }
-
-    public void setRecord(boolean record) {
-        isRecord = record;
-    }
-
     public String getCurPros() {
         return curPros;
     }
@@ -212,11 +200,84 @@ public class Widget implements IWidget, Serializable {
         this.curPros = curPros;
     }
 
-    public boolean isRecord2() {
-        return isRecord2;
+    public String getOutValue() {
+        return outValue;
     }
 
-    public void setRecord2(boolean record2) {
-        isRecord2 = record2;
+    public void setOutValue(String outValue) {
+        this.outValue = outValue;
+    }
+
+    public RegisterParam getRegisterParam() {
+        return registerParam;
+    }
+
+    public void setRegisterParam(RegisterParam registerParam) {
+        this.registerParam = registerParam;
+    }
+
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public String getProDataTitle() {
+        return proDataTitle;
+    }
+
+    public void setProDataTitle(String proDataTitle) {
+        this.proDataTitle = proDataTitle;
+    }
+
+    public String getMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(String multiple) {
+        this.multiple = multiple;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getSelectShowByPage() {
+        return selectShowByPage;
+    }
+
+    public void setSelectShowByPage(String selectShowByPage) {
+        this.selectShowByPage = selectShowByPage;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public boolean isUrlIsDefault() {
+        return urlIsDefault;
+    }
+
+    public void setUrlIsDefault(boolean urlIsDefault) {
+        this.urlIsDefault = urlIsDefault;
+    }
+
+    public String getDataFlag() {
+        return dataFlag;
+    }
+
+    public void setDataFlag(String dataFlag) {
+        this.dataFlag = dataFlag;
     }
 }

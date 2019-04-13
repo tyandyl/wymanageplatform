@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.parser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wy.manage.platform.core.action.Action;
+import com.wy.manage.platform.core.utils.ChinaFontTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.widget.Page;
 import com.wy.manage.platform.core.widget.StyleSheetType;
@@ -31,10 +32,25 @@ public class AnalyzeExecuteModel {
         Set<String> startNodes =context.getMapEmpty().get(context.getStartNodeStateNum());
 
         while (modelParam.getCurInt()<modelParam.getChars().length){
+
             if(modelParam.getChars()[modelParam.getCurInt()]==';'){
                 System.out.print("");
             }
 
+            if(Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()])>1988){
+                String s = ChinaFontTools.gbEncoding(modelParam.getChars()[modelParam.getCurInt()]);
+                int length = modelParam.getChars().length;
+                int i1 = length - modelParam.getCurInt() - 1;
+                char[] arrayCp=new char[modelParam.getChars().length+s.length()-1];
+                //前半部分
+                System.arraycopy(modelParam.getChars(),0,arrayCp,0,modelParam.getCurInt());
+                //新增部分
+                System.arraycopy(s.toCharArray(),0,arrayCp,modelParam.getCurInt(),s.length());
+                //后半部分
+                System.arraycopy(modelParam.getChars(),modelParam.getCurInt()+1,arrayCp,s.length()+modelParam.getCurInt(),i1);
+                modelParam.setChars(arrayCp);
+                continue;
+            }
             new AnalyzeStateMoveHandle().analyze(startNodes,result,Integer.valueOf(modelParam.getChars()[modelParam.getCurInt()]), context);
             if(result.getList().size()==0){
                 System.out.println("当前字符不符合规则,当前字符是:"+modelParam.getChars()[modelParam.getCurInt()]
@@ -80,6 +96,7 @@ public class AnalyzeExecuteModel {
                     });
                     for(NfaStateNode node:nodes){
                         node.getAction().action(modelParam);
+                        modelParam.setActionName(node.getAction().getName());
                         modelParam.getLockRegularName().add(node.getAction().getName());
                         //最高优先度执行完毕后需要清空，避免两个状态机衔接问题，一个没执行完，另一个就填充
                         if(node.getAction().getPriority()==1){
@@ -142,7 +159,9 @@ public class AnalyzeExecuteModel {
                                 buffer1.append(modelParam.getChars()[i]);
                                 regularValue.put(belongRegular,buffer1);
                             }
-                        }else if(!modelParam.getLockRegularName().contains(belongRegular)){
+                            //或者和刚刚执行的动作对比，发现是同一个动作的话，也可以执行
+                        }else if((!modelParam.getLockRegularName().contains(belongRegular))
+                                || modelParam.getActionName().equalsIgnoreCase(belongRegular)){
                             if(modelParam.addRegularNum(belongRegular, i)){
                                 buffer.append(modelParam.getChars()[i]);
                                 regularValue.put(belongRegular,buffer);
@@ -196,5 +215,7 @@ public class AnalyzeExecuteModel {
         }
         return 3;
     }
+
+
 
 }

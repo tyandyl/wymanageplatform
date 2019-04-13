@@ -1,6 +1,7 @@
 import com.wy.manage.platform.core.entrance.Ingress;
 import com.wy.manage.platform.core.entrance.WindowIngress;
 import com.wy.manage.platform.core.entrance.WindowOpenIngress;
+import com.wy.manage.platform.core.utils.UserAgentTools;
 
 import java.io.IOException;
 

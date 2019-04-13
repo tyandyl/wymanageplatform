@@ -23,8 +23,10 @@ public class LayoutLineAction extends CssBasicAction {
 
     @Override
     public List<String> getIntraGroupNames() {
-        List<String> list = TempTools.createList("display",
-                "overflow");
+        List<String> list = TempTools.createList(
+                "display",
+                "overflow",
+                "float");
         return list;
     }
 

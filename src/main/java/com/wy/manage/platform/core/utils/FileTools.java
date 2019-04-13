@@ -2,10 +2,7 @@ package com.wy.manage.platform.core.utils;
 
 import com.wy.manage.platform.core.widget.Page;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 
 /**
@@ -17,7 +14,8 @@ public class FileTools {
         URL resource = FileTools.class.getClassLoader().getResource(address);
         File file=new File(resource.toURI());
 
-        Reader fr = new FileReader(file);
+       // Reader fr = new FileReader(file);
+        InputStreamReader fr = new InputStreamReader(new FileInputStream(file), "UTF-8");
         BufferedReader bufr = new BufferedReader(fr);
         StringBuffer stringBuffer=new StringBuffer();
         String line = null;

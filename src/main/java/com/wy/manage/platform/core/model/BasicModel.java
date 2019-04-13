@@ -57,7 +57,7 @@ public abstract class BasicModel<T> implements Model<T>{
                 stringBuffer.append(chars1[w]);
             }
         }
-        System.out.println(stringBuffer.toString());
+        //System.out.println(stringBuffer.toString());
         Stack<XContentItem> parser = RegularExpressionParser.parser(chars1, this.valueActions,false);
         XContentItem peek = parser.peek();
         Set<Integer> index = peek.getIndex();
@@ -87,6 +87,9 @@ public abstract class BasicModel<T> implements Model<T>{
         //重写，保证读取顺序
         Set<String> strings = cssProperties.stringPropertyNames();
         for (String name:strings) {
+            if(name.equalsIgnoreCase("legendEndLine")){
+                System.out.println(name);
+            }
             //解决css中人为做出来的空格
             StringBuffer line=new StringBuffer();
             String value = cssProperties.getProperty(name);

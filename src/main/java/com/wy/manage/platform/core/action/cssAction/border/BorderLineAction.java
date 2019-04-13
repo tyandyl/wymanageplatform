@@ -28,7 +28,10 @@ public class BorderLineAction extends CssBasicAction {
                 "border-bottom",
                 "border-radius",
                 "border-width",
-                "border-color");
+                "border-color",
+                "border-left",
+                "border-right",
+                "border-bottom");
         return list;
     }
 

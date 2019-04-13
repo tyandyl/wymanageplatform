@@ -1,20 +1,14 @@
 package com.wy.manage.platform.core.entrance;
 
-import com.alibaba.fastjson.JSONObject;
 import com.wy.manage.platform.core.model.BasicModel;
 import com.wy.manage.platform.core.model.HtmlModel;
-import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.widget.*;
-import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tianye
@@ -27,7 +21,7 @@ public class WindowIngress extends Ingress{
             WidgetModel model=new WidgetModel(){
                 @Override
                 public void handleType(WidgetModelParamResult paramResult){
-                    paramResult.setAddType(AddType.getAddType(1));
+                    paramResult.setHandleType(HandleType.getHandleType(1));
                 }
 
                 @Override
@@ -44,10 +38,11 @@ public class WindowIngress extends Ingress{
                 public Page loadPage(WidgetModelParamResult widgetModelParamResult) {
                     return null;
                 }
-            }.init(request);
-            model.add();
+            }.init(request).execute();
             String view = model.getPage().toView();
             OutputStream out = response.getOutputStream();
+            response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
+            response.setCharacterEncoding("utf-8");
             out.write(view.getBytes());
         }catch (Exception e){
             System.out.println("创建窗口报错");

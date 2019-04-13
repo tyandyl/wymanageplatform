@@ -49,5 +49,17 @@ public class HtmlModel<T>  extends BasicModel<T>{
         defineAction(new TdStartLineAction());
         defineAction(new TdEndLineAction());
         defineAction(new InputLineAction());
+        defineAction(new LegendStartLineAction());
+        defineAction(new LegendEndLineAction());
+        defineAction(new FormStartLineAction());
+        defineAction(new FormEndLineAction());
+        defineAction(new FieldsetStartLineAction());
+        defineAction(new FieldsetEndLineAction());
+        defineAction(new SpanStartLineAction());
+        defineAction(new SpanEndLineAction());
+        defineAction(new SelectStartLineAction());
+        defineAction(new SelectEndLineAciton());
+        defineAction(new OptionEndLineAction());
+        defineAction(new OptionStartLineAction());
     }
 }

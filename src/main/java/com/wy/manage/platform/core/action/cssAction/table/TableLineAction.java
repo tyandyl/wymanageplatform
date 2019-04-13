@@ -25,7 +25,9 @@ public class TableLineAction extends CssBasicAction {
                 "table-layout",
                 "padding-right",
                 "padding-top",
-                "margin");
+                "margin",
+                "margin-right",
+                "margin-left");
         return list;
     }
 

@@ -3,6 +3,7 @@ package com.wy.manage.platform.core.parser;
 import com.sun.org.apache.bcel.internal.generic.PUSH;
 import com.wy.manage.platform.core.utils.AtomicTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -20,6 +21,9 @@ public class ModelParam<T> {
     private List<String> lockRegularName=new ArrayList<String>();
 
     private Map<String,CssBag> map=new HashMap<String, CssBag>();
+    //刚刚执行的动作
+    private String actionName;
+    //刚刚执行动作的开始
 
     public DfaContext initDfaContext(NfaStateMachine parser)throws Exception{
         DfaContext context=new DfaContext();
@@ -212,5 +216,13 @@ public class ModelParam<T> {
 
     public void setMap(Map<String, CssBag> map) {
         this.map = map;
+    }
+
+    public String getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
     }
 }

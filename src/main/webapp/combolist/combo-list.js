@@ -17,8 +17,7 @@
             combolistClass: "combolist-cell-class"
         };
 
-		var  combolistNumId = 0;
-		
+		var listM={};
 		function Plugin( element, options ) {
 			this.element = element;
 
@@ -32,7 +31,6 @@
 
 		Plugin.prototype.init = function () {
 			var options = $.extend( {}, this.options, $(this.element).data());
-			options.id = combolistNumId;
 
 			$(this.element)
 				.on('mousedown', function (e){
@@ -40,18 +38,20 @@
 				})
 				.on('click', function (e) {
 					e.preventDefault();
-					var menu_div=$("<div id='window2-combo-list-cell-content'></div>");
-					if(combolistNumId==0){
+					var idStr=options.record.getAttribute('wd')+"y";
+					var mId=document.getElementById(idStr);
+					if(listM[idStr]==null || mId==null){
+						var menu_div=$("<div id="+idStr+" ></div>");
 						var l = options.items.length;
 						var i;
 						var menu = $(options.record);
 						for (i = 0; i < l; i++) {
 							var item = options.items[i];
-							var div="<div>"+item.text+"</div>";
+							var div="<div svalue='"+item.value+"'>"+item.text+"</div>";
 							var el = $(div);
 							el
 								.css('position','relative')
-								.css('z-index','99999')
+								.css('z-index','999')
 								.css('margin','0px')
 								.css('padding','0px')
 								.css('top','2px')
@@ -76,6 +76,7 @@
 								//$(options.record).text($(this).text());
 								var vn=$(this).text();
 								$(options.record2).text(vn);
+								options.record2.value=this.getAttribute('svalue');
 								$(menu_div).hide();
 								//combolistNumId=0;
 							})
@@ -85,8 +86,9 @@
 						}
 						menu.append(menu_div);
 						$(menu_div).show();
+						listM[idStr]=1;
 					}else{
-						$("#window2-combo-list-cell-content").show();
+						$("#"+idStr).toggle();
 					}
 					
 					combolistNumId++;

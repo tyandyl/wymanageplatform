@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.entrance;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wy.manage.platform.core.bean.Result;
 import com.wy.manage.platform.core.model.BasicModel;
 import com.wy.manage.platform.core.model.HtmlModel;
 import com.wy.manage.platform.core.widget.CurWidget;
@@ -46,9 +47,10 @@ public class ComboListIngress  extends Ingress{
                 }
             }.init(request);
             model.add();
-            List<CurWidget> curWidgets = model.getParamResult().getCurWidgets();
-            String strPage = JSONObject.toJSONString(curWidgets);
+            Result result = model.getParamResult().getResult();
+            String strPage = JSONObject.toJSONString(result);
             OutputStream out = response.getOutputStream();
+            response.setHeader("content-type", "text/html;charset=UTF-8");//注意是分号，不能是逗号
             out.write(strPage.getBytes());
         }catch (Exception e){
             System.out.println("创建下拉列表报错");

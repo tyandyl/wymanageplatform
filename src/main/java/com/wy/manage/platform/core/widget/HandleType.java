@@ -3,19 +3,20 @@ package com.wy.manage.platform.core.widget;
 /**
  * Created by tianye
  */
-public enum AddType {
-    PAGE(1,"page"),
-    WIDGET(2,"widget")
+public enum HandleType {
+    NEW_PAGE(1,"new_page"),
+    NEW_WIDGET(2,"new_widget"),
+    EDIT_WIDGET(3,"edit_widget")
     ;
     private int code;
     private String name;
 
-    AddType(int code,String name){
+    HandleType(int code, String name){
         this.code=code;
         this.name=name;
     }
-    public static AddType getAddType(int code){
-        for (AddType c : AddType.values()) {
+    public static HandleType getHandleType(int code){
+        for (HandleType c : HandleType.values()) {
             if (c.getCode()==code) {
                 return c;
             }

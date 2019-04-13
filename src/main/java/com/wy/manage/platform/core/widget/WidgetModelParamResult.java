@@ -17,18 +17,24 @@ public class WidgetModelParamResult extends Result implements Serializable {
 
     private JParam JParam;
 
-    private AddType addType;
+    private HandleType handleType;
 
     private Map<String,String> param=new HashMap<String, String>();
 
-    private List<CurWidget> curWidgets=new ArrayList<CurWidget>();
+    private RegisterEvent registerEvent=new RegisterEvent();
 
 
     private HttpServletRequest request;
 
+    private Result result=new Result();
+
     public WidgetModelParamResult(JParam param,HttpServletRequest request){
         this.JParam=param;
         this.request=request;
+    }
+
+    public WidgetModelParamResult(){
+
     }
 
     public JParam getJParam() {
@@ -39,20 +45,12 @@ public class WidgetModelParamResult extends Result implements Serializable {
         this.JParam = JParam;
     }
 
-    public List<CurWidget> getCurWidgets() {
-        return curWidgets;
+    public HandleType getHandleType() {
+        return handleType;
     }
 
-    public void setCurWidgets(List<CurWidget> curWidgets) {
-        this.curWidgets = curWidgets;
-    }
-
-    public AddType getAddType() {
-        return addType;
-    }
-
-    public void setAddType(AddType addType) {
-        this.addType = addType;
+    public void setHandleType(HandleType handleType) {
+        this.handleType = handleType;
     }
 
     public Map<String, String> getParam() {
@@ -69,5 +67,22 @@ public class WidgetModelParamResult extends Result implements Serializable {
 
     public void setRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+
+    public RegisterEvent getRegisterEvent() {
+        return registerEvent;
+    }
+
+    public void setRegisterEvent(RegisterEvent registerEvent) {
+        this.registerEvent = registerEvent;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
     }
 }

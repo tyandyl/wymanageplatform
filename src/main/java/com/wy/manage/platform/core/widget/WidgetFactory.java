@@ -1,8 +1,8 @@
 package com.wy.manage.platform.core.widget;
 
 import com.wy.manage.platform.core.attribute.AttributeNameType;
-import com.wy.manage.platform.core.attribute.IAttributeValue;
-import com.wy.manage.platform.core.attribute.Properties;
+import com.wy.manage.platform.core.bean.*;
+import com.wy.manage.platform.core.bean.Result;
 import com.wy.manage.platform.core.parser.CssBag;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.GUIDTools;
@@ -15,29 +15,34 @@ import java.util.*;
  */
 public class WidgetFactory {
 
-    private static HashMap<String, String> eventMap = new HashMap<String, String>() {
-        private static final long serialVersionUID = -7130991970747133460L;
-        {
-            put("search_button", "move,click");
-            put("window2-combo-list-div", "move");
-            put("window2-combo-list-cell-after", "click");
-            put("window2-combo-list-cell", "record");
-            put("window2-combo-list-cell_real", "record2");
-            put("window2-table-input","move");
-        }
-    };
+
 
     public static Widget getWidget(WidgetModel model,String selectorType,String selectorValue,TagType tagType)throws Exception{
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
         widget.setTagType(tagType);
 
-        processEvent(selectorValue,widget);
+        processEvent(selectorValue,widget,model);
 
         buildInStyleAnalyze( model, selectorType, selectorValue, widget);
         widget.setTitle(selectorValue);
         return widget;
     }
+
+    public static Widget getWidgetEx(WidgetModel model,String selectorType,String selectorValue,TagType tagType,Object dataFlagValue)throws Exception{
+        Widget widget=new Widget();
+        widget.setCode(GUIDTools.randomUUID());
+        widget.setTagType(tagType);
+        if(dataFlagValue!=null){
+            widget.setDataFlag(dataFlagValue.toString());
+        }
+        processEvent(selectorValue,widget,model);
+
+        buildInStyleAnalyze( model, selectorType, selectorValue, widget);
+        widget.setTitle(selectorValue);
+        return widget;
+    }
+
 
 
     public static void buildInStyleAnalyze(WidgetModel model,String selectorType,String selectorValue,Widget widget)throws Exception{
@@ -77,28 +82,113 @@ public class WidgetFactory {
 
     }
 
-    public static void processEvent(String selectorValue,Widget widget){
+    public static void processEvent(String selectorValue,Widget widget,WidgetModel model)throws Exception{
         if(selectorValue!=null){
-            String event = eventMap.get(selectorValue.trim());
-            if(event!=null){
-                String[] split = event.split(",");
-                if(split!=null && split.length>0){
-                    for(int i=0;i<split.length;i++){
-                        if("move".equalsIgnoreCase(split[i])){
-                            widget.setMoved(true);
-                        }else if("click".equalsIgnoreCase(split[i])){
-                            widget.setClick(true);
-                        }else if("record".equalsIgnoreCase(split[i])){
-                            widget.setRecord(true);
-                        }else if("record2".equalsIgnoreCase(split[i])){
-                            widget.setRecord2(true);
+            if(selectorValue.equalsIgnoreCase("selectMultipleRight")){
+                System.out.println("");
+            }
+            List<RegisterEventManage> manages = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
+            if(manages!=null && manages.size()>0){
+                for(RegisterEventManage manage:manages){
+                    manage.setWidget(widget);
+                    checkArray( manage,model);
+                }
+
+            }
+            List<RegisterEventData> registerEventDatas = model.getParamResult().getRegisterEvent().handle().getMaps().get(selectorValue.trim());
+            if(registerEventDatas!=null && registerEventDatas.size()>0){
+                for(RegisterEventData registerEventData:registerEventDatas){
+                    if(registerEventData!=null){
+                        List<RegisterEventManage> manage1s = model.getParamResult().getRegisterEvent().handle().getMapManage().get(registerEventData.getSelectorValue());
+                        if(manage1s!=null && manage1s.size()>0){
+                            for(RegisterEventManage manage1:manage1s){
+                                manage1.getArr()[registerEventData.getI()]=widget.getCode();
+                                checkArray( manage1,model);
+                            }
                         }
+
                     }
                 }
             }
+
         }
     }
 
+    public static void checkArray(RegisterEventManage manage,WidgetModel model){
+        int paramNum = manage.getParamNum();
+        //不减一的原因是第一个参数是事件
+        if(paramNum>0 && manage.getArr()[paramNum]!=null){
+            boolean isB=false;
+            for(int i=paramNum-1;i>0;i--){
+                if(manage.getArr()[i]==null){
+                    isB=true;
+                }
+            }
+            if(!isB){
+                Widget widget = manage.getWidget();
+                String[] arr = manage.getArr();
+                StringBuffer str=new StringBuffer();
+                for(int i=0;i<=paramNum;i++){
+                    str.append(arr[i]);
+                    if(i!=paramNum){
+                        str.append(",");
+                    }
+                }
+                if(widget!=null){
+                    widget.getRegisterParam().getRegister().add(str.toString());
+                    if(manage.getArr()[0].equalsIgnoreCase("requestClick")){
+                        Map<String, WidgetNode> nodeMap = model.getPage().getWidgetNodeTree().getNodeMap();
+                        if(manage.getArr()[1]!=null){
+                            WidgetNode widgetNode = nodeMap.get(manage.getArr()[1]);
+                            widget.getRegisterParam().getRequestParam().add(manage.getArr()[1]+":"+widgetNode.getData().getTagType().getName()+":"+widgetNode.getData().getDataFlag());
+                        }
+                        if(manage.getArr()[2]!=null){
+                            WidgetNode widgetNode = nodeMap.get(manage.getArr()[2]);
+                            widget.getRegisterParam().getRequestParam().add(manage.getArr()[2]+":"+widgetNode.getData().getTagType().getName()+":"+widgetNode.getData().getDataFlag());
+                        }
+                        if(manage.getArr()[3]!=null){
+                            WidgetNode widgetNode = nodeMap.get(manage.getArr()[3]);
+                            widget.getRegisterParam().getRequestParam().add(manage.getArr()[3]+":"+widgetNode.getData().getTagType().getName()+":"+widgetNode.getData().getDataFlag());
+                        }
+
+                    }
+                    manage.getArr()[1]=null;
+                    manage.getArr()[2]=null;
+                    manage.getArr()[3]=null;
+                }
+            }
+
+
+        }
+        if(manage.getArr()[0].equalsIgnoreCase("widget")){
+            Widget widget = manage.getWidget();
+            if(widget!=null){
+                widget.setFlag(true);
+
+                String targetId = model.getParamResult().getParam().get("targetId");
+                if(targetId!=null){
+                    String[] split = targetId.split(",");
+                    for(String m:split){
+                        widget.getRegisterParam().getTargetParam().add(m);
+                    }
+                }
+
+                Integer integer = RegisterEvent.getWidgetMap().get(manage.getSelectorValue());
+                if(integer!=null){
+                    widget.setBlockType(BlockType.getBlockType(integer));
+
+                }
+
+            }
+        }
+
+        if(manage.getArr()[0].equalsIgnoreCase("selectShowByPage")){
+            Widget widget = manage.getWidget();
+            if(widget!=null){
+                widget.setSelectShowByPage("1");
+            }
+        }
+    }
 
 
     public static void addWidgetNode(WidgetModel model,WidgetNode widgetNode)throws Exception {
@@ -115,8 +205,8 @@ public class WidgetFactory {
         }
         //解决控件插入
         WidgetNode widgetNodeInsert=null;
-        AddType addType = model.getParamResult().getAddType();
-        if(addType==AddType.WIDGET){
+        HandleType handleType = model.getParamResult().getHandleType();
+        if(handleType == HandleType.NEW_WIDGET){
             String jValue = model.getParamResult().getParam().get("id");
             if(StringUtils.isNotBlank(jValue)){
                 WidgetNode widgetNode1 = widgetNodeTree.getNodeMap().get(jValue);
@@ -153,7 +243,7 @@ public class WidgetFactory {
             }
             peek.getChildNodes().add(widgetNode);
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
-            if(addType==AddType.WIDGET){
+            if(handleType == HandleType.NEW_WIDGET){
                 setHandleCurWidget( model, widgetNode,peek.getCode(),peek.getData().getTagType().getName());
             }
         }
@@ -161,17 +251,34 @@ public class WidgetFactory {
     }
 
     public static void setHandleCurWidget(WidgetModel model,WidgetNode widgetNode,String parentWd,String parentTagName){
+        Widget data = widgetNode.getData();
+
         CurWidget curWidget=new CurWidget();
         curWidget.setCurWd(widgetNode.getCode());
-        curWidget.setCurTagName(widgetNode.getData().getTagType().getName());
+        curWidget.setCurTagName(data.getTagType().getName());
         curWidget.setParentWd(parentWd);
         curWidget.setParentTagName(parentTagName);
-        curWidget.setMoved(widgetNode.getData().isMoved());
-        curWidget.setClicked(widgetNode.getData().isClick());
-        curWidget.setRecorded(widgetNode.getData().isRecord());
-        curWidget.setRecorded2(widgetNode.getData().isRecord2());
-        curWidget.setCurPros(widgetNode.getData().getCurPros());
-        model.getParamResult().getCurWidgets().add(curWidget);
+        curWidget.setRegisterParam(data.getRegisterParam());
+        curWidget.setCurPros(data.getCurPros());
+        curWidget.setOutContentValue(data.getOutValue());
+        curWidget.setFlag(data.isFlag());
+        curWidget.setWidgetName(data.getBlockType()!=null?data.getBlockType().getName():null);
+        curWidget.setMultiple(data.getMultiple());
+        curWidget.setValue(data.getValue());
+        curWidget.setUrl(data.getUrl());
+        curWidget.setUrlIsDefault(data.isUrlIsDefault());
+        curWidget.setDataFlag(data.getDataFlag());
+        Result result = model.getParamResult().getResult();
+        Object result1 = result.getResult();
+        if(result1==null){
+            List<CurWidget> m=new ArrayList<CurWidget>();
+            m.add(curWidget);
+            result.setResult(m);
+        }else {
+            if(result1 instanceof List){
+                ((List<CurWidget>)result1).add(curWidget);
+            }
+        }
     }
 
 

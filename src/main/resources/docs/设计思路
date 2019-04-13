@@ -1,19 +1,11 @@
 设计思想：
-block是对块的抽象，所以它的接口体现的是块的功能
-他的本质功能有：判断标签类型，提供标签属性，提供子标签的列表
-获取他父类的块，不是他本质的功能，在树上提供
+菜单控件的设计思路：
+在jquery中注册一个方法：contextify
+在这个方法中的第一件事就是遍历调用该方法的元素：
+$(selector).each(function(index,element))
+element - 当前的元素（也可使用 "this" 选择器）
 
-css文件的正则表达式：
-注释正则表达式：/\*\* *\*\*/
-#|\.*
-\{
-position:absolute;|
-display:block;|
-top:[0-9]+px;|
-left:[0-9]+px;|
-right:[0-9]+px;|
-bottom:[0-9]+px;
-\}
+
 
 
 
