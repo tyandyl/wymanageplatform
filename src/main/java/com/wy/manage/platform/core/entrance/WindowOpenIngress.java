@@ -55,7 +55,7 @@ public class WindowOpenIngress extends Ingress{
                         }
                         @Override
                         public String getContentAddress() {
-                            return "template/window3/window.html";
+                            return "template/window5/window.html";
                         }
                     };
                 }
