@@ -9,7 +9,7 @@ $(document).ready(
 			var options = {items:[
 				{header: '右键功能菜单'},
 				{divider: true},
-				{text: '生成后台窗口', href: '/wy-manage-web/Window'},
+				{text: '生成后台窗口', href: '/Window'},
 				//{text: '生成弹出窗口',onclick: function() {createWindow()}},
 				{text: '生成按钮', onclick: function(e) {createButton(e)}},
 				{text: '生成输入面板', onclick: function(e) {createTablePanel(e)}},
@@ -231,7 +231,7 @@ function createWindow(e){
 	var param={"id":temp,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute","targetId":wdMain};
 	var type="post";
 	var isAsync=false;
-	var url="/wy-manage-web/OpenWindow";
+	var url="/OpenWindow";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
 		var data=resultList.result;
 		createDivElement(data,function(curTagName,curWd,parentTagDiv){
@@ -280,7 +280,7 @@ function createButton(e){
 	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
-	var url="/wy-manage-web/Button";
+	var url="/Button";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
 		var kNodeA=null;
 		var data=resultList.result;
@@ -341,7 +341,7 @@ function createComboList(e){
 	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
-	var url="/wy-manage-web/ComboList";
+	var url="/ComboList";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
 		var data=resultList.result;
 		var options = {items:[
@@ -424,7 +424,7 @@ function createTablePanel(e){
 	var param={"id":wd,"left":relativeLeft+'px',"top":relativeTop+'px',"handleType":2,"position":"absolute"};
 	var type="post";
 	var isAsync=false;
-	var url="/wy-manage-web/TablePanel";
+	var url="/TablePanel";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
 		var kNodeA=null;
 		var data=resultList.result;
@@ -503,7 +503,7 @@ function getOffsetLeft(obj){
 function openURL(param,url){
 	$.ajax({
 		type: "post",
-		url: "/wy-manage-web/"+url,
+		url: "/"+url,
 		async: false,
 		data: param,
 		success: function (data) {
