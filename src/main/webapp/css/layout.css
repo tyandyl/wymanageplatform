@@ -91,7 +91,7 @@ body,html{ min-width:1300px; overflow-x:hidden; position:relative;}
 .subPro04 .subPtoTxt01{ background:url(../images/img24.png) 32px center no-repeat; padding-left:189px; position:absolute; z-index:4; left:0; top:75px; width:297px; height:214px;}
 .subPro04 .subPtoTxt01 h3{ background:url(../images/img25.png) left bottom no-repeat; }
 
-.indexNews{ background:url(../images/bg02.jpg) top center no-repeat; padding-top:109px; font-size:13px; caption-side:#999; height:1200px;}
+.indexNews{ background:url(../images/bg02.jpg) top center no-repeat; padding-top:109px; font-size:13px; caption-side:#999; height:300px;}
 .indexNews h2{ padding-bottom:66px;}
 .subNews01{ position:relative; width:515px; float:left; margin-top:80px;}
 .subNews01 .mask{ position:absolute; left:-1px; top:386px; background:url(../images/IMG27.png) no-repeat; width:516px; height:13px; display:block; z-index:9;}
