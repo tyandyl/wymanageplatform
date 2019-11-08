@@ -56,7 +56,7 @@
 								.css('padding','0px')
 								.css('top','2px')
 								.css('left','-2px')
-								.css('width','202px')
+								.css('width','189px')
 								.css('height','23px')
 								.css('background-color','#ffffff')
 								.css('font',"13px/1.7 verdana,'\\5b8b\\4f53',arial,georgia,helvetica,sans-serif")

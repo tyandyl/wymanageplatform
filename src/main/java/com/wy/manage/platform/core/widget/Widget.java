@@ -39,7 +39,7 @@ public class Widget implements IWidget, Serializable {
     private RegisterParam registerParam=new RegisterParam();
     //是起始控件标识
     private boolean flag=false;
-
+    //如果是按钮，这个就是查询两字,和data-title对应，data-title 是外边标题的对应，解决搜出来之后，没有名字
     private String proDataTitle;
 
     private String multiple;
@@ -52,7 +52,11 @@ public class Widget implements IWidget, Serializable {
 
     private boolean urlIsDefault=false;
 
+    //字段名
     private String dataFlag;
+    
+    //控件操作类型
+    private int handleType;
 
     /**
      * 获取宽度
@@ -279,5 +283,13 @@ public class Widget implements IWidget, Serializable {
 
     public void setDataFlag(String dataFlag) {
         this.dataFlag = dataFlag;
+    }
+    
+    public int getHandleType() {
+        return handleType;
+    }
+    
+    public void setHandleType(int handleType) {
+        this.handleType = handleType;
     }
 }

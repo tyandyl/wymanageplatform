@@ -71,6 +71,7 @@ function createDivElement(data,call,call2){
 			option.wd=curWd;
 			option.url=data[i].url;
 			option.requestParam=data[i].registerParam.requestParam;
+      option.handleType=data[i].handleType;
 			el.on('click',option, function (e) {
 				//targetId：有两个目标，一个前台展示，一个弹出窗口的列表
 				var wdMain=e.data.wd;
@@ -78,26 +79,29 @@ function createDivElement(data,call,call2){
 				var addressUrl=null;
 				var targetList=null;
 				var selectValueList=null;
-				var param={"id":wdMain,"handleType":3};
+				var param={"id":wdMain,"handleType":option.handleType};
 				for(var p=0;p<requestParam.length;p++){
 					if(requestParam[p]!=null){
 						var re=null;
 						var pro=requestParam[p].split(":");
-						var tagDiv=getElementByAttr(pro[1],'wd',pro[0]);
-						if(pro[1]=='select'){
-							var selValues=new Array();
-							var list=tagDiv.options;
-							if(list!=null){
-								for(var r=0;r<list.length;r++){
-									var ud=$(list[r]).attr('value');
-									selValues.push(ud);
-								}
-							}
-							re=selValues.join(",");
-							param[pro[2]]=re;
-						}else{
-							param[pro[2]]=$(tagDiv).val();
+						if(pro[1]!=null && pro[1]!="null" && pro[0]!=null && pro[0]!="null" && pro[2]!=null && pro[2]!="null"){
+              var tagDiv=getElementByAttr(pro[1],'wd',pro[0]);
+              if(pro[1]=='select'){
+                var selValues=new Array();
+                var list=tagDiv.options;
+                if(list!=null){
+                  for(var r=0;r<list.length;r++){
+                    var ud=$(list[r]).attr('value');
+                    selValues.push(ud);
+                  }
+                }
+                re=selValues.join(",");
+                param[pro[2]]=re;
+              }else{
+                param[pro[2]]=$(tagDiv).val();
+              }
 						}
+
 
 
 					}
@@ -306,7 +310,7 @@ function createButton(e){
 					}
 				}
 			}
-			el.text( '查询');
+			el.text(data[i].proDataTitle);
 			el.attr('wd',curWd);
 			parentTagDiv.appendChild(curDiv);
 

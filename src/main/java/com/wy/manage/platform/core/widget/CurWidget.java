@@ -27,6 +27,8 @@ public class CurWidget {
     private boolean urlIsDefault=false;
 
     private String dataFlag;
+    //控件操作类型
+    private int handleType;
 
     public String getWidgetName() {
         return widgetName;
@@ -149,5 +151,13 @@ public class CurWidget {
 
     public void setDataFlag(String dataFlag) {
         this.dataFlag = dataFlag;
+    }
+    
+    public int getHandleType() {
+        return handleType;
+    }
+    
+    public void setHandleType(int handleType) {
+        this.handleType = handleType;
     }
 }

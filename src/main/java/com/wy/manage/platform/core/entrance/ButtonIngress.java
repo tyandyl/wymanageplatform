@@ -1,14 +1,11 @@
 package com.wy.manage.platform.core.entrance;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.wy.manage.platform.core.bean.*;
 import com.wy.manage.platform.core.bean.Result;
 import com.wy.manage.platform.core.model.BasicModel;
 import com.wy.manage.platform.core.model.HtmlModel;
 import com.wy.manage.platform.core.widget.*;
-import org.apache.commons.lang.StringUtils;
+import java.util.HashSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -72,6 +69,9 @@ public class ButtonIngress extends Ingress{
                     WidgetNode widgetNode = page.getWidgetNodeTree().getNodeMap().get(id);
                     //根据id获取当前点击的按钮，然后获取当前按钮的target，注：每个窗口打开的时候，会把选中的控件当做
                     Set<String> targetParam = widgetNode.getData().getRegisterParam().getTargetParam();
+                    if(targetParam==null){
+                        targetParam=new HashSet<String>();
+                    }
                     List<List<CurWidget>> lists=new ArrayList<List<CurWidget>>();
                     if(targetParam!=null && targetParam.size()>0){
                         for(String targetId:targetParam){

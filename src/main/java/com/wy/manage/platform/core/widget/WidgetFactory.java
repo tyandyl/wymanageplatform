@@ -84,9 +84,32 @@ public class WidgetFactory {
 
     public static void processEvent(String selectorValue,Widget widget,WidgetModel model)throws Exception{
         if(selectorValue!=null){
-            if(selectorValue.equalsIgnoreCase("selectMultipleRight")){
-                System.out.println("");
+            //targetSetInputView 朝向资源自动带出自己
+            if(selectorValue.equalsIgnoreCase("targetSetInputView")){
+                //设置朝向资源，并显示在界面
+                String targetId = model.getParamResult().getParam().get("targetId");
+                if(targetId!=null){
+                    String[] split = targetId.split(",");
+                    for(String m:split){
+                        //使用set解决不和以前设置的冲突
+                        widget.getRegisterParam().getTargetParam().add(m);
+                    }
+                }
+                Set<String> targetIdList=widget.getRegisterParam().getTargetParam();
+                if(targetIdList!=null){
+                    String symbol = StringUtils.join(targetIdList, ",");
+                    widget.setValue(symbol);
+                }
             }
+            
+            //如果设置了请求网址，再次打开的时候，需要把以前设置的值带出来
+//            if(selectorValue.equalsIgnoreCase("urlSetInputView")){
+//                Map<String, WidgetNode> nodeMap = model.getPage().getWidgetNodeTree().getNodeMap();
+//                WidgetNode widgetNode = nodeMap.get(widget.getCode());
+//                String value = widgetNode.getData().getValue();
+//            }
+            
+            
             List<RegisterEventManage> manages = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
             if(manages!=null && manages.size()>0){
                 for(RegisterEventManage manage:manages){
@@ -122,6 +145,7 @@ public class WidgetFactory {
             for(int i=paramNum-1;i>0;i--){
                 if(manage.getArr()[i]==null){
                     isB=true;
+                    break;
                 }
             }
             if(!isB){
@@ -165,14 +189,6 @@ public class WidgetFactory {
             if(widget!=null){
                 widget.setFlag(true);
 
-                String targetId = model.getParamResult().getParam().get("targetId");
-                if(targetId!=null){
-                    String[] split = targetId.split(",");
-                    for(String m:split){
-                        widget.getRegisterParam().getTargetParam().add(m);
-                    }
-                }
-
                 Integer integer = RegisterEvent.getWidgetMap().get(manage.getSelectorValue());
                 if(integer!=null){
                     widget.setBlockType(BlockType.getBlockType(integer));
@@ -188,6 +204,7 @@ public class WidgetFactory {
                 widget.setSelectShowByPage("1");
             }
         }
+        
     }
 
 
@@ -268,6 +285,8 @@ public class WidgetFactory {
         curWidget.setUrl(data.getUrl());
         curWidget.setUrlIsDefault(data.isUrlIsDefault());
         curWidget.setDataFlag(data.getDataFlag());
+        curWidget.setProDataTitle(data.getProDataTitle());
+        curWidget.setHandleType(data.getHandleType());
         Result result = model.getParamResult().getResult();
         Object result1 = result.getResult();
         if(result1==null){

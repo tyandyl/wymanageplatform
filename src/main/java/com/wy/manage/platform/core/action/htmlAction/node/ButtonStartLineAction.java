@@ -2,6 +2,7 @@ package com.wy.manage.platform.core.action.htmlAction.node;
 
 import com.wy.manage.platform.core.action.BasicAction;
 import com.wy.manage.platform.core.parser.ModelParam;
+import com.wy.manage.platform.core.utils.ChinaFontTools;
 import com.wy.manage.platform.core.utils.IgnoreTools;
 import com.wy.manage.platform.core.utils.TempTools;
 import com.wy.manage.platform.core.widget.*;
@@ -17,6 +18,8 @@ public class ButtonStartLineAction extends BasicAction {
     private static final String SELECTOR_VALUE="selectorValue";
     private static final String SELECTOR_TYPE="selectorType";
     private static final String URL_VALUE="urlValue";
+    private static final String ChineseFonts="ChineseFonts";
+    private static final String handleTypeValue="handleTypeValue";
     @Override
     public void action(ModelParam modelParam)throws Exception {
         Object t = modelParam.getT();
@@ -32,6 +35,15 @@ public class ButtonStartLineAction extends BasicAction {
                     if(regularValue.get(URL_VALUE)!=null){
                         widget.setUrl(regularValue.get(URL_VALUE).toString());
                         widget.setUrlIsDefault(true);
+                    }
+                    if(regularValue.get(ChineseFonts)!=null){
+                        String s = ChinaFontTools.decodeUnicode(String.valueOf(regularValue.get(ChineseFonts)))+"";
+                        //存放button的text 比如.text( '查询');
+                        widget.setProDataTitle(s);
+                    }
+    
+                    if(regularValue.get(handleTypeValue)!=null){
+                        widget.setHandleType(Integer.valueOf(regularValue.get(handleTypeValue).toString()));
                     }
                     WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
                     WidgetFactory.addWidgetNode(model,widgetNode);
@@ -59,7 +71,8 @@ public class ButtonStartLineAction extends BasicAction {
                 SELECTOR_VALUE,
                 SELECTOR_TYPE,
                 this.getName(),
-                URL_VALUE);
+                URL_VALUE,
+          handleTypeValue);
         return list;
     }
 
