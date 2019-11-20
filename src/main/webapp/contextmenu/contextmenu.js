@@ -110,7 +110,7 @@ function createDivElement(data,call,call2){
 				//url:"/wy-manage-web/TablePanel"
 				var url=e.data.url;
 				if(url==null){
-					url="/wy-manage-web/TablePanel";
+					url="/TablePanel";
 				}
 				sendAjaxNews(false,"post",url,param,function(resultList){
 					var dataResult=resultList.result;
@@ -130,9 +130,13 @@ function createDivElement(data,call,call2){
 		if(data[i].multiple!=null){
 			el.attr('multiple',"multiple");
 		}
-		if(data[i].value!=null){
+		if(data[i].value!=null && data[i].value.trim()!=""){
 			el.attr('value',data[i].value);
 		}
+
+    if(data[i].url!=null && data[i].url.trim()!=""){
+      el.attr('value',data[i].url);
+    }
 
 		el.attr('wd',curWd);
 		var curPros=data[i].curPros;

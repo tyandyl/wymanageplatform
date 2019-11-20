@@ -5,6 +5,7 @@ import com.wy.manage.platform.core.bean.Result;
 import com.wy.manage.platform.core.model.BasicModel;
 import com.wy.manage.platform.core.model.HtmlModel;
 import com.wy.manage.platform.core.widget.*;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import javax.servlet.ServletException;
@@ -72,6 +73,11 @@ public class ButtonIngress extends Ingress{
                     if(targetParam==null){
                         targetParam=new HashSet<String>();
                     }
+                    String targets=result.getParam().get("targetList");
+                    if(targets!=null){
+                        String[] splits=targets.split(",");
+                        targetParam.addAll( Arrays.asList(splits));
+                    }
                     List<List<CurWidget>> lists=new ArrayList<List<CurWidget>>();
                     if(targetParam!=null && targetParam.size()>0){
                         for(String targetId:targetParam){
@@ -83,9 +89,9 @@ public class ButtonIngress extends Ingress{
                                 String[] split = targetList.split(",");
                                 if(split!=null && split.length>0){
                                     for(String m:split){
-                                        targetIdNode.getData().getRegisterParam().getTargetParam().add(m);
+                                        //targetIdNode.getData().getRegisterParam().getTargetParam().add(m);
                                         String selectValueList = result.getParam().get("selectValueList");
-                                        if(selectValueList!=null){
+                                        if(selectValueList!=null && selectValueList.trim().equalsIgnoreCase("")){
                                             String[] split1 = selectValueList.split(",");
                                             if(split1!=null && split1.length>0){
                                                 for(String u:split1){

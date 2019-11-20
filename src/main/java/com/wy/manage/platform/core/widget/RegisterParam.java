@@ -15,7 +15,7 @@ public class RegisterParam implements Serializable{
     private Set<String> targetParam=new HashSet<String>();
     //注册事件,VALUE=事件,辅助wd,辅助wd
     private Set<String> register=new HashSet<String>();
-    //存放参数,比如弹出窗口选出的字段名称，字段值，下次点击还得发请求回来。
+    //存放参数,比如弹出窗口选出的字段名称，字段值，下次点击还得发请求回来,保存在target指向的按钮上。
     private Set<String> requestParam=new HashSet<String>();
 
     public Set<String> getTargetParam() {

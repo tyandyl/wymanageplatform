@@ -103,11 +103,20 @@ public class WidgetFactory {
             }
             
             //如果设置了请求网址，再次打开的时候，需要把以前设置的值带出来
-//            if(selectorValue.equalsIgnoreCase("urlSetInputView")){
-//                Map<String, WidgetNode> nodeMap = model.getPage().getWidgetNodeTree().getNodeMap();
-//                WidgetNode widgetNode = nodeMap.get(widget.getCode());
-//                String value = widgetNode.getData().getValue();
-//            }
+            if(selectorValue.equalsIgnoreCase("urlSetInputView")){
+                //点击按钮右键，设置完请求网址后，关闭，再次点击按钮右键打开界面
+                String targetId = model.getParamResult().getParam().get("targetId");
+                if(targetId!=null){
+                    String[] split = targetId.split(",");
+                    for(String m:split){
+                        Map<String, WidgetNode> nodeMap = model.getPage().getWidgetNodeTree().getNodeMap();
+                        WidgetNode widgetNode = nodeMap.get(m);
+                        widget.setUrl(widgetNode.getData().getUrl());
+                    }
+                }
+                
+                
+            }
             
             
             List<RegisterEventManage> manages = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
