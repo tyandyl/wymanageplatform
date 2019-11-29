@@ -29,7 +29,7 @@ public class Page implements Serializable {
 
     private WidgetNodeTree widgetNodeTree=new WidgetNodeTree();
 
-    private Map<String,String> urlContents=new HashMap<String, String>();
+    private Map<String,String> proDataTitleMap=new HashMap<String, String>();
 
 
     public String toView(){
@@ -206,12 +206,12 @@ public class Page implements Serializable {
     public void setWidgetNodeTree(WidgetNodeTree widgetNodeTree) {
         this.widgetNodeTree = widgetNodeTree;
     }
-
-    public Map<String, String> getUrlContents() {
-        return urlContents;
+    
+    public Map<String, String> getProDataTitleMap() {
+        return proDataTitleMap;
     }
-
-    public void setUrlContents(Map<String, String> urlContents) {
-        this.urlContents = urlContents;
+    
+    public void setProDataTitleMap(Map<String, String> proDataTitleMap) {
+        this.proDataTitleMap = proDataTitleMap;
     }
 }

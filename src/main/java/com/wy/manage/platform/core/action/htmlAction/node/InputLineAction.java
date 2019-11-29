@@ -41,7 +41,7 @@ public class InputLineAction extends BasicAction {
             Object chineseFonts = regularValue.get(CHINESE_FONTS);
             if(chineseFonts!=null){
                 String s = ChinaFontTools.decodeUnicode(String.valueOf(chineseFonts));
-                Map<String, String> urlContents = model.getPage().getUrlContents();
+                Map<String, String> urlContents = model.getPage().getProDataTitleMap();
                 urlContents.put(widgetNode.getCode(),s);
             }
         }

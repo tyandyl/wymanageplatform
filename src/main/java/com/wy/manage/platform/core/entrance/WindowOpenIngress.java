@@ -73,7 +73,7 @@ public class WindowOpenIngress extends Ingress{
                 WidgetNode widgetNode = model.getPage().getWidgetNodeTree().getNodeMap().get(targetId.split(",")[0]);
                 BlockType blockType = widgetNode.getData().getBlockType();
                 if (blockType.getCode() == 3 || blockType.getCode() == 5) {
-                    Map<String, String> urlContents = model.getPage().getUrlContents();
+                    Map<String, String> urlContents = model.getPage().getProDataTitleMap();
                     System.out.println(urlContents);
                 }
             }

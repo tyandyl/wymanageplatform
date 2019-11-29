@@ -6,6 +6,9 @@ $(selector).each(function(index,element))
 element - 当前的元素（也可使用 "this" 选择器）
 
 
+ data-title 和data-flag
+
+
 
 
 

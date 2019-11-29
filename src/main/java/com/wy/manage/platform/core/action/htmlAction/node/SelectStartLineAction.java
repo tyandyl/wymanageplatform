@@ -44,7 +44,7 @@ public class SelectStartLineAction  extends BasicAction {
 
             String selectShowByPage = widget.getSelectShowByPage();
             if("1".equalsIgnoreCase(selectShowByPage)){
-                Map<String, String> urlContents = model.getPage().getUrlContents();
+                Map<String, String> urlContents = model.getPage().getProDataTitleMap();
                 if(urlContents!=null && urlContents.size()>0){
                     for(Map.Entry<String,String> entry:urlContents.entrySet()){
                         Widget widget1 = WidgetFactory.getWidget(model, null, null, TagType.OPTION);
