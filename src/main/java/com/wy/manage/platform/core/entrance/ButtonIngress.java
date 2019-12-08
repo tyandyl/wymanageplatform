@@ -84,26 +84,19 @@ public class ButtonIngress extends Ingress{
                             WidgetNode targetIdNode = page.getWidgetNodeTree().getNodeMap().get(targetId);
                             String addressUrl = result.getParam().get("addressUrl");
                             targetIdNode.getData().setUrl(addressUrl);
-                            String targetList = result.getParam().get("targetList");
-                            if(targetList!=null){
-                                String[] split = targetList.split(",");
-                                if(split!=null && split.length>0){
-                                    for(String m:split){
-                                        //targetIdNode.getData().getRegisterParam().getTargetParam().add(m);
-                                        String selectValueList = result.getParam().get("selectValueList");
-                                        if(selectValueList!=null && selectValueList.trim().equalsIgnoreCase("")){
-                                            String[] split1 = selectValueList.split(",");
-                                            if(split1!=null && split1.length>0){
-                                                for(String u:split1){
-                                                    WidgetNode widgetNode1 = page.getWidgetNodeTree().getNodeMap().get(u);
-                                                    String name = widgetNode1.getData().getTagType().getName();
-                                                    targetIdNode.getData().getRegisterParam().getRequestParam().add(u+":"+name+":"+widgetNode1.getData().getDataFlag());
-                                                }
-                                            }
-                                        }
+
+                            String selectValueList = result.getParam().get("selectValueList");
+                            if(selectValueList!=null && !selectValueList.trim().equalsIgnoreCase("")){
+                                String[] split1 = selectValueList.split(",");
+                                if(split1!=null && split1.length>0){
+                                    for(String u:split1){
+                                        WidgetNode widgetNode1 = page.getWidgetNodeTree().getNodeMap().get(u);
+                                        String name = widgetNode1.getData().getTagType().getName();
+                                        targetIdNode.getData().getRegisterParam().getRequestParam().add(u+":"+name+":"+widgetNode1.getData().getDataFlag());
                                     }
                                 }
                             }
+
                             List<CurWidget> curWidgets=new ArrayList<CurWidget>();
                             page.fillNodeEX(targetIdNode,curWidgets);
                             lists.add(curWidgets);

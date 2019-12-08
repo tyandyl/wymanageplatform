@@ -1,5 +1,5 @@
 <link rel="stylesheet" style="text/css" href="window.css" />
-<div id="Window2">
+<div id="Window2" widget-title="按钮设置" widget-flag="open-window-01" >
 	<div id="window2-top-left">
 	</div>
 	<div id="window2-top">
@@ -8,7 +8,7 @@
 	</div>
 	<div id="window2-title">
 		<div id="window2-title-content">按钮设置</div>
-		<div class="window2-closed"></div>
+		<div class="window2-closed" event="closed!@!open-window-01:Window2" ></div>
 	</div>
 	<div id="window2-left">
 	</div>
@@ -17,14 +17,14 @@
 			<tr>
 				<td>
 					<div>
-						<select  id="selectMultipleLeft" multiple="multiple">
+						<select  id="selectMultipleLeft" multiple="multiple" event="capture" >
 						</select>
 					</div>
 				</td>
 				<td>
 					<div>
-						<div id="addOneWY" >移动</div>
-						<div id="addAllWY">全移</div>
+						<div id="addOneWY" event="click!@!open-window-01:selectMultipleLeft,open-window-01:selectMultipleRight">移动</div>
+						<div id="addAllWY" >全移</div>
 					</div>
 				</td>
 
@@ -37,22 +37,22 @@
 
 				<td>
 					<div>
-						<div id="sortListWY">排序</div>
-						<div id="firstOneWY">置顶</div>
-						<div id="moveUpwardWY">上移</div>
-						<div id="moveDownWY">下游</div>
+						<div id="sortListWY" >排序</div>
+						<div id="firstOneWY" >置顶</div>
+						<div id="moveUpwardWY" >上移</div>
+						<div id="moveDownWY" >下游</div>
 					</div>
 				</td>
 			</tr>
 		</table>
-		<div id="urlSet">
+		<div id="urlSet" >
 			<span>请求网址：</span><span><input type ="text" id="urlSetInputView" data-flag="addressUrl" /></span>
 		</div>
 		<div id="targetSet">
 			<span>朝向资源：</span><span><input type ="text" id="targetSetInputView"  data-flag="targetList" /></span>
 		</div>
 
-		<button id="buttonSaveByButton" url="/Button" handle-type="3" >保存</button>
+		<button id="buttonSaveByButton" url="/Button" widget-flag="botton-01" event="requestClick!@!open-window-01:urlSetInputView,open-window-01:targetSetInputView,open-window-01:selectMultipleRight" widget-type="3" handle-type="3" >保存</button>
 	</div>
 
 	<div id="window2-right"></div>

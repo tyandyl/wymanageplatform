@@ -64,7 +64,7 @@ public class CPUMonitor {
                     Math.min(99F,
                             elapsedCpu / (elapsedTime * 10000F * nCPUs));
             if(cpuUsage>0){
-                System.out.println("cpu利用率："+cpuUsage+" ,cpu核数是："+nCPUs);
+                //System.out.println("cpu利用率："+cpuUsage+" ,cpu核数是："+nCPUs);
             }
             if(cpuUsage>40){
                 long[] allThreadIds = tmBean.getAllThreadIds();
@@ -73,12 +73,12 @@ public class CPUMonitor {
                         ThreadInfo threadInfo = tmBean.getThreadInfo(allThreadIds[i]);
                         long threadCpuTime = tmBean.getThreadCpuTime(allThreadIds[i]);
                         if(threadCpuTime>0){
-                            System.out.println("线程名称是:"+threadInfo.getThreadName()+" ,线程执行时间是："+threadCpuTime);
+                            //System.out.println("线程名称是:"+threadInfo.getThreadName()+" ,线程执行时间是："+threadCpuTime);
                         }
                         StackTraceElement[] stackTrace = threadInfo.getStackTrace();
                         if(stackTrace!=null){
                             for(StackTraceElement element:stackTrace){
-                                System.out.println("栈堆类名:"+element.getClassName()+",方法是:"+element.getMethodName()+",行数是:"+element.getLineNumber());
+                                //System.out.println("栈堆类名:"+element.getClassName()+",方法是:"+element.getMethodName()+",行数是:"+element.getLineNumber());
                             }
                         }
 

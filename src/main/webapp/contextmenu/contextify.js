@@ -60,6 +60,7 @@
         if(node!=null){
             var kMain=node.kWidget;
             if(kMain!=null){
+                $("#contextify-menu").hide();
                 $(kMain).moveDrag(kMain);
             }
         }
@@ -168,7 +169,7 @@
                     .show();
             })
         .parents().on('mouseup', function () {
-            $("#" + options.menuId).hide();
+            //$("#" + options.menuId).hide();
         });
 
         contextifyId++;

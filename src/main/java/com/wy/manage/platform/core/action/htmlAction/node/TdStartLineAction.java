@@ -1,6 +1,7 @@
 package com.wy.manage.platform.core.action.htmlAction.node;
 
 import com.wy.manage.platform.core.action.BasicAction;
+import com.wy.manage.platform.core.constant.Constant;
 import com.wy.manage.platform.core.parser.ModelParam;
 import com.wy.manage.platform.core.utils.ChinaFontTools;
 import com.wy.manage.platform.core.utils.IgnoreTools;
@@ -28,8 +29,14 @@ public class TdStartLineAction extends BasicAction {
                 String value = IgnoreTools.ignore(regularValue.get(SELECTOR_VALUE).toString());
                 if(regularValue!=null && regularValue.get(SELECTOR_TYPE)!=null){
                     String s = IgnoreTools.ignore(regularValue.get(SELECTOR_TYPE).toString());
-                    Widget widget = WidgetFactory.getWidget(model, s, value, TagType.TD);
+                    Object event_value = regularValue.get(Constant.EVENT_VALUE);
+                    Object dataFlagValue = regularValue.get(Constant.DATA_FLAG_VALUE);
+                    Object chineseFonts = regularValue.get(Constant.CHINESE_FONTS);
+                    Widget widget = WidgetFactory.getWidgetEx(model, s, value, TagType.TD,dataFlagValue,chineseFonts,null,null);
 
+                    if(event_value!=null){
+                        model.getPage().getEventMap().put(event_value.toString(),widget.getCode());
+                    }
 
                     WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
                     WidgetFactory.addWidgetNode(model,widgetNode);
@@ -53,6 +60,9 @@ public class TdStartLineAction extends BasicAction {
                 SELECTOR_VALUE,
                 SELECTOR_TYPE,
                 this.getName());
+        list.add(Constant.EVENT_VALUE);
+        list.add(Constant.DATA_FLAG_VALUE);
+        list.add(Constant.CHINESE_FONTS);
         return list;
     }
 

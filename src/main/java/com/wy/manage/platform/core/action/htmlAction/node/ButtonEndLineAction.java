@@ -40,6 +40,7 @@ public class ButtonEndLineAction extends BasicAction {
             }
             //闭环校验，校验一些div名称之类的，目前先不校验
             WidgetNode pop = widgetNodeTree.getNewestNoClosed().pop();
+            WidgetFactory.handleEvent(model);
             pop.getData().setOutValue(s);
         }
     }

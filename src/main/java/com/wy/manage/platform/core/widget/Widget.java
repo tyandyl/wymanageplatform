@@ -26,7 +26,7 @@ public class Widget implements IWidget, Serializable {
 
     private BlockType blockType;
 
-    private String title;
+    private String title;//存放selectValue,event时使用
 
     private TagType tagType;
 
@@ -58,7 +58,7 @@ public class Widget implements IWidget, Serializable {
     //控件操作类型
     private int handleType;
     
-    //控件唯一标记
+    //控件唯一标记,和flag=true ,配合表明是控件的开头，如果flag=false，则代表该控件属于widgetFlag
     private String widgetFlag;
     //控件唯一名称
     private String widgetTitle;

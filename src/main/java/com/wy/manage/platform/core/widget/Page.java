@@ -28,8 +28,12 @@ public class Page implements Serializable {
     private Map<String,CssBag> cssMaps=new HashMap<String,CssBag>();
 
     private WidgetNodeTree widgetNodeTree=new WidgetNodeTree();
-
+    //key 控件的code，value 当前控件的widget-title，查询当前页面的控件名称使用。
     private Map<String,String> proDataTitleMap=new HashMap<String, String>();
+    //key event,比如combolist-01:window2-combo-list-cell,value 控件的code
+    private Map<String,String> eventMap=new HashMap<String,String >();
+    //key widget-flag：selectValue,value 控件的code
+    private Map<String,String> eventValueMap=new HashMap<String, String>();
 
 
     public String toView(){
@@ -137,6 +141,7 @@ public class Page implements Serializable {
         curWidget.setUrl(data.getUrl());
         curWidget.setUrlIsDefault(data.isUrlIsDefault());
         curWidget.setDataFlag(data.getDataFlag());
+        curWidget.setProDataTitle(data.getProDataTitle());
         curWidgets.add(curWidget);
         List<WidgetNode> childNodes = node.getChildNodes();
         if(childNodes!=null && childNodes.size()>0){
@@ -206,12 +211,30 @@ public class Page implements Serializable {
     public void setWidgetNodeTree(WidgetNodeTree widgetNodeTree) {
         this.widgetNodeTree = widgetNodeTree;
     }
-    
+
+    public Map<String, String> getEventMap() {
+        return eventMap;
+    }
+
+    public void setEventMap(Map<String, String> eventMap) {
+        this.eventMap = eventMap;
+    }
+
     public Map<String, String> getProDataTitleMap() {
         return proDataTitleMap;
     }
     
     public void setProDataTitleMap(Map<String, String> proDataTitleMap) {
         this.proDataTitleMap = proDataTitleMap;
+    }
+
+
+
+    public Map<String, String> getEventValueMap() {
+        return eventValueMap;
+    }
+
+    public void setEventValueMap(Map<String, String> eventValueMap) {
+        this.eventValueMap = eventValueMap;
     }
 }

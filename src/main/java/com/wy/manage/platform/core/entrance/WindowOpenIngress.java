@@ -76,6 +76,9 @@ public class WindowOpenIngress extends Ingress{
                     Map<String, String> urlContents = model.getPage().getProDataTitleMap();
                     System.out.println(urlContents);
                 }
+                if(blockType.getCode() == 6){
+
+                }
             }
 
             Result result = model.getParamResult().getResult();

@@ -4,6 +4,7 @@ import com.wy.manage.platform.core.attribute.AttributeNameType;
 import com.wy.manage.platform.core.bean.*;
 import com.wy.manage.platform.core.bean.Result;
 import com.wy.manage.platform.core.parser.CssBag;
+import com.wy.manage.platform.core.utils.ChinaFontTools;
 import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.GUIDTools;
 import org.apache.commons.lang.StringUtils;
@@ -29,13 +30,34 @@ public class WidgetFactory {
         return widget;
     }
 
-    public static Widget getWidgetEx(WidgetModel model,String selectorType,String selectorValue,TagType tagType,Object dataFlagValue)throws Exception{
+    public static Widget getWidgetEx(WidgetModel model,String selectorType,String selectorValue,TagType tagType,
+                                     Object dataFlagValue,Object dataTitleValue,
+                                     Object widgetFlagValue,Object widgetTitleValue)throws Exception{
         Widget widget=new Widget();
         widget.setCode(GUIDTools.randomUUID());
         widget.setTagType(tagType);
         if(dataFlagValue!=null){
             widget.setDataFlag(dataFlagValue.toString());
         }
+        if(dataTitleValue!=null){
+            widget.setProDataTitle(dataTitleValue.toString());
+            if(dataFlagValue!=null){
+                //记录控件名称
+                String s1 = ChinaFontTools.decodeUnicode(String.valueOf(dataTitleValue));
+                Map<String, String> proDataTitleMap = model.getPage().getProDataTitleMap();
+                proDataTitleMap.put(widget.getCode(),s1);
+            }
+
+        }
+        if(widgetFlagValue!=null){
+            widget.setWidgetFlag(widgetFlagValue.toString());
+            widget.setFlag(true);
+        }
+        if(widgetTitleValue!=null){
+            widget.setWidgetTitle(widgetTitleValue.toString());
+
+        }
+
         processEvent(selectorValue,widget,model);
 
         buildInStyleAnalyze( model, selectorType, selectorValue, widget);
@@ -111,37 +133,39 @@ public class WidgetFactory {
                     for(String m:split){
                         Map<String, WidgetNode> nodeMap = model.getPage().getWidgetNodeTree().getNodeMap();
                         WidgetNode widgetNode = nodeMap.get(m);
-                        widget.setUrl(widgetNode.getData().getUrl());
-                    }
-                }
-                
-                
-            }
-            
-            
-            List<RegisterEventManage> manages = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
-            if(manages!=null && manages.size()>0){
-                for(RegisterEventManage manage:manages){
-                    manage.setWidget(widget);
-                    checkArray( manage,model);
-                }
-
-            }
-            List<RegisterEventData> registerEventDatas = model.getParamResult().getRegisterEvent().handle().getMaps().get(selectorValue.trim());
-            if(registerEventDatas!=null && registerEventDatas.size()>0){
-                for(RegisterEventData registerEventData:registerEventDatas){
-                    if(registerEventData!=null){
-                        List<RegisterEventManage> manage1s = model.getParamResult().getRegisterEvent().handle().getMapManage().get(registerEventData.getSelectorValue());
-                        if(manage1s!=null && manage1s.size()>0){
-                            for(RegisterEventManage manage1:manage1s){
-                                manage1.getArr()[registerEventData.getI()]=widget.getCode();
-                                checkArray( manage1,model);
-                            }
+                        if(widgetNode.getData().getUrl()!=null && !widgetNode.getData().getUrl().trim().equalsIgnoreCase("")){
+                            widget.setUrl(widgetNode.getData().getUrl());
                         }
-
                     }
                 }
+                
+                
             }
+            
+            
+//            List<RegisterEventManage> manages = model.getParamResult().getRegisterEvent().handle().getMapManage().get(selectorValue.trim());
+//            if(manages!=null && manages.size()>0){
+//                for(RegisterEventManage manage:manages){
+//                    manage.setWidget(widget);
+//                    checkArray( manage,model);
+//                }
+//
+//            }
+//            List<RegisterEventData> registerEventDatas = model.getParamResult().getRegisterEvent().handle().getMaps().get(selectorValue.trim());
+//            if(registerEventDatas!=null && registerEventDatas.size()>0){
+//                for(RegisterEventData registerEventData:registerEventDatas){
+//                    if(registerEventData!=null){
+//                        List<RegisterEventManage> manage1s = model.getParamResult().getRegisterEvent().handle().getMapManage().get(registerEventData.getSelectorValue());
+//                        if(manage1s!=null && manage1s.size()>0){
+//                            for(RegisterEventManage manage1:manage1s){
+//                                manage1.getArr()[registerEventData.getI()]=widget.getCode();
+//                                checkArray( manage1,model);
+//                            }
+//                        }
+//
+//                    }
+//                }
+//            }
 
         }
     }
@@ -216,6 +240,85 @@ public class WidgetFactory {
         
     }
 
+    public static void handleEvent(WidgetModel model)throws Exception {
+        Map<String, String> eventMap = model.getPage().getEventMap();
+        List<String> remove=new ArrayList<>();
+        if(eventMap!=null && eventMap.size()>0){
+            for(Map.Entry<String ,String> entry:eventMap.entrySet()){
+                String key = entry.getKey();
+                String[] split = key.split("!@!");
+                if(split.length==1){
+                    WidgetNode widgetNode = model.getPage().getWidgetNodeTree().getNodeMap().get(entry.getValue());
+                    widgetNode.getData().getRegisterParam().getRegister().add(split[0]);
+                    //收集data-flag，左边显示使用
+                    if(split[0].equalsIgnoreCase("capture")){
+                        widgetNode.getData().setSelectShowByPage("1");
+                        Map<String, String> urlContents = model.getPage().getProDataTitleMap();
+                        if(urlContents!=null && urlContents.size()>0){
+                            for(Map.Entry<String,String> entry1:urlContents.entrySet()){
+                                Widget widget1 = WidgetFactory.getWidget(model, null, null, TagType.OPTION);
+                                widget1.setOutValue(entry1.getValue());
+                                widget1.setValue(entry1.getKey());
+                                WidgetNode widgetNode1 = WidgetFactory.getWidgetNode(widget1,false);
+                                WidgetFactory.addWidgetNode(model,widgetNode1);
+                                WidgetNodeTree widgetNodeTree = model.getPage().getWidgetNodeTree();
+                                //闭环校验，校验一些div名称之类的，目前先不校验
+                                widgetNodeTree.getNewestNoClosed().pop();
+                            }
+                        }
+
+                        remove.add(key);
+                    }
+                    if(remove.size()>0){
+                        for(int i=0;i<remove.size();i++){
+                            eventMap.remove(remove.get(i));
+                        }
+                    }
+                    return;
+                }
+
+                String[] split1 = split[1].split(",");
+                int j=0;
+                //事件使用
+                StringBuffer str=new StringBuffer();
+                str.append(split[0]);
+                str.append(",");
+
+                Set<String> requestParam=new HashSet<>();
+
+                for(int i=0;i<split1.length;i++){
+                    String s1 = model.getPage().getEventValueMap().get(split1[i]);
+                    if(s1!=null){
+                        //注册参数使用
+                        StringBuffer param=new StringBuffer();
+                        j++;
+                        str.append(s1);
+                        if(i!=(split1.length-1)){
+                            str.append(",");
+                        }
+                        WidgetNode widgetNode = model.getPage().getWidgetNodeTree().getNodeMap().get(s1);
+                        param.append(widgetNode.getCode()+":"+widgetNode.getData().getTagType().getName()+":"+widgetNode.getData().getDataFlag());
+                        requestParam.add(param.toString());
+                    }
+                }
+                if(j==split1.length){
+
+                    WidgetNode widgetNode = model.getPage().getWidgetNodeTree().getNodeMap().get(entry.getValue());
+                    widgetNode.getData().getRegisterParam().getRegister().add(str.toString());
+                    remove.add(key);
+                    //代码注册
+                    if(split[0].equalsIgnoreCase("requestClick")){
+                        widgetNode.getData().getRegisterParam().getRequestParam().addAll(requestParam);
+                    }
+                }
+            }
+        }
+        if(remove.size()>0){
+            for(int i=0;i<remove.size();i++){
+                eventMap.remove(remove.get(i));
+            }
+        }
+    }
 
     public static void addWidgetNode(WidgetModel model,WidgetNode widgetNode)throws Exception {
         WidgetNodeTree widgetNodeTree = model.getPage().getWidgetNodeTree();
@@ -251,6 +354,7 @@ public class WidgetFactory {
             widgetNode.setParentNode(widgetNodeInsert);
             widgetNodeInsert.getChildNodes().add(widgetNode);
             widgetNodeTree.getNodeMap().put(widgetNode.getCode(),widgetNode);
+            setHandleEvent( model,widgetNode,widgetNodeInsert);
             Stack<WidgetNode> newestNoClosed = widgetNodeTree.getNewestNoClosed();
             newestNoClosed.push(widgetNode);
             setHandleCurWidget( model, widgetNode,widgetNodeInsert.getCode(),widgetNodeInsert.getData().getTagType().getName());
@@ -263,6 +367,7 @@ public class WidgetFactory {
             WidgetNode peek = newestNoClosed.peek();
             widgetNode.setFullCode(peek.getFullCode()+widgetNode.getCode());
             widgetNode.setParentNode(peek);
+            setHandleEvent( model,widgetNode,peek);
             //判断是不是首个标签闭合如<input />
             if(!widgetNode.isFirstClosed()){
                 newestNoClosed.push(widgetNode);
@@ -274,6 +379,26 @@ public class WidgetFactory {
             }
         }
 
+    }
+
+
+    public static void setHandleEvent(WidgetModel model,WidgetNode curWidgetNode,WidgetNode parentWidgetNode)throws Exception{
+        String widgetFlag = curWidgetNode.getData().getWidgetFlag();
+        if("Window2".equalsIgnoreCase(curWidgetNode.getData().getTitle())){
+            System.out.println();
+        }
+        //是控件的开头
+        if(widgetFlag!=null && curWidgetNode.getData().isFlag()){
+            //解决<div id="Window2" widget-title="按钮设置" widget-flag="open-window-01" >
+            //<div class="window2-closed" event="closed!@!open-window-01:Window2" ></div>
+            model.getPage().getEventValueMap().put(widgetFlag+":"+curWidgetNode.getData().getTitle(),curWidgetNode.getCode());
+        }else {
+            String widgetFlag1 = parentWidgetNode.getData().getWidgetFlag();
+            if(widgetFlag1!=null){
+                curWidgetNode.getData().setWidgetFlag(widgetFlag1);
+                model.getPage().getEventValueMap().put(widgetFlag1+":"+curWidgetNode.getData().getTitle(),curWidgetNode.getCode());
+            }
+        }
     }
 
     public static void setHandleCurWidget(WidgetModel model,WidgetNode widgetNode,String parentWd,String parentTagName){
@@ -310,6 +435,13 @@ public class WidgetFactory {
     }
 
 
+    /**
+     *
+     * @param data
+     * @param isFirstClosed input等没有</div>,需要关闭
+     * @return
+     * @throws Exception
+     */
     public static WidgetNode getWidgetNode(Widget data,boolean isFirstClosed)throws Exception {
         WidgetNode widgetNode=new WidgetNode();
         widgetNode.setData(data);

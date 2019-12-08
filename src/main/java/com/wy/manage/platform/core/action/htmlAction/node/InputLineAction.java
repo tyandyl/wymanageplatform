@@ -27,13 +27,13 @@ public class InputLineAction extends BasicAction {
                 if(regularValue!=null && regularValue.get("selectorType")!=null){
                     String s = IgnoreTools.ignore(regularValue.get("selectorType").toString());
                     Object dataFlagValue = regularValue.get("dataFlagValue");
-                    Widget widget = WidgetFactory.getWidgetEx(model, s, value, TagType.INPUT,dataFlagValue);
+                    Widget widget = WidgetFactory.getWidgetEx(model, s, value, TagType.INPUT,dataFlagValue,null,null,null);
                     widgetNode = WidgetFactory.getWidgetNode(widget,true);
                     WidgetFactory.addWidgetNode(model,widgetNode);
                 }
             }else {
                 Object dataFlagValue = regularValue.get("dataFlagValue");
-                Widget widget = WidgetFactory.getWidgetEx(model, null, null, TagType.INPUT,dataFlagValue);
+                Widget widget = WidgetFactory.getWidgetEx(model, null, null, TagType.INPUT,dataFlagValue,null,null,null);
                 widgetNode = WidgetFactory.getWidgetNode(widget,true);
                 WidgetFactory.addWidgetNode(model,widgetNode);
             }

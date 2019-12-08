@@ -7,6 +7,7 @@ import com.wy.manage.platform.core.utils.ExceptionTools;
 import com.wy.manage.platform.core.utils.TempTools;
 import com.wy.manage.platform.core.widget.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -44,6 +45,7 @@ public class DivEndLineAction extends BasicAction {
             }
             //闭环校验，校验一些div名称之类的，目前先不校验
             WidgetNode pop = widgetNodeTree.getNewestNoClosed().pop();
+            WidgetFactory.handleEvent(model);
             pop.getData().setOutValue(s);
         }
     }

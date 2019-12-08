@@ -36,16 +36,20 @@ public class DivStartLineAction extends BasicAction {
                 System.out.println("removeALLWY");
             }
             Object dataFlagValue = regularValue.get(Constant.DATA_FLAG_VALUE);
-            Widget widget = WidgetFactory.getWidgetEx(model, s, value, TagType.DIV,dataFlagValue);
+            Object widgetTitleValue = regularValue.get(Constant.WIDGET_TITLE_VALUE);
+            Object chineseFonts = regularValue.get(Constant.CHINESE_FONTS);
+            Object widgetFlagValue = regularValue.get(Constant.WIDGET_FLAG_VALUE);
+            Object event_value = regularValue.get(Constant.EVENT_VALUE);
+
+
+
+            Widget widget = WidgetFactory.getWidgetEx(model, s, value, TagType.DIV,dataFlagValue,chineseFonts,widgetFlagValue,widgetTitleValue);
+            if(event_value!=null){
+                model.getPage().getEventMap().put(event_value.toString(),widget.getCode());
+            }
             WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
             WidgetFactory.addWidgetNode(model,widgetNode);
 
-            Object chineseFonts = regularValue.get(Constant.CHINESE_FONTS_VALUE);
-            if(chineseFonts!=null){
-                String s1 = ChinaFontTools.decodeUnicode(String.valueOf(chineseFonts));
-                Map<String, String> proDataTitleMap = model.getPage().getProDataTitleMap();
-                proDataTitleMap.put(widgetNode.getCode(),s1);
-            }
 
         }
     }
@@ -60,9 +64,13 @@ public class DivStartLineAction extends BasicAction {
         List<String> list=new ArrayList<String>();
         list.add(Constant.SELECTOR_TYPE);
         list.add(Constant.SELECTOR_VALUE);
-        list.add(Constant.CHINESE_FONTS_VALUE);
+        list.add(Constant.CHINESE_FONTS);
         list.add(Constant.DATA_FLAG_VALUE);
         list.add(Constant.WIDGET_TITLE_VALUE);
+        list.add(Constant.WIDGET_FLAG_VALUE);
+        list.add(Constant.EVENT_VALUE);
+        list.add(Constant.CHINESE_FONTS_LINE);
+        list.add(Constant.DATA_FLAG_LINE);
         return list;
     }
 

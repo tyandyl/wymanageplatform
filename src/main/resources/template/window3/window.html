@@ -1,5 +1,5 @@
 <link rel="stylesheet" style="text/css" href="window.css" />
-<div id="Window2">
+<div id="Window2" widget-title="面板设置" widget-flag="open-window-01" >
 	<div id="window2-top-left">
 	</div>
 	<div id="window2-top">
@@ -8,7 +8,7 @@
 	</div>
 	<div id="window2-title">
 		<div id="window2-title-content">面板设置</div>
-		<div class="window2-closed"></div>
+		<div class="window2-closed" event="closed!@!open-window-01:Window2" ></div>
 	</div>
 	<div id="window2-left">
 	</div>
@@ -22,13 +22,13 @@
 							字段名
 						</td>
 						<td>
-							<input type="text" class="window2-form-group-input" data-title="字段名" data-flag="fieldTitle" />
+							<input type="text" class="window2-form-group-input" data-flag="fieldTitle" />
 						</td>
 						<td>
 							字段标识
 						</td>
 						<td>
-							<input type="text" class="window2-form-group-input" data-title="字段标识" data-flag="fieldName" />
+							<input type="text" class="window2-form-group-input" data-flag="fieldName" />
 						</td>
 						<td>
 							控件类型
@@ -40,7 +40,7 @@
 										<td id="window2-combo-list-td">
 
 											<div id="window2-combo-list-cell">
-												<div class="window2-combo-list-cell_real" data-title="控件类型" data-flag="fieldType" ></div>
+												<div class="window2-combo-list-cell_real" data-flag="fieldType" ></div>
 											</div>
 										</td>
 										<td id="window2-combo-list-cell-after">
@@ -53,7 +53,7 @@
 							每行列数
 						</td>
 						<td>
-							<input type="text" class="window2-form-group-input" data-title="每行列数"/>
+							<input type="text" class="window2-form-group-input" />
 						</td>
 					</tr>
 
@@ -62,7 +62,7 @@
 		</form>
 		<button id="search_button" url="/TablePanel" handle-type="3" >保存</button>
 		<button id="clear_button">编辑</button>
-		<div class="divSet">
+		<div class="divSet" widget-title="列表设置" widget-flag="scan-list-01" >
 			<table class="tableSet">
 				<tr class="theadSet" >
 					<td class="tdSet">

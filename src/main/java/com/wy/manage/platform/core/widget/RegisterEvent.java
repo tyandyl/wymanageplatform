@@ -18,15 +18,15 @@ public class RegisterEvent {
             put("search_button", "click;widget");
             put("window2-table-input","widget");
             //value为事件[辅助参数,辅助参数]
-            put("window2-combo-list-cell-after", "dropDown:window2-combo-list-cell,window2-combo-list-cell_real");
-            put("Window2","widget");
-            put("window2-combo-list-div","widget");
+           // put("window2-combo-list-cell-after", "dropDown:window2-combo-list-cell,window2-combo-list-cell_real");
+            //put("Window2","widget");
+           // put("window2-combo-list-div","widget");
             put("divSet","widget");
-            put("selectMultipleLeft","selectShowByPage");
-            put("addOneWY","click:selectMultipleLeft,selectMultipleRight");
+           // put("selectMultipleLeft","selectShowByPage");
+           // put("addOneWY","click:selectMultipleLeft,selectMultipleRight");
             //click 注册按钮点击事件，后边跟着要获取值的参数
             put("buttonSaveByButton", "widget;requestClick:urlSetInputView,targetSetInputView,selectMultipleRight");
-            put("window2-closed","closed:Window2");
+           // put("window2-closed","closed:Window2");
         }
     };
 

@@ -1,6 +1,5 @@
 package com.wy.manage.platform.core.widget;
 
-import javax.xml.soap.SAAJMetaFactory;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;

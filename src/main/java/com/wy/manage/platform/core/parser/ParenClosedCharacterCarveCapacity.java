@@ -74,7 +74,7 @@ public class ParenClosedCharacterCarveCapacity implements CharacterCarveCapacity
                     Map<String, Action> actions = context.getActions();
                     final Action action = actions.get(substring);
                     if(action!=null){
-                        //System.out.println("打印动作:"+action.getName());
+                        //System.out.println("打印动作:"+action.getName()+"-----------"+substring);
                         final Integer num = AtomicTools.getBiUniqueInteger();
                         NfaManager.traverse(xContentItemParen.getNfaStateMachine().getStartNode(),new NodeHandle<NfaStateNode>(){
                             public void handle(NfaStateNode o) throws Exception {

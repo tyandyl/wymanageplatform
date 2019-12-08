@@ -107,11 +107,15 @@ public abstract class WidgetModel {
                 break;
             case NEW_WIDGET:
                 page=loadPage(getParamResult());
+                page.getEventValueMap().clear();
+                page.getEventMap().clear();
                 //afterLoadPage(getParamResult(), page);
                 break;
             case EDIT_WIDGET:
                 page=loadPage(getParamResult());
                 //afterLoadPage(getParamResult(), page);
+                page.getEventMap().clear();
+                page.getEventValueMap().clear();
                 break;
             default:
         }
@@ -221,6 +225,9 @@ public abstract class WidgetModel {
                 break;
             case NEW_WIDGET:
                 add();
+                break;
+            case SEND:
+                System.out.println("事务处理---------------");
                 break;
         }
         return this;

@@ -6,7 +6,8 @@ package com.wy.manage.platform.core.widget;
 public enum HandleType {
     NEW_PAGE(1,"new_page"),
     NEW_WIDGET(2,"new_widget"),
-    EDIT_WIDGET(3,"edit_widget")
+    EDIT_WIDGET(3,"edit_widget"),
+    SEND(0,"edit_widget")
     ;
     private int code;
     private String name;

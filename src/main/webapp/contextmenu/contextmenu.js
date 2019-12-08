@@ -67,6 +67,7 @@ function createDivElement(data,call,call2){
 		}
 
 		if(curTagName=='button'){
+			el.text(data[i].proDataTitle);
 			var option={};
 			option.wd=curWd;
 			option.url=data[i].url;
@@ -85,21 +86,21 @@ function createDivElement(data,call,call2){
 						var re=null;
 						var pro=requestParam[p].split(":");
 						if(pro[1]!=null && pro[1]!="null" && pro[0]!=null && pro[0]!="null" && pro[2]!=null && pro[2]!="null"){
-              var tagDiv=getElementByAttr(pro[1],'wd',pro[0]);
-              if(pro[1]=='select'){
-                var selValues=new Array();
-                var list=tagDiv.options;
-                if(list!=null){
-                  for(var r=0;r<list.length;r++){
-                    var ud=$(list[r]).attr('value');
-                    selValues.push(ud);
-                  }
-                }
-                re=selValues.join(",");
-                param[pro[2]]=re;
-              }else{
-                param[pro[2]]=$(tagDiv).val();
-              }
+              				var tagDiv=getElementByAttr(pro[1],'wd',pro[0]);
+              				if(pro[1]=='select'){
+               					 var selValues=new Array();
+               					 var list=tagDiv.options;
+               					 if(list!=null){
+                  					for(var r=0;r<list.length;r++){
+                    					var ud=$(list[r]).attr('value');
+                    					selValues.push(ud);
+                  					}
+               					 }
+                				re=selValues.join(",");
+                				param[pro[2]]=re;
+              				}else{
+                				param[pro[2]]=$(tagDiv).val();
+              				}
 						}
 
 
@@ -241,6 +242,7 @@ function createWindow(e){
 	var isAsync=false;
 	var url="/OpenWindow";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
+		$("#contextify-menu").hide();
 		var data=resultList.result;
 		createDivElement(data,function(curTagName,curWd,parentTagDiv){
 		},function(curDiv){});
@@ -290,6 +292,7 @@ function createButton(e){
 	var isAsync=false;
 	var url="/Button";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
+		$("#contextify-menu").hide();
 		var kNodeA=null;
 		var data=resultList.result;
 		for(var i=0;i<data.length;i++){
@@ -351,12 +354,13 @@ function createComboList(e){
 	var isAsync=false;
 	var url="/ComboList";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
+		$("#contextify-menu").hide();
 		var data=resultList.result;
 		var options = {items:[
-			{text: '输入框'},
-			{text: '下拉列表(列表数量小于20)'},
+			{text: '输入框',value:'666'},
+			{text: '下拉列表(列表数量小于20)',value:'777'},
 
-			{text: '弹出列表(列表数量大于20)'}
+			{text: '弹出列表(列表数量大于20)',value:'888'}
 		]
 		};
 		var wyTemp = new WyTemp();
@@ -434,6 +438,7 @@ function createTablePanel(e){
 	var isAsync=false;
 	var url="/TablePanel";
 	sendAjaxNews(isAsync,type,url,param,function(resultList){
+		$("#contextify-menu").hide();
 		var kNodeA=null;
 		var data=resultList.result;
 		for(var i=0;i<data.length;i++){
@@ -447,6 +452,11 @@ function createTablePanel(e){
 			var curDiv=document.createElement(curTagName);
 			var el = $(curDiv);
 			el.attr('wd',curWd);
+
+			if(data[i].outContentValue!=null){
+				curDiv.innerHTML=data[i].outContentValue;
+			}
+
 			var curPros=data[i].curPros;
 			var sList=curPros.split(";");
 			for(var y=0;y<sList.length;y++){
