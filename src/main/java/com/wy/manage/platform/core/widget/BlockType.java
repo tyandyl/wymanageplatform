@@ -12,6 +12,7 @@ public enum BlockType {
     NORMAL_BUTTON(5,"normal_button"),//一般的按钮
     TABLE_PANEL(6,"table_panel"),//输入面板
     TABLE_LIST(7,"table_list"),//表格列表
+    COMBO_LIST(8,"combo_list"),//下拉列表
     ;
 
     private int code;

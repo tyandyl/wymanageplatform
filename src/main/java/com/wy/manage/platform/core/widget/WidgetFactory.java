@@ -242,7 +242,7 @@ public class WidgetFactory {
 
     public static void handleEvent(WidgetModel model)throws Exception {
         Map<String, String> eventMap = model.getPage().getEventMap();
-        List<String> remove=new ArrayList<>();
+        List<String> remove=new ArrayList<String>();
         if(eventMap!=null && eventMap.size()>0){
             for(Map.Entry<String ,String> entry:eventMap.entrySet()){
                 String key = entry.getKey();
@@ -284,7 +284,7 @@ public class WidgetFactory {
                 str.append(split[0]);
                 str.append(",");
 
-                Set<String> requestParam=new HashSet<>();
+                Set<String> requestParam=new HashSet<String>();
 
                 for(int i=0;i<split1.length;i++){
                     String s1 = model.getPage().getEventValueMap().get(split1[i]);

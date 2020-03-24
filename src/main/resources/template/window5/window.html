@@ -1,5 +1,5 @@
 <link rel="stylesheet" style="text/css" href="window.css" />
-<div id="Window2">
+<div id="Window2" widget-title="按钮设置" widget-flag="open-window-05" >
 	<div id="window2-top-left">
 	</div>
 	<div id="window2-top">
@@ -8,7 +8,7 @@
 	</div>
 	<div id="window2-title">
 		<div id="window2-title-content">基础数据设置</div>
-		<div class="window2-closed"></div>
+		<div class="window2-closed" event="closed!@!open-window-05:Window2" ></div>
 	</div>
 	<div id="window2-left">
 	</div>
@@ -22,20 +22,28 @@
 							基础代码
 						</td>
 						<td>
-							<input type="text" class="window2-form-group-input" data-title="基础代码" data-flag="baseCode" />
+							<input type="text" class="window2-form-group-input" data-flag="baseCode" />
 						</td>
 						<td>
 							基础名称
 						</td>
 						<td>
-							<input type="text" class="window2-form-group-input" data-title="基础名称" data-flag="baseTitle" />
+							<input type="text" class="window2-form-group-input_2" data-flag="baseTitle" />
 						</td>
 
 					</tr>
-
 				</table>
 			</fieldset>
 		</form>
+		<div class="combolist-title-config">设置下拉列表项目</div>
+		<table class="combolist-config">
+			<tr>
+				<td><input type="text" class="window2-form-group-input" /></td>
+				<td><input type="text" class="window2-form-group-input_2" /></td>
+				<td>+</td>
+				<td>-</td>
+			</tr>
+		</table>
 	</div>
 
 	<div id="window2-right"></div>

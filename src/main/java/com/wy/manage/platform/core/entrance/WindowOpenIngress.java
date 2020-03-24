@@ -45,6 +45,18 @@ public class WindowOpenIngress extends Ingress{
                                 }
                             };
                         }
+                        if(blockType.getCode()==8){
+                            return  new HtmlModel<Page>(){
+                                @Override
+                                public String getRegularAddress() {
+                                    return "regular/widget.properties";
+                                }
+                                @Override
+                                public String getContentAddress() {
+                                    return "template/window5/window.html";
+                                }
+                            };
+                        }
                     }
 
 

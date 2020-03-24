@@ -40,12 +40,15 @@ public class DivStartLineAction extends BasicAction {
             Object chineseFonts = regularValue.get(Constant.CHINESE_FONTS);
             Object widgetFlagValue = regularValue.get(Constant.WIDGET_FLAG_VALUE);
             Object event_value = regularValue.get(Constant.EVENT_VALUE);
-
+            Object widget_type_value = regularValue.get(Constant.WIDGET_TYPE_VALUE);
 
 
             Widget widget = WidgetFactory.getWidgetEx(model, s, value, TagType.DIV,dataFlagValue,chineseFonts,widgetFlagValue,widgetTitleValue);
             if(event_value!=null){
                 model.getPage().getEventMap().put(event_value.toString(),widget.getCode());
+            }
+            if(widget_type_value!=null){
+                widget.setBlockType(BlockType.getBlockType(Integer.valueOf(widget_type_value.toString())));
             }
             WidgetNode widgetNode = WidgetFactory.getWidgetNode(widget,false);
             WidgetFactory.addWidgetNode(model,widgetNode);
@@ -71,6 +74,7 @@ public class DivStartLineAction extends BasicAction {
         list.add(Constant.EVENT_VALUE);
         list.add(Constant.CHINESE_FONTS_LINE);
         list.add(Constant.DATA_FLAG_LINE);
+        list.add(Constant.WIDGET_TYPE_VALUE);
         return list;
     }
 

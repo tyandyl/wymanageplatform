@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by tianye
  */
-public class ComboListIngress  extends Ingress{
+public class    ComboListIngress  extends Ingress{
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
